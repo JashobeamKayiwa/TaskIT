@@ -76,6 +76,7 @@ o	As an accountant, I want to log farm expenses (feed, vet services, equipment) 
 o	As a financial analyst, I want to calculate net profit by deducting costs from revenue.
 
 o	As a breeder, I want to record mating dates, litter details (kits born, kits weaned, kits sold), and mortality rates.
+
 Link to user stories table: https://docs.google.com/spreadsheets/d/1zGJNXxUNM12QSHWTRg5rjs00cQKOOrkpdyDN5DF5uvE/edit?usp=sharing
 
 
