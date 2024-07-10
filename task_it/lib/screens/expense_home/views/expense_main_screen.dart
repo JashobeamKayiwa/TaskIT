@@ -196,14 +196,127 @@ class MainScreen extends StatelessWidget {
               ],
               ),
           ),
-                        
-                        ]
-          )
-              ],
-              
-            ),
-            )
+
+          const SizedBox(height: 40,),
+           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Transactions',
+              style: TextStyle(
+                    fontSize: 16,
+                    color:Theme.of(context).colorScheme.onSurface,
+                    fontWeight: FontWeight.bold
+              ),
+              ),
+
+              GestureDetector(
+                onTap: () {
+                  
+                },
+                child: Text('View all',
+                style: TextStyle(
+                      fontSize: 14,
+                      color:Theme.of(context).colorScheme.outline,
+                      fontWeight: FontWeight.w600
+                ),
+                ),
+              )
+            ],
+          ),
+
+           const SizedBox(height: 20,),
+           Expanded(
+             child: ListView.builder(
+              itemCount: transactionData.length,
+              itemBuilder:(context,int i){
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12)
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      color: transactionData[i]['color'],
+                                      shape: BoxShape.circle
+                                    ),
+                                  ),
+                                
+                                transactionData[i]['icon'],
+                                // const Icon(Icons.food_bank,
+                                // color: Colors.white,
+                                // )
+                                ],
+                              ),
+                              const SizedBox(width: 12,),
+                              Text(transactionData[i]['name'],
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color:Theme.of(context).colorScheme.onSurface,
+                                  fontWeight: FontWeight.w500
+                            ),
+                          ),
+                          ]
+                          ),
+
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(transactionData[i]['totalAmount'],
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color:Theme.of(context).colorScheme.onSurface,
+                                  fontWeight: FontWeight.w400
+                            ),
+                              ),
+                          
+                              Text(transactionData[i]['date'],
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color:Theme.of(context).colorScheme.outline,
+                                  fontWeight: FontWeight.w400
+                            ),
+                              ),
+                              ],
+                            )
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              } 
+              ),
+           )
+
+          ]
           
-        );
+        ),
+          ],
+    )
+    )
+    );
+      
   }
 }
+                        
+ 
+  
+              
+  
+  
+          
+  
+  
