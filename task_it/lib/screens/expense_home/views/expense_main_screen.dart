@@ -124,6 +124,78 @@ class MainScreen extends StatelessWidget {
                               )
                             ),
                           ),
+
+                                    
+                      const SizedBox(width: 8,),
+                      const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                           Text('Expenses',
+                           style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400
+                            ),
+                           ),
+                            Text('UGX 1,000,000',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600
+                            ),
+                           ),
+                        ],
+                        ),
+                        ]
+                      ),
+
+                      Row(
+                        children: [
+                          Container(
+                            width: 25,
+                            height: 25,
+                            decoration:const BoxDecoration(
+                              color: Colors.white30,
+                              shape: BoxShape.circle,
+                            ),
+                            child:const Center(
+                              child: Icon(CupertinoIcons.arrow_down,
+                              size: 12,
+                              color: Colors.redAccent,
+                              )
+                            ),
+                          ),
+                        
+                      
+                      const SizedBox(width: 8,),
+                      const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                           Text('Income',
+                           style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400
+                            ),
+                           ),
+                            Text('UGX 9,000,000',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600
+                            ),
+                           ),
+                        ],
+                        ),
+                        ]
+                      ),
+                    ],
+                  ),
+                )
+
+              ],
+              ),
+          ),
                         
                         ]
           )
@@ -131,13 +203,7 @@ class MainScreen extends StatelessWidget {
               
             ),
             )
-          ]
-        )
-      )
-              ])
-          ]
-          )
-      )
-    );
+          
+        );
   }
 }
