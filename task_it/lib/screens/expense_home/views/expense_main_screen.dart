@@ -82,12 +82,61 @@ class MainScreen extends StatelessWidget {
                 ),
               ]
             ),
+
+              
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Total Balance',
+                style:  TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600
+                ),
+                ),
+                const SizedBox(height: 12,),
+                const Text('UGX 2,000,000',
+                style: TextStyle(
+                  fontSize: 40,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600
+                ),
+                ),
+                const SizedBox(height: 12,),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            width: 25,
+                            height: 25,
+                            decoration:const BoxDecoration(
+                              color: Colors.white30,
+                              shape: BoxShape.circle,
+                            ),
+                            child:const Center(
+                              child: Icon(CupertinoIcons.arrow_down,
+                              size: 12,
+                              color: Colors.greenAccent,
+                              )
+                            ),
+                          ),
+                        
+                        ]
           )
               ],
               
             ),
+            )
           ]
         )
+      )
+              ])
+          ]
+          )
       )
     );
   }
