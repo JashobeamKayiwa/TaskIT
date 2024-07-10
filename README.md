@@ -79,4 +79,6 @@ o	As a breeder, I want to record mating dates, litter details (kits born, kits w
 
 Link to user stories table: https://docs.google.com/spreadsheets/d/1zGJNXxUNM12QSHWTRg5rjs00cQKOOrkpdyDN5DF5uvE/edit?usp=sharing
 
+Link to UI : https://www.figma.com/design/74zIUzyVTQhOgRqj00x5BI/TaskIT?node-id=0-1&t=tT0RnYEOw8Gk9XNx-1
+
 
