@@ -1,3 +1,4 @@
+import 'package:task_it/screens/expense_home/views/expense_main_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -23,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
       //   title: Text('Expense Tracker'),
 
       // ),
+      
       bottomNavigationBar: ClipRRect(
         borderRadius:const BorderRadius.vertical(
           top: Radius.circular(30),
@@ -52,7 +54,11 @@ class _HomeScreenState extends State<HomeScreen> {
           // label: 'Categories',
           // ),
           BottomNavigationBarItem(icon: Icon(CupertinoIcons.chart_bar),
-          label: 'Reports',
+          label: 'Stats',
+          ),
+         
+          BottomNavigationBarItem(icon: Icon(CupertinoIcons.profile_circled),
+          label: 'Profile',
           ),
          
           
@@ -60,29 +66,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ), 
       ),
       
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        
-        shape:const CircleBorder(),
-        child:Container(
-          width: 60,
-          height: 60,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-           gradient:LinearGradient(
-            colors:[
-            Theme.of(context).colorScheme.tertiary,
-            Theme.of(context).colorScheme.secondary,
-            Theme.of(context).colorScheme.primary,
-           ],
-           transform: const GradientRotation(pi / 4),
-           )
-          ),
-          child: const Icon(
-            CupertinoIcons.add),
-          ),
-      ),
+      
+      
+      body:const MainScreen()
 
       );
   }
