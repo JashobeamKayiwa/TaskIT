@@ -52,7 +52,7 @@ class MainScreen extends StatelessWidget {
                                         .outline),
                               ),
                               Text(
-                                'Madrine',
+                                'Manager',
                                 style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w600,
@@ -121,14 +121,14 @@ class MainScreen extends StatelessWidget {
                                   width: 25,
                                   height: 25,
                                   decoration: const BoxDecoration(
-                                    color: Colors.white30,
+                                    color: Color.fromARGB(77, 8, 0, 0),
                                     shape: BoxShape.circle,
                                   ),
                                   child: const Center(
                                       child: Icon(
                                     CupertinoIcons.arrow_down,
                                     size: 12,
-                                    color: Colors.greenAccent,
+                                    color: Colors.red,
                                   )),
                                 ),
                                 const SizedBox(
@@ -159,14 +159,14 @@ class MainScreen extends StatelessWidget {
                                   width: 25,
                                   height: 25,
                                   decoration: const BoxDecoration(
-                                    color: Colors.white30,
+                                    color: Color.fromARGB(77, 11, 0, 0),
                                     shape: BoxShape.circle,
                                   ),
                                   child: const Center(
                                       child: Icon(
-                                    CupertinoIcons.arrow_down,
+                                    CupertinoIcons.arrow_up,
                                     size: 12,
-                                    color: Colors.redAccent,
+                                    color: Colors.green,
                                   )),
                                 ),
                                 const SizedBox(
