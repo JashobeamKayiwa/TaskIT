@@ -1,7 +1,9 @@
 import 'package:task_it/screens/expense_home/views/expense_main_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
+import 'package:task_it/screens/stats/stats.dart';
+
+import 'package:task_it/workers_screens/home_screen.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -13,10 +15,14 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  int index = 0;
-  late Color selectedItem=Colors.blueAccent;
-  //Color unselectedItem = Colors.black;
-                                           //changing screens
+ var widgetlist = [
+  MainScreen(),
+  StatsScreen(),
+  WorkersProfileScreen()
+
+ ];
+
+ int index = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,8 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
         }
         ),
         fixedColor: Colors.blueAccent,
-        //selectedItemColor: Colors.blue,
-        //nselectedItemColor: Colors.black,
         backgroundColor: const Color.fromARGB(255, 250, 249, 249),
         showSelectedLabels: true,
         showUnselectedLabels: true,
@@ -47,12 +51,10 @@ class _HomeScreenState extends State<HomeScreen> {
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(icon: Icon(CupertinoIcons.home),
-          //color : index == 0 ? selectedItem : unselectedItem,                             color for selected icon 
+                              
           label: 'Home',
           ),
-          // BottomNavigationBarItem(icon: Icon(CupertinoIcons.square_grid_2x2),
-          // label: 'Categories',
-          // ),
+          
           BottomNavigationBarItem(icon: Icon(CupertinoIcons.chart_bar),
           label: 'Stats',
           ),
@@ -68,8 +70,11 @@ class _HomeScreenState extends State<HomeScreen> {
       
       
       
-      body:const MainScreen()
-
-      );
+     body: (index == 0)
+  ? MainScreen()
+  : (index == 1)
+    ? StatsScreen()
+    : WorkersProfileScreen()
+  );
   }
 }
