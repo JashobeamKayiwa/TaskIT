@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -10,10 +11,28 @@ class HomePage extends StatelessWidget {
         preferredSize: Size.fromHeight(60.0), // Adjust the height as needed
         child: _buildAppBar(),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [],
-        )
+      body: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 15,),
+          child: Column(
+            children: [
+              Expanded(
+              child:ListView(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 50, bottom:20,),
+                    child: Text('Dashboard',
+                    style: TextStyle(
+                      fontSize:30,
+                      fontWeight: FontWeight.bold))
+                  )
+                ]
+              )
+            )
+            ],
+            )
+      )
     );
   }
 }
