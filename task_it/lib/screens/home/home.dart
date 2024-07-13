@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:task_it/constants/colors.dart';
+import 'package:task_it/widgets/tiles.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -16,23 +18,41 @@ class HomePage extends StatelessWidget {
           horizontal: 20,
           vertical: 15,),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            
             children: [
-              Expanded(
-              child:ListView(
+              Container(
+                margin: EdgeInsets.only(top: 50, bottom:20),
+                child: Text(
+                  'Dashboard',
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                ),
+              ),
+            Expanded(
+              child: ListView(
                 children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 50, bottom:20,),
-                    child: Text('Dashboard',
-                    style: TextStyle(
-                      fontSize:30,
-                      fontWeight: FontWeight.bold))
-                  )
-                ]
+                  Tiles(
+                    leadingIcon: Icon(Icons.account_circle_sharp, size: 60, color: kBlack),
+                    titleText: 'Personal',
+                  ),
+                  SizedBox(height: 20), // Adjust the height as needed
+                  Tiles(
+                    leadingIcon: Icon(Icons.work, size: 60, color: kBlack),
+                    titleText: 'Work',
+                  ),
+                  SizedBox(height: 20), // Adjust the height as needed
+                  Tiles(
+                    leadingIcon: Icon(Icons.attach_money, size: 60, color: kBlack),
+                    titleText: 'Finance',
+                  ),
+                ],
+
               )
             )
             ],
             )
       )
+      bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 }
@@ -68,3 +88,5 @@ Widget _buildAppBar() {
     ),
   );
 }
+
+
