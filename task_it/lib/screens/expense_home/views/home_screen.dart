@@ -16,9 +16,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
  var widgetlist = [
-  MainScreen(),
-  StatsScreen(),
-  WorkersProfileScreen()
+  const MainScreen(),
+  const StatsScreen(),
+  const WorkersProfileScreen()
 
  ];
 
@@ -71,10 +71,10 @@ class _HomeScreenState extends State<HomeScreen> {
       
       
      body: (index == 0)
-  ? MainScreen()
+  ? const MainScreen()
   : (index == 1)
-    ? StatsScreen()
-    : WorkersProfileScreen()
+    ?const StatsScreen()
+    : const WorkersProfileScreen()
   );
   }
 }
