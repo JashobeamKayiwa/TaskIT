@@ -13,26 +13,27 @@ class MyApp extends StatelessWidget {
           title: Text('Work Progress'),
           backgroundColor: Colors.blue,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back), // Back arrow icon
+            icon: Icon(Icons.arrow_back),
             onPressed: () {
-              // Handle back button press
               Navigator.pop(context);
             },
           ),
         ),
         body: WorkProgressScreen(),
         bottomNavigationBar: BottomNavigationBar(
+          showSelectedLabels: false, // Hide labels
+          showUnselectedLabels: false,
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: Icon(Icons.home, size: 28), // Home icon
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart),
+              icon: Icon(Icons.bar_chart, size: 28), // Stats icon
               label: 'Stats',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person),
+              icon: Icon(Icons.person, size: 28), // Profile icon
               label: 'Profile',
             ),
           ],
@@ -120,3 +121,4 @@ class StaffProgress extends StatelessWidget {
     );
   }
 }
+
