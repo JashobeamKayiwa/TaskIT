@@ -8,153 +8,96 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Work Progress', style: TextStyle(fontWeight: FontWeight.bold),),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
-        body:Column(
-        children: [
-          Divider(height: 1, color: Colors.grey), 
-          Expanded(
-          child: WorkProgressScreen(),),
-          ],),
-        bottomNavigationBar: BottomNavigationBar(
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home, size: 28),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart, size: 28),
-              label: 'Stats',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person, size: 28),
-              label: 'Profile',
-            ),
-          ],
-        ),
-      ),
+      home: AddTaskScreen(),
     );
   }
 }
 
-class WorkProgressScreen extends StatelessWidget {
+class AddTaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Row(
-              children: [
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    SizedBox(
-                      width: 100,
-                      height: 100,
-                      child: CircularProgressIndicator(
-                        value: 1-0.55,
-                        backgroundColor: Colors.black,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
-                        strokeWidth: 10,
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Container(
+          width: 300,
+          height: 450,
+          padding: EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 229, 198, 234),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Add Task',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+              SizedBox(height: 16),
+              TextField(
+                decoration: InputDecoration(
+                  hintText: 'Enter Task Description..',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16),
+              TextField(
+                decoration: InputDecoration(
+                  hintText: 'Time',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  hintText: 'Category',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                items: ['Work', 'Personal', 'Other']
+                    .map((category) => DropdownMenuItem<String>(
+                          value: category,
+                          child: Text(category),
+                        ))
+                    .toList(),
+                onChanged: (value) {},
+              ),
+              SizedBox(height: 32),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  OutlinedButton(
+                    onPressed: () {},
+                    child: Text('Cancel', style: TextStyle(color: Colors.black),),
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: Colors.purple),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    Text(
-                      '55%',
-                      style: TextStyle(fontSize: 24, color: Colors.black),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: Text('+ Add', style: TextStyle(color: Colors.white),),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
-                  ],
-                ),
-                Container(
-                  width: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Tasks", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                        Text('27 Tasks Left', style: TextStyle(fontSize: 18)),
-                        Text('34 Tasks Complete', style: TextStyle(fontSize: 18)),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
-          SizedBox(height: 32),
-          Center(
-          child: Text('Staff Progress', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,)),),
-          SizedBox(height: 16),
-          Expanded(
-            child: ListView.builder(
-              itemCount: 4, // Replace with the actual number of staff members
-              itemBuilder: (context, index) {
-                return StaffProgress(
-                  name: 'Staff Member $index',
-                  completion: 0.7, // Replace with actual completion value
-                  tasksLeft: 5, // Replace with actual tasks left
-                );
-              },
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 }
-
-class StaffProgress extends StatelessWidget {
-  final String name;
-  final double completion;
-  final int tasksLeft;
-
-  StaffProgress({required this.name, required this.completion, required this.tasksLeft});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(name, style: TextStyle(fontSize: 18)),
-                Text('Completion: ${(completion * 100).toInt()}%'),
-                Text('Tasks left: $tasksLeft'),
-              ],
-            ),
-          ),
-          SizedBox(
-            width: 50,
-            height: 50,
-            child: CircularProgressIndicator(
-              value: 1-completion,
-              backgroundColor: Colors.black,
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
-              strokeWidth: 6,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-
