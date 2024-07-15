@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:task_it/constants/colors.dart';
+import 'package:task_it/screens/manager/tasker.dart';
 import 'package:task_it/screens/manager/worker_tile.dart';
 import 'package:task_it/widgets/tiles.dart';
 
@@ -48,10 +49,8 @@ class HomePage extends StatelessWidget {
                     leadingIcon: Icon(Icons.work, size: 60, color: kBlack),
                     titleText: 'Work',
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => WorkerTile()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Tasker()));
                     },
                   ),
                   SizedBox(height: 20),
