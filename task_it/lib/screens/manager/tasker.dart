@@ -5,13 +5,96 @@ class Tasker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBlack,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60.0),
-        child: _buildAppBar(),
-      ),
-      body:Conta
-    );
+        backgroundColor: kBlack,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(60.0),
+          child: _buildAppBar(),
+        ),
+        body: Container(
+          padding: EdgeInsets.all(20.0),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+              color: kWhite),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Tasks',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                      color: kBlack,
+                    ),
+                  ),
+                  Text(
+                    'Add Task+',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                      color: kBlack,
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: ListView(
+                  children: [
+                    ListTile(
+                      title: Text('Won the World Cup'),
+                      subtitle: Text('Year: 2022'),
+                      trailing: Icon(Icons.check_circle_outlined),
+                    ),
+                    ListTile(
+                      title: Text('Won the Copa America'),
+                      subtitle: Text('Year: 2021, 2024'),
+                      trailing: Icon(Icons.check_circle_outlined),
+                    ),
+                    ListTile(
+                      title: Text('Won the Copa America'),
+                      subtitle: Text('Year: 2021, 2024'),
+                      trailing: Icon(Icons.check_circle_outlined),
+                    ),
+                    ListTile(
+                      title: Text('Won the Copa America'),
+                      subtitle: Text('Year: 2021, 2024'),
+                      trailing: Icon(Icons.check_circle_outlined),
+                    ),
+                    ListTile(
+                      title: Text('Won the Copa America'),
+                      subtitle: Text('Year: 2021, 2024'),
+                      trailing: Icon(Icons.check_circle_outlined),
+                    ),
+                    ListTile(
+                      title: Text('Won the Copa America'),
+                      subtitle: Text('Year: 2021, 2024'),
+                      trailing: Icon(Icons.check_circle_outlined),
+                    ),
+                    ListTile(
+                      title: Text('Won the Copa America'),
+                      subtitle: Text('Year: 2021, 2024'),
+                      trailing: Icon(Icons.check_circle_outlined),
+                    ),
+                    ListTile(
+                      title: Text('Won the Copa America'),
+                      subtitle: Text('Year: 2021, 2024'),
+                      trailing: Icon(Icons.check_circle_outlined),
+                    ),
+                    ListTile(
+                      title: Text('Won the Copa America'),
+                      subtitle: Text('Year: 2021, 2024'),
+                      trailing: Icon(Icons.check_circle_outlined),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ));
   }
 }
 
@@ -35,7 +118,7 @@ Widget _buildAppBar() {
           ],
         ),
         actions: [
-          Icon(Icons.more_vert, color: kWhite, size: 40),
+          Icon(Icons.circle_outlined, color: kWhite, size: 40),
         ],
       ),
     ),
