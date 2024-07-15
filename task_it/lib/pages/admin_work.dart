@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
+class AdminWork extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: Text('Work Progress', style: TextStyle(fontWeight: FontWeight.bold),),
           leading: IconButton(
@@ -42,7 +37,6 @@ class MyApp extends StatelessWidget {
             ),
           ],
         ),
-      ),
     );
   }
 }
