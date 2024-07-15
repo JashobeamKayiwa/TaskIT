@@ -32,33 +32,24 @@ class AddTaskScreen extends StatelessWidget {
             children: [
               Text(
                 'Add Task',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
               ),
               SizedBox(height: 16),
               TextField(
                 decoration: InputDecoration(
                   hintText: 'Enter Task Description..',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
                 ),
               ),
               SizedBox(height: 16),
               TextField(
                 decoration: InputDecoration(
                   hintText: 'Time',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
                 ),
               ),
               SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 decoration: InputDecoration(
                   hintText: 'Category',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
                 ),
                 items: ['Work', 'Personal', 'Other']
                     .map((category) => DropdownMenuItem<String>(
