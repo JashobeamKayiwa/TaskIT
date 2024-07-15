@@ -4,8 +4,9 @@ import 'package:task_it/constants/colors.dart';
 class Tiles extends StatelessWidget {
   final Icon leadingIcon;
   final String titleText;
+  final VoidCallback onTap;
 
-  Tiles({required this.leadingIcon, required this.titleText});
+  Tiles({required this.leadingIcon, required this.titleText, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class Tiles extends StatelessWidget {
         ]),
         child: Center(
             child: ListTile(
-          onTap: () {},
+          onTap:onTap,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           tileColor: kGrey,
