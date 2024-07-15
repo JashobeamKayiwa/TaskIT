@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:task_it/constants/colors.dart';
+import 'package:task_it/screens/manager/personal.dart';
 import 'package:task_it/screens/manager/tasker.dart';
 import 'package:task_it/screens/manager/worker_tile.dart';
 import 'package:task_it/widgets/tiles.dart';
@@ -41,7 +42,7 @@ class HomePage extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => WorkerTile()));
+                              builder: (context) => Personal()));
                     },
                   ),
                   SizedBox(height: 20),
