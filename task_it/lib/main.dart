@@ -10,8 +10,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Work Progress'),
-          backgroundColor: Colors.blue,
+          title: Text('Work Progress', style: TextStyle(fontWeight: FontWeight.bold),),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
@@ -19,21 +18,26 @@ class MyApp extends StatelessWidget {
             },
           ),
         ),
-        body: WorkProgressScreen(),
+        body:Column(
+        children: [
+          Divider(height: 1, color: Colors.grey), 
+          Expanded(
+          child: WorkProgressScreen(),),
+          ],),
         bottomNavigationBar: BottomNavigationBar(
-          showSelectedLabels: false, // Hide labels
+          showSelectedLabels: false,
           showUnselectedLabels: false,
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home, size: 28), // Home icon
+              icon: Icon(Icons.home, size: 28),
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart, size: 28), // Stats icon
+              icon: Icon(Icons.bar_chart, size: 28),
               label: 'Stats',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person, size: 28), // Profile icon
+              icon: Icon(Icons.person, size: 28),
               label: 'Profile',
             ),
           ],
@@ -52,34 +56,60 @@ class WorkProgressScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Center(
-            child: Column(
+            child: Row(
               children: [
-                CircularProgressIndicator(
-                  value: 0.55,
-                  backgroundColor: Colors.grey[300],
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: CircularProgressIndicator(
+                        value: 1-0.55,
+                        backgroundColor: Colors.black,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
+                        strokeWidth: 10,
+                      ),
+                    ),
+                    Text(
+                      '55%',
+                      style: TextStyle(fontSize: 24, color: Colors.black),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 8),
-                Text('55%', style: TextStyle(fontSize: 24, color: Colors.blue)),
-                SizedBox(height: 16),
-                Text('27 Tasks Left', style: TextStyle(fontSize: 18)),
-                Text('34 Tasks Complete', style: TextStyle(fontSize: 18)),
+                Container(
+                  width: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Tasks", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                        Text('27 Tasks Left', style: TextStyle(fontSize: 18)),
+                        Text('34 Tasks Complete', style: TextStyle(fontSize: 18)),
+                      ],
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
           SizedBox(height: 32),
-          Text('Staff Progress', style: TextStyle(fontSize: 20)),
+          Center(
+          child: Text('Staff Progress', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,)),),
           SizedBox(height: 16),
           Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  StaffProgress(name: 'SAMUEL KATO', completion: 0.52, tasksLeft: 12),
-                  StaffProgress(name: 'LAMINE YAMAL', completion: 0.70, tasksLeft: 5),
-                  StaffProgress(name: 'LIONEL MESSI', completion: 1.0, tasksLeft: 0),
-                  StaffProgress(name: 'RUBEN DIAS', completion: 0.12, tasksLeft: 12),
-                ],
-              ),
+            child: ListView.builder(
+              itemCount: 4, // Replace with the actual number of staff members
+              itemBuilder: (context, index) {
+                return StaffProgress(
+                  name: 'Staff Member $index',
+                  completion: 0.7, // Replace with actual completion value
+                  tasksLeft: 5, // Replace with actual tasks left
+                );
+              },
             ),
           ),
         ],
@@ -111,14 +141,20 @@ class StaffProgress extends StatelessWidget {
               ],
             ),
           ),
-          CircularProgressIndicator(
-            value: completion,
-            backgroundColor: Colors.grey[300],
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+          SizedBox(
+            width: 50,
+            height: 50,
+            child: CircularProgressIndicator(
+              value: 1-completion,
+              backgroundColor: Colors.black,
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
+              strokeWidth: 6,
+            ),
           ),
         ],
       ),
     );
   }
 }
+
 
