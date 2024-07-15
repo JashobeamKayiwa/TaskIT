@@ -90,50 +90,21 @@ class WorkerTile extends StatelessWidget {
               Expanded(
                 child: ListView(
                   children: [
-                    ListTile(
-                      title: Text('Won the World Cup'),
-                      subtitle: Text('Year: 2022'),
-                      trailing: Icon(Icons.check_circle_outlined),
+                    Card(
+                      child: ListTile(
+                        title: Text('Won the Copa America',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        subtitle: Text('Year: 2021, 2024'),
+                        trailing: Icon(Icons.check_circle_outlined),
+                      ),
                     ),
-                    ListTile(
-                      title: Text('Won the Copa America'),
-                      subtitle: Text('Year: 2021, 2024'),
-                      trailing: Icon(Icons.check_circle_outlined),
-                    ),
-                    ListTile(
-                      title: Text('Won the Copa America'),
-                      subtitle: Text('Year: 2021, 2024'),
-                      trailing: Icon(Icons.check_circle_outlined),
-                    ),
-                    ListTile(
-                      title: Text('Won the Copa America'),
-                      subtitle: Text('Year: 2021, 2024'),
-                      trailing: Icon(Icons.check_circle_outlined),
-                    ),
-                    ListTile(
-                      title: Text('Won the Copa America'),
-                      subtitle: Text('Year: 2021, 2024'),
-                      trailing: Icon(Icons.check_circle_outlined),
-                    ),
-                    ListTile(
-                      title: Text('Won the Copa America'),
-                      subtitle: Text('Year: 2021, 2024'),
-                      trailing: Icon(Icons.check_circle_outlined),
-                    ),
-                    ListTile(
-                      title: Text('Won the Copa America'),
-                      subtitle: Text('Year: 2021, 2024'),
-                      trailing: Icon(Icons.check_circle_outlined),
-                    ),
-                    ListTile(
-                      title: Text('Won the Copa America'),
-                      subtitle: Text('Year: 2021, 2024'),
-                      trailing: Icon(Icons.check_circle_outlined),
-                    ),
-                    ListTile(
-                      title: Text('Won the Copa America'),
-                      subtitle: Text('Year: 2021, 2024'),
-                      trailing: Icon(Icons.check_circle_outlined),
+                    Card(
+                      child: ListTile(
+                        title: Text('Won the Copa America',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        subtitle: Text('Year: 2021, 2024'),
+                        trailing: Icon(Icons.check_circle_outlined),
+                      ),
                     ),
                   ],
                 ),

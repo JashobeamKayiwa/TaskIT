@@ -44,50 +44,14 @@ class Tasker extends StatelessWidget {
               Expanded(
                 child: ListView(
                   children: [
-                    ListTile(
-                      title: Text('Won the World Cup'),
-                      subtitle: Text('Year: 2022'),
-                      trailing: Icon(Icons.check_circle_outlined),
-                    ),
-                    ListTile(
-                      title: Text('Won the Copa America'),
-                      subtitle: Text('Year: 2021, 2024'),
-                      trailing: Icon(Icons.check_circle_outlined),
-                    ),
-                    ListTile(
-                      title: Text('Won the Copa America'),
-                      subtitle: Text('Year: 2021, 2024'),
-                      trailing: Icon(Icons.check_circle_outlined),
-                    ),
-                    ListTile(
-                      title: Text('Won the Copa America'),
-                      subtitle: Text('Year: 2021, 2024'),
-                      trailing: Icon(Icons.check_circle_outlined),
-                    ),
-                    ListTile(
-                      title: Text('Won the Copa America'),
-                      subtitle: Text('Year: 2021, 2024'),
-                      trailing: Icon(Icons.check_circle_outlined),
-                    ),
-                    ListTile(
-                      title: Text('Won the Copa America'),
-                      subtitle: Text('Year: 2021, 2024'),
-                      trailing: Icon(Icons.check_circle_outlined),
-                    ),
-                    ListTile(
-                      title: Text('Won the Copa America'),
-                      subtitle: Text('Year: 2021, 2024'),
-                      trailing: Icon(Icons.check_circle_outlined),
-                    ),
-                    ListTile(
-                      title: Text('Won the Copa America'),
-                      subtitle: Text('Year: 2021, 2024'),
-                      trailing: Icon(Icons.check_circle_outlined),
-                    ),
-                    ListTile(
-                      title: Text('Won the Copa America'),
-                      subtitle: Text('Year: 2021, 2024'),
-                      trailing: Icon(Icons.check_circle_outlined),
+                    Card(
+                      child: ListTile(
+                        isThreeLine: true,
+                        title: Text('Win the World Cup',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        subtitle: Text('Time: 20:22pm \n Lionel Messi'),
+                        trailing: Icon(Icons.delete_outlined, color: kRedDark),
+                      ),
                     ),
                   ],
                 ),
@@ -108,7 +72,7 @@ Widget _buildAppBar() {
         title: Row(
           children: [
             Text(
-              'LIONEL MESSI',
+              'WORK',
               style: TextStyle(
                 color: kWhite,
                 fontSize: 26,
