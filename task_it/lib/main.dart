@@ -12,6 +12,13 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text('Work Progress'),
           backgroundColor: Colors.blue,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back), // Back arrow icon
+            onPressed: () {
+              // Handle back button press
+              Navigator.pop(context);
+            },
+          ),
         ),
         body: WorkProgressScreen(),
         bottomNavigationBar: BottomNavigationBar(
@@ -21,7 +28,7 @@ class MyApp extends StatelessWidget {
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart), // Added the Stats icon
+              icon: Icon(Icons.bar_chart),
               label: 'Stats',
             ),
             BottomNavigationBarItem(
