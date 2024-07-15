@@ -5,62 +5,63 @@ class Personal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: kBlack,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(60.0),
-          child: _buildAppBar(),
-        ),
-        body: Container(
-          padding: EdgeInsets.all(20.0),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              ),
-              color: kWhite),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Tasks',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                      color: kBlack,
-                    ),
+      backgroundColor: kBlack,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60.0),
+        child: _buildAppBar(),
+      ),
+      body: Container(
+        padding: EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+            color: kWhite),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Tasks',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: kBlack,
                   ),
-                  Text(
-                    'Add Task+',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                      color: kBlack,
+                ),
+                Text(
+                  'Add Task+',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: kBlack,
+                  ),
+                ),
+              ],
+            ),
+            Expanded(
+              child: ListView(
+                children: [
+                  Card(
+                    child: ListTile(
+                      leading: Icon(Icons.crop_square),
+                      isThreeLine: true,
+                      title: Text('Win the World Cup',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      subtitle: Text('Time: 20:22pm \n Lionel Messi'),
+                      trailing: Icon(Icons.delete_outlined, color: kRedDark),
                     ),
                   ),
                 ],
               ),
-              Expanded(
-                child: ListView(
-                  children: [
-                    Card(
-                      child: ListTile(
-                        isThreeLine: true,
-                        title: Text('Win the World Cup',
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: Text('Time: 20:22pm \n Lionel Messi'),
-                        trailing: Icon(Icons.delete_outlined, color: kRedDark),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
+      ),
       bottomNavigationBar: _buildBottomNavigationBar(),
-      );
+    );
   }
 }
 
@@ -74,7 +75,7 @@ Widget _buildAppBar() {
         title: Row(
           children: [
             Text(
-              'WORK',
+              'PERSONAL',
               style: TextStyle(
                 color: kWhite,
                 fontSize: 26,
@@ -84,7 +85,7 @@ Widget _buildAppBar() {
           ],
         ),
         actions: [
-          Icon(Icons.circle_outlined, color: kWhite, size: 40),
+          Icon(Icons.add, color: kWhite, size: 40),
         ],
       ),
     ),
@@ -127,5 +128,3 @@ Widget _buildBottomNavigationBar() {
             ],
           )));
 }
-
-
