@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 
-class AdminWork extends StatelessWidget {
+class AdminWork extends StatefulWidget {
+  const AdminWork({super.key});
+
+  @override
+  State<AdminWork> createState() => _AdminWorkState();
+}
+
+class _AdminWorkState extends State<AdminWork> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,24 +27,6 @@ class AdminWork extends StatelessWidget {
           Expanded(
           child: WorkProgressScreen(),),
           ],),
-        bottomNavigationBar: BottomNavigationBar(
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home, size: 28),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart, size: 28),
-              label: 'Stats',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person, size: 28),
-              label: 'Profile',
-            ),
-          ],
-        ),
     );
   }
 }
