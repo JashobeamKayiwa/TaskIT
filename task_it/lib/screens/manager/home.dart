@@ -57,7 +57,7 @@ class HomePage extends StatelessWidget {
                   SizedBox(height: 20),
                   Tiles(
                     leadingIcon:
-                        Icon(Icons.attach_money, size: 60, color: kBlack),
+                        Icon(Icons.bar_chart, size: 60, color: kBlack),
                     titleText: 'Finance',
                     onTap: () {
                       Navigator.push(
@@ -93,7 +93,7 @@ Widget _buildAppBar() {
         elevation: 0,
         title: Row(
           children: [
-            Text('Welcome Michelle',
+            Text('Welcome, Michelle',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 26,
@@ -137,7 +137,7 @@ Widget _buildBottomNavigationBar() {
                   label: 'Home', icon: Icon(Icons.home_rounded, size: 40)),
               BottomNavigationBarItem(
                   label: 'Finances',
-                  icon: Icon(Icons.attach_money_outlined, size: 40)),
+                  icon: Icon(Icons.bar_chart, size: 40)),
               BottomNavigationBarItem(
                   label: 'Person', icon: Icon(Icons.person_rounded, size: 40)),
             ],
