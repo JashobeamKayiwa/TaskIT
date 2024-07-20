@@ -2,7 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:task_it/data/database.dart';
 import 'package:task_it/pages/add_task.dart';
+import 'package:task_it/pages/admin_home.dart';
 import 'package:task_it/pages/admin_work.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
+import 'package:task_it/constants/colors.dart';
+import 'package:task_it/pages/personal.dart';
+import 'package:task_it/pages/tasker.dart';
+import 'package:task_it/pages/worker_tile.dart';
+import 'package:task_it/widgets/tiles.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -25,7 +33,7 @@ class _HomeState extends State<Home> {
   }
 
   List pages = [
-    AdminWork(),
+    AdminHome(),
     //Statistics(),
     //Profile(),
   ];
@@ -33,7 +41,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     //first time opening the app
-    if (MyBox.get("TODOLIST") == null) {
+    if (((MyBox.get("TODOLIST"))&&MyBox.get("PERSONAL")) == null) {
       db.createInitData();
     } else {
       //not first time
@@ -134,3 +142,4 @@ class _HomeState extends State<Home> {
     );
   }
 }
+

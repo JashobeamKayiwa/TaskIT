@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_it/pages/admin_home.dart';
 
 class AdminWork extends StatefulWidget {
   const AdminWork({super.key});
@@ -17,7 +18,8 @@ class _AdminWorkState extends State<AdminWork> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => AdminHome()));
             },
           ),
         ),
