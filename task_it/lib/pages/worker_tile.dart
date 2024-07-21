@@ -175,7 +175,7 @@ Widget _buildBottomNavigationBar() {
                   label: 'Home', icon: Icon(Icons.home_rounded, size: 40)),
               BottomNavigationBarItem(
                   label: 'Finances',
-                  icon: Icon(Icons.attach_money_outlined, size: 40)),
+                  icon: Icon(Icons.bar_chart, size: 40)),
               BottomNavigationBarItem(
                   label: 'Person', icon: Icon(Icons.person_rounded, size: 40)),
             ],

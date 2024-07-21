@@ -41,8 +41,10 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     //first time opening the app
-    if (((MyBox.get("TODOLIST"))&&MyBox.get("PERSONAL")) == null) {
-      db.createInitData();
+    if (MyBox.get("TODOLIST") == null) {
+      if (MyBox.get("PERSONAL") == null){
+        db.createInitData();
+      }
     } else {
       //not first time
       db.loadData();
