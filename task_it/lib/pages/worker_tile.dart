@@ -1,8 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:hive/hive.dart';
 import 'package:task_it/constants/colors.dart';
+import 'package:task_it/data/database.dart';
 
-class WorkerTile extends StatelessWidget {
+class WorkerTile extends StatefulWidget {
+  const WorkerTile({super.key});
+
   @override
+  State<WorkerTile> createState() => _WorkerTileState();
+}
+
+class _WorkerTileState extends State<WorkerTile> {
+
+  final MyBox = Hive.box("my_box");
+  ToDoDataBase db = ToDoDataBase(); 
+  
+  @override
+
+  void checkBoxChanged(bool? value, int index) {
+    setState(() {
+      db.Personal[index][2] = !db.Personal[index][2];
+    });
+    db.updateDataBase();
+  }
+
+  void deleteTask(int index) {
+    setState(() {
+      db.Personal.removeAt(index);
+    });
+    db.updateDataBase();
+  }
+
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kWhite,
@@ -80,28 +110,21 @@ class WorkerTile extends StatelessWidget {
                  
                 ],
               ),
+              SizedBox(height: 16),
               Expanded(
-                child: ListView(
-                  children: [
-                    Card(
-                      child: ListTile(
-                        title: Text('Won the Copa America',
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: Text('Year: 2021, 2024'),
-                        trailing: Icon(Icons.check_circle_outlined),
-                      ),
-                    ),
-                    Card(
-                      child: ListTile(
-                        title: Text('Won the Copa America',
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: Text('Year: 2021, 2024'),
-                        trailing: Icon(Icons.check_circle_outlined),
-                      ),
-                    ),
-                  ],
-                ),
-              )
+              child: ListView.builder(
+                itemCount: db.toDoList.length,
+                itemBuilder: (context, index) {
+                  return ToDoTile(
+                    taskName: db.toDoList[index][0],
+                    taskTime: db.toDoList[index][1],
+                    taskCompleted: db.toDoList[index][2],
+                    onChanged: (value) => checkBoxChanged(value, index),
+                    deleteFunction: (context) => deleteTask(index),
+                  );
+                },
+              ),
+            )
             ],
           )),
       bottomNavigationBar: _buildBottomNavigationBar(),
@@ -180,4 +203,86 @@ Widget _buildBottomNavigationBar() {
                   label: 'Person', icon: Icon(Icons.person_rounded, size: 40)),
             ],
           )));
+}
+
+
+class ToDoTile extends StatelessWidget {
+  final String taskName;
+  final String taskTime;
+  final bool taskCompleted;
+  Function(bool?)? onChanged;
+  Function(BuildContext)? deleteFunction;
+
+  ToDoTile({
+    super.key,
+    required this.taskName,
+    required this.taskTime,
+    required this.taskCompleted,
+    required this.onChanged,
+    required this.deleteFunction,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 25.0,
+        right: 25.0,
+        top: 25.0,
+      ),
+      child: Slidable(
+        endActionPane: ActionPane(
+          motion: StretchMotion(),
+          children: [
+            SlidableAction(
+              onPressed: deleteFunction,
+              icon: Icons.delete,
+              backgroundColor: Colors.red,
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ],
+        ),
+        child: Container(
+          padding: EdgeInsets.all(24),
+          child: Row(
+            children: [
+              //checkout
+              Checkbox(
+                value: taskCompleted,
+                onChanged: onChanged,
+                activeColor: Colors.black,
+              ),
+              //task name
+              Column(
+                children: [
+                  Text(
+                    taskName,
+                    style: TextStyle(
+                      decoration: taskCompleted
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    taskTime,
+                    style: TextStyle(
+                      decoration: taskCompleted
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 195, 206, 208),
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      ),
+    );
+  }
 }

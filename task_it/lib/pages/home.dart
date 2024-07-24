@@ -65,7 +65,7 @@ class _HomeState extends State<Home> {
   //checkbox was tapped
   void checkBoxChanged(bool? value, int index) {
     setState(() {
-      db.toDoList[index][2] = !db.toDoList[index][2];
+      db.toDoList[index][3] = !db.toDoList[index][3];
     });
     db.updateDataBase();
   }
@@ -121,26 +121,26 @@ class _HomeState extends State<Home> {
       //   child: Icon(Icons.add),
       //   backgroundColor: Colors.yellow,
       // ),
-      bottomNavigationBar: BottomNavigationBar(
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        currentIndex: selectedindex,
-        onTap: navigateBottomBar,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home, size: 28),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart, size: 28),
-            label: 'Stats',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person, size: 28),
-            label: 'Profile',
-          ),
-        ],
-      ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   showSelectedLabels: false,
+      //   showUnselectedLabels: false,
+      //   currentIndex: selectedindex,
+      //   onTap: navigateBottomBar,
+      //   items: [
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home, size: 28),
+      //       label: 'Home',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.bar_chart, size: 28),
+      //       label: 'Stats',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.person, size: 28),
+      //       label: 'Profile',
+      //     ),
+      //   ],
+      // ),
     );
   }
 }

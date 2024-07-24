@@ -1,8 +1,11 @@
 import "package:flutter/material.dart";
+import "package:hive_flutter/hive_flutter.dart";
 import "package:task_it/constants/colors.dart";
 import "package:task_it/data/database.dart";
+import "package:task_it/main.dart";
 import "package:task_it/pages/add_task.dart";
 import "package:task_it/pages/admin_home.dart";
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class Personal extends StatefulWidget {
   const Personal({super.key});
@@ -12,6 +15,7 @@ class Personal extends StatefulWidget {
 }
 
 class _PersonalState extends State<Personal> {
+  final MyBox = Hive.box("my_box");
   ToDoDataBase db = ToDoDataBase();
   var _task_controller = TextEditingController();
   var _time_controller = TextEditingController();
@@ -31,9 +35,23 @@ class _PersonalState extends State<Personal> {
     );
   }
 
+  void checkBoxChanged(bool? value, int index) {
+    setState(() {
+      db.Personal[index][2] = !db.Personal[index][2];
+    });
+    db.updateDataBase();
+  }
+
+  void deleteTask(int index) {
+    setState(() {
+      db.Personal.removeAt(index);
+    });
+    db.updateDataBase();
+  }
+
   void saveNewTask() {
     setState(() {
-      db.toDoList.add([_task_controller.text, _time_controller.text, false]);
+      db.Personal.add([_task_controller.text, _time_controller.text, false]);
       _task_controller.clear();
       _time_controller.clear();
     });
@@ -62,13 +80,15 @@ class _PersonalState extends State<Personal> {
               backgroundColor: kBlack,
               elevation: 0,
               leading: IconButton(
-                icon: Icon(Icons.arrow_back, color: kWhite, ),
-                onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => AdminHome()));
-                  },
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: kWhite,
                 ),
-                  
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AdminHome()));
+                },
+              ),
               title: Row(
                 children: [
                   Text(
@@ -85,7 +105,6 @@ class _PersonalState extends State<Personal> {
           ),
         ),
       ),
-      
       body: Container(
         padding: EdgeInsets.all(20.0),
         decoration: BoxDecoration(
@@ -128,19 +147,17 @@ class _PersonalState extends State<Personal> {
             ),
             SizedBox(height: 16),
             Expanded(
-              child: ListView(
-                children: [
-                  Card(
-                    child: ListTile(
-                      leading: Icon(Icons.crop_square),
-                      isThreeLine: true,
-                      title: Text('Win the World Cup',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      subtitle: Text('Time: 20:22pm \n Lionel Messi'),
-                      trailing: Icon(Icons.delete_outlined, color: kRedDark),
-                    ),
-                  ),
-                ],
+              child: ListView.builder(
+                itemCount: db.Personal.length,
+                itemBuilder: (context, index) {
+                  return ToDoTile(
+                    taskName: db.Personal[index][0],
+                    taskTime: db.Personal[index][1],
+                    taskCompleted: db.Personal[index][2],
+                    onChanged: (value) => checkBoxChanged(value, index),
+                    deleteFunction: (context) => deleteTask(index),
+                  );
+                },
               ),
             )
           ],
@@ -180,10 +197,90 @@ Widget _buildBottomNavigationBar() {
               BottomNavigationBarItem(
                   label: 'Home', icon: Icon(Icons.home_rounded, size: 40)),
               BottomNavigationBarItem(
-                  label: 'Finances',
-                  icon: Icon(Icons.bar_chart, size: 40)),
+                  label: 'Finances', icon: Icon(Icons.bar_chart, size: 40)),
               BottomNavigationBarItem(
                   label: 'Person', icon: Icon(Icons.person_rounded, size: 40)),
             ],
           )));
+}
+
+class ToDoTile extends StatelessWidget {
+  final String taskName;
+  final String taskTime;
+  final bool taskCompleted;
+  Function(bool?)? onChanged;
+  Function(BuildContext)? deleteFunction;
+
+  ToDoTile({
+    super.key,
+    required this.taskName,
+    required this.taskTime,
+    required this.taskCompleted,
+    required this.onChanged,
+    required this.deleteFunction,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 25.0,
+        right: 25.0,
+        top: 25.0,
+      ),
+      child: Slidable(
+        endActionPane: ActionPane(
+          motion: StretchMotion(),
+          children: [
+            SlidableAction(
+              onPressed: deleteFunction,
+              icon: Icons.delete,
+              backgroundColor: Colors.red,
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ],
+        ),
+        child: Container(
+          padding: EdgeInsets.all(24),
+          child: Row(
+            children: [
+              //checkout
+              Checkbox(
+                value: taskCompleted,
+                onChanged: onChanged,
+                activeColor: Colors.black,
+              ),
+              //task name
+              Column(
+                children: [
+                  Text(
+                    taskName,
+                    style: TextStyle(
+                      decoration: taskCompleted
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    taskTime,
+                    style: TextStyle(
+                      decoration: taskCompleted
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 195, 206, 208),
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      ),
+    );
+  }
 }

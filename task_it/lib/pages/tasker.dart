@@ -1,4 +1,6 @@
 import "package:flutter/material.dart";
+import "package:flutter_slidable/flutter_slidable.dart";
+import "package:hive/hive.dart";
 import "package:task_it/constants/colors.dart";
 import "package:task_it/data/database.dart";
 import "package:task_it/pages/add_task.dart";
@@ -12,6 +14,7 @@ class Tasker extends StatefulWidget {
 }
 
 class _TaskerState extends State<Tasker> {
+  final MyBox = Hive.box("my_box");
   ToDoDataBase db = ToDoDataBase();
   var _task_controller = TextEditingController();
   var _time_controller = TextEditingController();
@@ -48,6 +51,20 @@ class _TaskerState extends State<Tasker> {
       _time_controller.clear();
     });
     Navigator.of(context).pop();
+  }
+
+  void checkBoxChanged(bool? value, int index) {
+    setState(() {
+      db.toDoList[index][2] = !db.toDoList[index][2];
+    });
+    db.updateDataBase();
+  }
+
+  void deleteTask(int index) {
+    setState(() {
+      db.toDoList.removeAt(index);
+    });
+    db.updateDataBase();
   }
 
 
@@ -125,20 +142,19 @@ class _TaskerState extends State<Tasker> {
               ),
               SizedBox(height: 16),
               Expanded(
-                child: ListView(
-                  children: [
-                    Card(
-                      child: ListTile(
-                        isThreeLine: true,
-                        title: Text('Win the World Cup',
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: Text('Time: 20:22pm \n Lionel Messi'),
-                        trailing: Icon(Icons.delete_outlined, color: kRedDark),
-                      ),
-                    ),
-                  ],
-                ),
-              )
+              child: ListView.builder(
+                itemCount: db.toDoList.length,
+                itemBuilder: (context, index) {
+                  return ToDoTile(
+                    taskName: db.toDoList[index][0],
+                    taskTime: db.toDoList[index][1],
+                    taskCompleted: db.toDoList[index][2],
+                    onChanged: (value) => checkBoxChanged(value, index),
+                    deleteFunction: (context) => deleteTask(index),
+                  );
+                },
+              ),
+            )
             ],
           ),
         ),
@@ -184,3 +200,83 @@ Widget _buildBottomNavigationBar() {
           )));
 }
 
+class ToDoTile extends StatelessWidget {
+  final String taskName;
+  final String taskTime;
+  final bool taskCompleted;
+  Function(bool?)? onChanged;
+  Function(BuildContext)? deleteFunction;
+
+  ToDoTile({
+    super.key,
+    required this.taskName,
+    required this.taskTime,
+    required this.taskCompleted,
+    required this.onChanged,
+    required this.deleteFunction,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 25.0,
+        right: 25.0,
+        top: 25.0,
+      ),
+      child: Slidable(
+        endActionPane: ActionPane(
+          motion: StretchMotion(),
+          children: [
+            SlidableAction(
+              onPressed: deleteFunction,
+              icon: Icons.delete,
+              backgroundColor: Colors.red,
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ],
+        ),
+        child: Container(
+          padding: EdgeInsets.all(24),
+          child: Row(
+            children: [
+              //checkout
+              Checkbox(
+                value: taskCompleted,
+                onChanged: onChanged,
+                activeColor: Colors.black,
+              ),
+              //task name
+              Column(
+                children: [
+                  Text(
+                    taskName,
+                    style: TextStyle(
+                      decoration: taskCompleted
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    taskTime,
+                    style: TextStyle(
+                      decoration: taskCompleted
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 195, 206, 208),
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      ),
+    );
+  }
+}
