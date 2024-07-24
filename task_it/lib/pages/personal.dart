@@ -21,6 +21,25 @@ class _PersonalState extends State<Personal> {
   var _time_controller = TextEditingController();
 
   @override
+
+  void initState() {
+    //first time opening the app
+    if (MyBox.get("PERSONAL") == null) {
+      db.createInitData();
+    } else {
+      //not first time
+      db.loadData();
+    }
+
+    super.initState();
+  }
+
+  bool operator ==(Object other) {
+    // TODO: implement ==
+    return super == other;
+  }
+
+
   void createNewTask() {
     showDialog(
       context: context,

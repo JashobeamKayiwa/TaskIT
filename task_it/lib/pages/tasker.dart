@@ -21,6 +21,24 @@ class _TaskerState extends State<Tasker> {
   
   @override
 
+  void initState() {
+    //first time opening the app
+    if (MyBox.get("TODOLIST") == null) {
+      db.createInitData();
+    } else {
+      //not first time
+      db.loadData();
+    }
+
+    super.initState();
+  }
+
+  bool operator ==(Object other) {
+    // TODO: implement ==
+    return super == other;
+  }
+
+
   void createNewTask() {
       showDialog(
         context: context,

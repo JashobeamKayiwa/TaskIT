@@ -18,6 +18,24 @@ class _WorkerTileState extends State<WorkerTile> {
   
   @override
 
+  void initState() {
+    //first time opening the app
+    if (MyBox.get("TODOLIST") == null) {
+      db.createInitData();
+    } else {
+      //not first time
+      db.loadData();
+    }
+
+    super.initState();
+  }
+
+  bool operator ==(Object other) {
+    // TODO: implement ==
+    return super == other;
+  }
+
+
   void checkBoxChanged(bool? value, int index) {
     setState(() {
       db.Personal[index][2] = !db.Personal[index][2];
