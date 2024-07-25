@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class AddTask extends StatelessWidget {
   final task_controller;
   final time_controller;
+  final String assigned_to;
   VoidCallback on_save;
   VoidCallback on_cancel;
 
@@ -10,9 +11,13 @@ class AddTask extends StatelessWidget {
     super.key,
     required this.task_controller,
     required this.time_controller,
+    required this.assigned_to,
     required this.on_save,
     required this.on_cancel,
   });
+  
+  String _selectedWorker = '';
+  final List<String> _workers = ['Alice', 'Bob', 'Charlie'];
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +26,7 @@ class AddTask extends StatelessWidget {
       body: Center(
         child: Container(
           width: 300,
-          height: 300,
+          height: 350,
           padding: EdgeInsets.all(16.0),
           decoration: BoxDecoration(
             color: Color.fromARGB(255, 229, 198, 234),
@@ -51,7 +56,26 @@ class AddTask extends StatelessWidget {
                   hintText: 'Time',
                 ),
               ),
-              SizedBox(height: 32),
+              SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                decoration: InputDecoration(labelText: 'Assign to Worker'),
+                value: _selectedWorker.isEmpty ? null : _selectedWorker,
+                items: _workers.map((worker) {
+                  return DropdownMenuItem<String>(
+                    value: worker,
+                    child: Text(worker),
+                  );
+                }).toList(),
+                onChanged: (newValue) {
+                  
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please select a worker';
+                  }
+                  return null;
+                },),
+                SizedBox(height: 32),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [

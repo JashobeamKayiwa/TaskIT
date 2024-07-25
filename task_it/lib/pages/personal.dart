@@ -19,9 +19,9 @@ class _PersonalState extends State<Personal> {
   ToDoDataBase db = ToDoDataBase();
   var _task_controller = TextEditingController();
   var _time_controller = TextEditingController();
+  String _assigned_to = "None";
 
   @override
-
   void initState() {
     //first time opening the app
     if (MyBox.get("PERSONAL") == null) {
@@ -39,7 +39,6 @@ class _PersonalState extends State<Personal> {
     return super == other;
   }
 
-
   void createNewTask() {
     showDialog(
       context: context,
@@ -47,6 +46,7 @@ class _PersonalState extends State<Personal> {
         return AddTask(
           task_controller: _task_controller,
           time_controller: _time_controller,
+          assigned_to: _assigned_to,
           on_save: saveNewTask,
           on_cancel: cancelNewTask,
         );
@@ -70,7 +70,7 @@ class _PersonalState extends State<Personal> {
 
   void saveNewTask() {
     setState(() {
-      db.Personal.add([_task_controller.text, _time_controller.text, false]);
+      db.Personal.add([_task_controller.text, _time_controller.text, false, _assigned_to]);
       _task_controller.clear();
       _time_controller.clear();
     });

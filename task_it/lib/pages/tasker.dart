@@ -18,9 +18,9 @@ class _TaskerState extends State<Tasker> {
   ToDoDataBase db = ToDoDataBase();
   var _task_controller = TextEditingController();
   var _time_controller = TextEditingController();
-  
-  @override
+  String _assigned_to = "None";
 
+  @override
   void initState() {
     //first time opening the app
     if (MyBox.get("TODOLIST") == null) {
@@ -38,28 +38,29 @@ class _TaskerState extends State<Tasker> {
     return super == other;
   }
 
-
   void createNewTask() {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AddTask(
-            task_controller: _task_controller,
-            time_controller: _time_controller,
-            on_save: saveNewTask,
-            on_cancel: cancelNewTask,);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AddTask(
+          task_controller: _task_controller,
+          time_controller: _time_controller,
+          assigned_to: _assigned_to,
+          on_save: saveNewTask,
+          on_cancel: cancelNewTask,
+        );
       },
     );
   }
 
-    void saveNewTask() {
-      setState(() {
-        db.toDoList.add([_task_controller.text, _time_controller.text, false]);
-        _task_controller.clear();
-        _time_controller.clear();
+  void saveNewTask() {
+    setState(() {
+      db.toDoList.add([_task_controller.text, _time_controller.text, false, _assigned_to]);
+      _task_controller.clear();
+      _time_controller.clear();
     });
-      Navigator.of(context).pop();
-      db.updateDataBase();
+    Navigator.of(context).pop();
+    db.updateDataBase();
   }
 
   //cancel new task
@@ -85,81 +86,85 @@ class _TaskerState extends State<Tasker> {
     db.updateDataBase();
   }
 
-
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: kBlack,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(60.0),
-          child: Material(
-            elevation: 0,
-            child: ClipRRect(
-              child: AppBar(
-                backgroundColor: kBlack,
-                elevation: 0,
-                leading: IconButton(
-                icon: Icon(Icons.arrow_back, color: kWhite, ),
+      backgroundColor: kBlack,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60.0),
+        child: Material(
+          elevation: 0,
+          child: ClipRRect(
+            child: AppBar(
+              backgroundColor: kBlack,
+              elevation: 0,
+              leading: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: kWhite,
+                ),
                 onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => AdminHome()));
-                  },
-                ),
-                title: Row(
-                  children: [
-                    Text(
-                      'WORK',
-                      style: TextStyle(
-                        color: kWhite,
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AdminHome()));
+                },
+              ),
+              title: Row(
+                children: [
+                  Text(
+                    'WORK',
+                    style: TextStyle(
+                      color: kWhite,
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
         ),
-        body: Container(
-          padding: EdgeInsets.all(20.0),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              ),
-              color: kWhite),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Tasks',
+      ),
+      body: Container(
+        padding: EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+            color: kWhite),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Tasks',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: kBlack,
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: createNewTask,
+                  child: Text(
+                    '+ Add Task',
                     style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
-                      color: kBlack,
+                      color: kWhite,
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: createNewTask,
-                    child: Text('+ Add Task',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                        color: kWhite,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                    ),),
-                ],
-              ),
-              SizedBox(height: 16),
-              Expanded(
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            Expanded(
               child: ListView.builder(
                 itemCount: db.toDoList.length,
                 itemBuilder: (context, index) {
@@ -173,11 +178,11 @@ class _TaskerState extends State<Tasker> {
                 },
               ),
             )
-            ],
-          ),
+          ],
         ),
+      ),
       bottomNavigationBar: _buildBottomNavigationBar(),
-      );
+    );
   }
 }
 
@@ -210,8 +215,7 @@ Widget _buildBottomNavigationBar() {
               BottomNavigationBarItem(
                   label: 'Home', icon: Icon(Icons.home_rounded, size: 40)),
               BottomNavigationBarItem(
-                  label: 'Finances',
-                  icon: Icon(Icons.bar_chart, size: 40)),
+                  label: 'Finances', icon: Icon(Icons.bar_chart, size: 40)),
               BottomNavigationBarItem(
                   label: 'Person', icon: Icon(Icons.person_rounded, size: 40)),
             ],

@@ -42,7 +42,7 @@ class _HomeState extends State<Home> {
   void initState() {
     //first time opening the app
     if (MyBox.get("TODOLIST") == null) {
-      if (MyBox.get("PERSONAL") == null){
+      if (MyBox.get("PERSONAL") == null) {
         db.createInitData();
       }
     } else {
@@ -61,11 +61,12 @@ class _HomeState extends State<Home> {
   //text controllers
   var _task_controller = TextEditingController();
   var _time_controller = TextEditingController();
+  String _assigned_to = "None";
 
   //checkbox was tapped
   void checkBoxChanged(bool? value, int index) {
     setState(() {
-      db.toDoList[index][3] = !db.toDoList[index][3];
+      db.toDoList[index][2] = !db.toDoList[index][2];
     });
     db.updateDataBase();
   }
@@ -73,7 +74,7 @@ class _HomeState extends State<Home> {
   //save new task
   void saveNewTask() {
     setState(() {
-      db.toDoList.add([_task_controller.text, _time_controller.text, false]);
+      db.toDoList.add([_task_controller.text, _time_controller.text, false, _assigned_to]);
       _task_controller.clear();
       _time_controller.clear();
     });
@@ -98,6 +99,7 @@ class _HomeState extends State<Home> {
         return AddTask(
             task_controller: _task_controller,
             time_controller: _time_controller,
+            assigned_to: _assigned_to,
             on_save: saveNewTask,
             on_cancel: cancelNewTask);
       },
@@ -144,4 +146,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
