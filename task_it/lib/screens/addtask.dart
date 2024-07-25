@@ -44,6 +44,7 @@ class _AddTaskState extends State<AddTask> {
                     child: RadioListTile<FinanceType>(
                       contentPadding: EdgeInsets.all(0.0),
                       value: FinanceType.Income,
+                      activeColor: kBlack,
                       groupValue: _financeTypeEnum,
                       title: Text('Income'),
                       onChanged: (val) {
@@ -57,6 +58,7 @@ class _AddTaskState extends State<AddTask> {
                     child: RadioListTile<FinanceType>(
                       contentPadding: EdgeInsets.all(0.0),
                       value: FinanceType.Expense,
+                      activeColor: kBlack,
                       groupValue: _financeTypeEnum,
                       title: Text('Expense'),
                       onChanged: (val) {
