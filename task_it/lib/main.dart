@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:task_it/pages/add_task.dart';
+import 'package:task_it/pages/add_task_personal.dart';
 import 'package:task_it/pages/admin_home.dart';
 import 'package:task_it/pages/admin_work.dart';
 import 'package:task_it/pages/home.dart';

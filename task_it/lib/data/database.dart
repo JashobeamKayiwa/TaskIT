@@ -2,7 +2,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 class ToDoDataBase {
   List toDoList = [];
-  List Personal = [];
+  List Personal = [["dig","2",false,"job"],];
 
   //hive box
   final MyBox = Hive.box("my_box");

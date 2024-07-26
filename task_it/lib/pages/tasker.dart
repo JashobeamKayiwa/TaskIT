@@ -3,7 +3,7 @@ import "package:flutter_slidable/flutter_slidable.dart";
 import "package:hive/hive.dart";
 import "package:task_it/constants/colors.dart";
 import "package:task_it/data/database.dart";
-import "package:task_it/pages/add_task.dart";
+import "package:task_it/pages/add_task_work.dart";
 import "package:task_it/pages/admin_home.dart";
 
 class Tasker extends StatefulWidget {
@@ -18,7 +18,7 @@ class _TaskerState extends State<Tasker> {
   ToDoDataBase db = ToDoDataBase();
   var _task_controller = TextEditingController();
   var _time_controller = TextEditingController();
-  String _assigned_to = "None";
+  String _assigned_to = "";
 
   @override
   void initState() {
@@ -38,40 +38,7 @@ class _TaskerState extends State<Tasker> {
     return super == other;
   }
 
-  void createNewTask() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AddTask(
-          task_controller: _task_controller,
-          time_controller: _time_controller,
-          assigned_to: _assigned_to,
-          on_save: saveNewTask,
-          on_cancel: cancelNewTask,
-        );
-      },
-    );
-  }
-
-  void saveNewTask() {
-    setState(() {
-      db.toDoList.add([_task_controller.text, _time_controller.text, false, _assigned_to]);
-      _task_controller.clear();
-      _time_controller.clear();
-    });
-    Navigator.of(context).pop();
-    db.updateDataBase();
-  }
-
-  //cancel new task
-  void cancelNewTask() {
-    setState(() {
-      _task_controller.clear();
-      _time_controller.clear();
-    });
-    Navigator.of(context).pop();
-  }
-
+ 
   void checkBoxChanged(bool? value, int index) {
     setState(() {
       db.toDoList[index][2] = !db.toDoList[index][2];
@@ -145,7 +112,10 @@ class _TaskerState extends State<Tasker> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: createNewTask,
+                  onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AddTaskWork()));
+                },
                   child: Text(
                     '+ Add Task',
                     style: TextStyle(

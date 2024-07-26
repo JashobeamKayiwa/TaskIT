@@ -1,23 +1,76 @@
 import 'package:flutter/material.dart';
+import 'package:task_it/data/database.dart';
+import 'package:task_it/data/task.dart';
 
-class AddTask extends StatelessWidget {
-  final task_controller;
-  final time_controller;
-  final String assigned_to;
-  VoidCallback on_save;
-  VoidCallback on_cancel;
+class AddTaskPersonal extends StatefulWidget {
+  const AddTaskPersonal({super.key});
 
-  AddTask({
-    super.key,
-    required this.task_controller,
-    required this.time_controller,
-    required this.assigned_to,
-    required this.on_save,
-    required this.on_cancel,
-  });
-  
+  @override
+  State<AddTaskPersonal> createState() => _AddTaskPersonalState();
+}
+
+class _AddTaskPersonalState extends State<AddTaskPersonal> {
+  ToDoDataBase db = ToDoDataBase();
   String _selectedWorker = '';
   final List<String> _workers = ['Alice', 'Bob', 'Charlie'];
+  final task_controller = TextEditingController();
+  final time_controller = TextEditingController();
+  DateTime? combinedDateTime;
+
+  Future<void> _showDateTimePicker(BuildContext context) async {
+    final selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate:
+          DateTime.now().add(Duration(days: 365)), // Limit to one year from now
+    );
+
+    if (selectedDate != null) {
+      final selectedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+
+      if (selectedTime != null) {
+        combinedDateTime = DateTime(
+          selectedDate.year,
+          selectedDate.month,
+          selectedDate.day,
+          selectedTime.hour,
+          selectedTime.minute,
+        );
+
+        time_controller.text = '${selectedTime.hour}:${selectedTime.minute}';
+        // Use `combinedDateTime` for your task time
+      }
+    }
+  }
+
+  void createNewTask() {
+    final task = Task(
+      task: task_controller.text,
+      time: combinedDateTime!,
+      assigned_to: _selectedWorker,
+    );
+    setState(() {
+      db.Personal.add([task_controller.text, "${time_controller.text}" , false, _selectedWorker]);
+      task_controller.clear();
+      time_controller.clear();
+    });
+    //task_controller.clear();
+    //time_controller.clear();
+    db.updateDataBase();
+    Navigator.of(context).pop();
+  }
+
+  void cancelNewTask() {
+    setState(() {
+      task_controller.clear();
+      time_controller.clear();
+    });
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +79,7 @@ class AddTask extends StatelessWidget {
       body: Center(
         child: Container(
           width: 300,
-          height: 350,
+          height: 400,
           padding: EdgeInsets.all(16.0),
           decoration: BoxDecoration(
             color: Color.fromARGB(255, 229, 198, 234),
@@ -50,11 +103,26 @@ class AddTask extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 16),
-              TextField(
-                controller: time_controller,
-                decoration: InputDecoration(
-                  hintText: 'Time',
-                ),
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons
+                        .calendar_today), // Use an appropriate calendar icon
+                    onPressed: () {
+                      // Show date and time picker dialog
+                      _showDateTimePicker(context);
+                    },
+                  ),
+                  Expanded(
+                    child: TextField(
+                      controller: time_controller,
+                      decoration: InputDecoration(
+                        hintText: 'Time',
+                      ),
+                      readOnly: true,
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 16),
               DropdownButtonFormField<String>(
@@ -66,21 +134,20 @@ class AddTask extends StatelessWidget {
                     child: Text(worker),
                   );
                 }).toList(),
-                onChanged: (newValue) {
-                  
-                },
+                onChanged: (newValue) {},
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please select a worker';
                   }
                   return null;
-                },),
-                SizedBox(height: 32),
+                },
+              ),
+              SizedBox(height: 32),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   OutlinedButton(
-                    onPressed: on_cancel,
+                    onPressed: cancelNewTask,
                     child: Text(
                       'Cancel',
                       style: TextStyle(color: Colors.black),
@@ -93,7 +160,7 @@ class AddTask extends StatelessWidget {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: on_save,
+                    onPressed: createNewTask,
                     child: Text(
                       '+ Add',
                       style: TextStyle(color: Colors.white),

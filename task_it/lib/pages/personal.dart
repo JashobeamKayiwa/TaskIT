@@ -3,7 +3,7 @@ import "package:hive_flutter/hive_flutter.dart";
 import "package:task_it/constants/colors.dart";
 import "package:task_it/data/database.dart";
 import "package:task_it/main.dart";
-import "package:task_it/pages/add_task.dart";
+import "package:task_it/pages/add_task_personal.dart";
 import "package:task_it/pages/admin_home.dart";
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -17,9 +17,6 @@ class Personal extends StatefulWidget {
 class _PersonalState extends State<Personal> {
   final MyBox = Hive.box("my_box");
   ToDoDataBase db = ToDoDataBase();
-  var _task_controller = TextEditingController();
-  var _time_controller = TextEditingController();
-  String _assigned_to = "None";
 
   @override
   void initState() {
@@ -39,20 +36,7 @@ class _PersonalState extends State<Personal> {
     return super == other;
   }
 
-  void createNewTask() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AddTask(
-          task_controller: _task_controller,
-          time_controller: _time_controller,
-          assigned_to: _assigned_to,
-          on_save: saveNewTask,
-          on_cancel: cancelNewTask,
-        );
-      },
-    );
-  }
+  
 
   void checkBoxChanged(bool? value, int index) {
     setState(() {
@@ -68,25 +52,10 @@ class _PersonalState extends State<Personal> {
     db.updateDataBase();
   }
 
-  void saveNewTask() {
-    setState(() {
-      db.Personal.add([_task_controller.text, _time_controller.text, false, _assigned_to]);
-      _task_controller.clear();
-      _time_controller.clear();
-    });
-    Navigator.of(context).pop();
-    db.updateDataBase();
-  }
+  
 
   //cancel new task
-  void cancelNewTask() {
-    setState(() {
-      _task_controller.clear();
-      _time_controller.clear();
-    });
-    Navigator.of(context).pop();
-  }
-
+  
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBlack,
@@ -146,7 +115,10 @@ class _PersonalState extends State<Personal> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: createNewTask,
+                  onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AddTaskPersonal()));
+                },
                   child: Text(
                     '+ Add Task',
                     style: TextStyle(
