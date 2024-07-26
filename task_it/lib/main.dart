@@ -4,6 +4,7 @@ import 'package:task_it/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:task_it/screens/addtask.dart';
 import 'package:task_it/screens/login.dart';
+import 'package:task_it/screens/register.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'TaskIT',
-      home: AddTask(),
+      home: RegisterPage(),
     );
   }
 }

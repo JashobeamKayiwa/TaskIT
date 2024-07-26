@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:task_it/constants/colors.dart';
 
+import '../widgets/forms.dart';
+
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
@@ -14,6 +16,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final _lNameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _numberController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -37,39 +41,38 @@ class _RegisterPageState extends State<RegisterPage> {
             Expanded(
               child: ListView(
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _buildTextFormField(_fNameController, "First Name",
-                          Icons.person_outline_sharp),
-                      SizedBox(height: 16.0),
-                      _buildTextFormField(_lNameController, "Last Name",
-                          Icons.person_outline_sharp),
-                      SizedBox(height: 16.0),
-                      _buildTextFormField(
-                          _emailController, "Email", Icons.email_outlined),
-                      SizedBox(height: 16.0),
-                      _buildTextFormField(
-                          _passwordController, "Password", Icons.lock_outline),
-                      SizedBox(height: 16.0),
-                      _buildTextFormField(_numberController, "Phone Number",
-                          Icons.phone_outlined),
-                      SizedBox(height: 20.0),
-                      ElevatedButton(
-                          onPressed: () {},
-                          child:
-                              Text('Sign In', style: TextStyle(color: kWhite)),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: kBlack,
-                            padding: EdgeInsets.only(
-                              right: 90.0,
-                              left: 90.0,
-                            ),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0)),
-                          )),
-                    ],
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _buildTextFormField(_fNameController, "First Name",
+                            Icons.person_outline_sharp),
+                        SizedBox(height: 16.0),
+                        _buildTextFormField(_lNameController, "Last Name",
+                            Icons.person_outline_sharp),
+                        SizedBox(height: 16.0),
+                        _buildTextFormField(
+                            _emailController, "Email", Icons.email_outlined),
+                        SizedBox(height: 16.0),
+                        _buildTextFormField(_passwordController, "Password",
+                            Icons.lock_outline),
+                        SizedBox(height: 16.0),
+                        _buildTextFormField(_numberController, "Phone Number",
+                            Icons.phone_outlined),
+                        SizedBox(height: 20.0),
+                        RegButton(
+                          onPress: () {
+                            if (_formKey.currentState!.validate()) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text('Processing Data')));
+                            }
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -83,6 +86,13 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget _buildTextFormField(
       TextEditingController controller, String hintText, IconData icon) {
     return TextFormField(
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return "Fill out this field";
+        } else {
+          null;
+        }
+      },
       controller: controller,
       decoration: InputDecoration(
         hintText: hintText,
@@ -113,9 +123,6 @@ Widget _buildAppBar() {
             ),
           ],
         ),
-        actions: [
-          Icon(Icons.add, color: kWhite, size: 40),
-        ],
       ),
     ),
   );
