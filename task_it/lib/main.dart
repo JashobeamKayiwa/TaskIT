@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:task_it/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:task_it/screens/forgot.dart';
 import 'package:task_it/screens/login.dart';
 
 void main() async {
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'TaskIT',
-      home: LoginPage(),
+      home: ForgotPage(),
     );
   }
 }
