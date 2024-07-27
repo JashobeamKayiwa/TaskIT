@@ -1,10 +1,13 @@
 import "package:flutter/material.dart";
 import "package:flutter_slidable/flutter_slidable.dart";
 import "package:hive/hive.dart";
-import "package:task_it/constants/colors.dart";
-import "package:task_it/data/database.dart";
-import "package:task_it/pages/add_task_work.dart";
 import "package:task_it/pages/admin_home.dart";
+import "package:task_it/pages/worker_tile.dart";
+import "package:task_it/requirements/task.dart";
+import "package:task_it/requirements/colors.dart";
+import "package:task_it/requirements/database.dart";
+import "package:task_it/requirements/dialog.dart";
+import "package:task_it/requirements/tasktile.dart";
 
 class Tasker extends StatefulWidget {
   const Tasker({super.key});
@@ -39,16 +42,23 @@ class _TaskerState extends State<Tasker> {
   }
 
  
-  void checkBoxChanged(bool? value, int index) {
+  void createNewTask(Task task) {
     setState(() {
-      db.toDoList[index][2] = !db.toDoList[index][2];
+      db.toDoList.add(task);
     });
     db.updateDataBase();
   }
 
-  void deleteTask(int index) {
+  void checkBoxChanged(bool? value, int index) {
     setState(() {
-      db.toDoList.removeAt(index);
+      db.toDoList[index].isCompleted = !db.toDoList[index].isCompleted;
+    });
+    db.updateDataBase();
+  }
+
+  void deleteTask(Task task) {
+    setState(() {
+      db.toDoList.remove(task);
     });
     db.updateDataBase();
   }
@@ -113,8 +123,10 @@ class _TaskerState extends State<Tasker> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AddTaskWork()));
+                  showDialog(
+            context: context,
+            builder: (context) => AddTaskDialog(onAddTask: createNewTask),
+          );
                 },
                   child: Text(
                     '+ Add Task',
@@ -139,11 +151,10 @@ class _TaskerState extends State<Tasker> {
                 itemCount: db.toDoList.length,
                 itemBuilder: (context, index) {
                   return ToDoTile(
-                    taskName: db.toDoList[index][0],
-                    taskTime: db.toDoList[index][1],
-                    taskCompleted: db.toDoList[index][2],
+                    task: db.toDoList[index],
+                    taskCompleted: db.toDoList[index].isCompleted,
                     onChanged: (value) => checkBoxChanged(value, index),
-                    deleteFunction: (context) => deleteTask(index),
+                    deleteFunction: deleteTask,
                   );
                 },
               ),
@@ -192,83 +203,3 @@ Widget _buildBottomNavigationBar() {
           )));
 }
 
-class ToDoTile extends StatelessWidget {
-  final String taskName;
-  final String taskTime;
-  final bool taskCompleted;
-  Function(bool?)? onChanged;
-  Function(BuildContext)? deleteFunction;
-
-  ToDoTile({
-    super.key,
-    required this.taskName,
-    required this.taskTime,
-    required this.taskCompleted,
-    required this.onChanged,
-    required this.deleteFunction,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 25.0,
-        right: 25.0,
-        top: 25.0,
-      ),
-      child: Slidable(
-        endActionPane: ActionPane(
-          motion: StretchMotion(),
-          children: [
-            SlidableAction(
-              onPressed: deleteFunction,
-              icon: Icons.delete,
-              backgroundColor: Colors.red,
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ],
-        ),
-        child: Container(
-          padding: EdgeInsets.all(24),
-          child: Row(
-            children: [
-              //checkout
-              Checkbox(
-                value: taskCompleted,
-                onChanged: onChanged,
-                activeColor: Colors.black,
-              ),
-              //task name
-              Column(
-                children: [
-                  Text(
-                    taskName,
-                    style: TextStyle(
-                      decoration: taskCompleted
-                          ? TextDecoration.lineThrough
-                          : TextDecoration.none,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    taskTime,
-                    style: TextStyle(
-                      decoration: taskCompleted
-                          ? TextDecoration.lineThrough
-                          : TextDecoration.none,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          decoration: BoxDecoration(
-            color: Color.fromARGB(255, 195, 206, 208),
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-      ),
-    );
-  }
-}

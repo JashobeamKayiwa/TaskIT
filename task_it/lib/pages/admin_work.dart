@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:task_it/constants/colors.dart';
 import 'package:task_it/pages/admin_home.dart';
+import 'package:task_it/requirements/colors.dart';
 
 class AdminWork extends StatefulWidget {
   const AdminWork({super.key});

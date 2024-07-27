@@ -1,11 +1,13 @@
 import "package:flutter/material.dart";
-import "package:hive_flutter/hive_flutter.dart";
-import "package:task_it/constants/colors.dart";
-import "package:task_it/data/database.dart";
-import "package:task_it/main.dart";
-import "package:task_it/pages/add_task_personal.dart";
-import "package:task_it/pages/admin_home.dart";
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:hive/hive.dart';
+import 'package:task_it/pages/admin_home.dart';
+import 'package:task_it/pages/worker_tile.dart';
+import 'package:task_it/requirements/task.dart';
+import 'package:task_it/requirements/colors.dart';
+import 'package:task_it/requirements/database.dart';
+import 'package:task_it/requirements/dialog.dart';
+import 'package:task_it/requirements/tasktile.dart';
 
 class Personal extends StatefulWidget {
   const Personal({super.key});
@@ -36,26 +38,29 @@ class _PersonalState extends State<Personal> {
     return super == other;
   }
 
-  
+  void createNewTask(Task task) {
+    setState(() {
+      db.Personal.add(task);
+    });
+    db.updateDataBase();
+  }
 
   void checkBoxChanged(bool? value, int index) {
     setState(() {
-      db.Personal[index][2] = !db.Personal[index][2];
+      db.Personal[index].isCompleted = !db.Personal[index].isCompleted;
     });
     db.updateDataBase();
   }
 
-  void deleteTask(int index) {
+  void deleteTask(Task task) {
     setState(() {
-      db.Personal.removeAt(index);
+      db.Personal.remove(task);
     });
     db.updateDataBase();
   }
-
-  
 
   //cancel new task
-  
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBlack,
@@ -76,7 +81,7 @@ class _PersonalState extends State<Personal> {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => AdminHome()));
                 },
-              ),
+               ),
               title: Row(
                 children: [
                   Text(
@@ -116,9 +121,11 @@ class _PersonalState extends State<Personal> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AddTaskPersonal()));
-                },
+                    showDialog(
+            context: context,
+            builder: (context) => AddTaskDialog(onAddTask: createNewTask),
+          );
+                  },
                   child: Text(
                     '+ Add Task',
                     style: TextStyle(
@@ -142,11 +149,10 @@ class _PersonalState extends State<Personal> {
                 itemCount: db.Personal.length,
                 itemBuilder: (context, index) {
                   return ToDoTile(
-                    taskName: db.Personal[index][0],
-                    taskTime: db.Personal[index][1],
-                    taskCompleted: db.Personal[index][2],
+                    task: db.Personal[index],
+                    taskCompleted: db.Personal[index].isCompleted,
                     onChanged: (value) => checkBoxChanged(value, index),
-                    deleteFunction: (context) => deleteTask(index),
+                    deleteFunction: deleteTask,
                   );
                 },
               ),
@@ -195,83 +201,3 @@ Widget _buildBottomNavigationBar() {
           )));
 }
 
-class ToDoTile extends StatelessWidget {
-  final String taskName;
-  final String taskTime;
-  final bool taskCompleted;
-  Function(bool?)? onChanged;
-  Function(BuildContext)? deleteFunction;
-
-  ToDoTile({
-    super.key,
-    required this.taskName,
-    required this.taskTime,
-    required this.taskCompleted,
-    required this.onChanged,
-    required this.deleteFunction,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 25.0,
-        right: 25.0,
-        top: 25.0,
-      ),
-      child: Slidable(
-        endActionPane: ActionPane(
-          motion: StretchMotion(),
-          children: [
-            SlidableAction(
-              onPressed: deleteFunction,
-              icon: Icons.delete,
-              backgroundColor: Colors.red,
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ],
-        ),
-        child: Container(
-          padding: EdgeInsets.all(24),
-          child: Row(
-            children: [
-              //checkout
-              Checkbox(
-                value: taskCompleted,
-                onChanged: onChanged,
-                activeColor: Colors.black,
-              ),
-              //task name
-              Column(
-                children: [
-                  Text(
-                    taskName,
-                    style: TextStyle(
-                      decoration: taskCompleted
-                          ? TextDecoration.lineThrough
-                          : TextDecoration.none,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    taskTime,
-                    style: TextStyle(
-                      decoration: taskCompleted
-                          ? TextDecoration.lineThrough
-                          : TextDecoration.none,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          decoration: BoxDecoration(
-            color: Color.fromARGB(255, 195, 206, 208),
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-      ),
-    );
-  }
-}

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:task_it/constants/colors.dart';
 import 'package:task_it/pages/admin_work.dart';
 import 'package:task_it/pages/personal.dart';
-import 'package:task_it/pages/tasker.dart';
+import 'package:task_it/pages/work.dart';
 import 'package:task_it/pages/worker_tile.dart';
-import 'package:task_it/widgets/tiles.dart';
+import 'package:task_it/requirements/colors.dart';
+import 'package:task_it/requirements/tiles.dart';
 
 class AdminHome extends StatelessWidget {
   @override
