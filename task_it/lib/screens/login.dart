@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:task_it/constants/colors.dart';
 import 'package:task_it/screens/forgot.dart';
 import 'package:task_it/screens/register.dart';
@@ -87,10 +88,29 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 TextButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ForgotPage()));
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) => Container(
+                          padding: EdgeInsets.all(15.0),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text("Enter Phone Number",
+                                    style: TextStyle(fontSize: 20.0)),
+                                Expanded(
+                                  child: OtpTextField(
+                                    numberOfFields: 10,
+                                    fillColor: const Color.fromARGB(
+                                        255, 211, 209, 209),
+                                    filled: true,
+                                    onSubmit: (code) {
+                                      print("Code is $code");
+                                    },
+                                  ),
+                                ),
+                              ]),
+                        ),
+                      );
                     },
                     child: Text(
                       "Forgot Password?",
