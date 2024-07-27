@@ -15,32 +15,32 @@ class WorkerTile extends StatefulWidget {
 }
 
 class _WorkerTileState extends State<WorkerTile> {
+  List<Task> tasks = [];
   final MyBox = Hive.box("my_box");
-  ToDoDataBase db = ToDoDataBase();
+  //ToDoDataBase db = ToDoDataBase();
 
   @override
-  void initState() {
-    //first time opening the app
-    if (MyBox.get("TODOLIST") == null) {
-      db.createInitData();
-    } else {
-      //not first time
-      db.loadData();
-    }
+  // void initState() {
+  //   //first time opening the app
+  //   if (MyBox.get("TODOLIST") == null) {
+  //     db.createInitData();
+  //   } else {
+  //     //not first time
+  //     db.loadData();
+  //   }
 
-    super.initState();
-  }
+  //   super.initState();
+  // }
 
-  bool operator ==(Object other) {
-    // TODO: implement ==
-    return super == other;
-  }
+  // bool operator ==(Object other) {
+  //   // TODO: implement ==
+  //   return super == other;
+  // }
 
   void checkBoxChanged(bool? value, int index) {
     setState(() {
-      db.toDoList[index].isCompleted = !db.toDoList[index].isCompleted;
+      tasks[index].isCompleted = !tasks[index].isCompleted;
     });
-    db.updateDataBase();
   }
 
   // void deleteTask(Task task) {
@@ -159,11 +159,11 @@ class _WorkerTileState extends State<WorkerTile> {
             SizedBox(height: 16),
             Expanded(
               child: ListView.builder(
-                itemCount: db.toDoList.length,
+                itemCount: tasks.length,
                 itemBuilder: (context, index) {
                   return ToDoTile(
-                    task: db.toDoList[index],
-                    taskCompleted: db.toDoList[index].isCompleted,
+                    task: tasks[index],
+                    taskCompleted: tasks[index].isCompleted,
                     onChanged: (value) => checkBoxChanged(value, index),
                     deleteFunction: (context) => null,
                   );
@@ -213,4 +213,3 @@ Widget _buildBottomNavigationBar() {
             ],
           )));
 }
-

@@ -17,46 +17,44 @@ class Personal extends StatefulWidget {
 }
 
 class _PersonalState extends State<Personal> {
+  List<Task> tasks = [];
   final MyBox = Hive.box("my_box");
-  ToDoDataBase db = ToDoDataBase();
+  //ToDoDataBase db = ToDoDataBase();
 
   @override
-  void initState() {
-    //first time opening the app
-    if (MyBox.get("PERSONAL") == null) {
-      db.createInitData();
-    } else {
-      //not first time
-      db.loadData();
-    }
+  // void initState() {
+  //   //first time opening the app
+  //   if (MyBox.get("PERSONAL") == null) {
+  //     db.createInitData();
+  //   } else {
+  //     //not first time
+  //     db.loadData();
+  //   }
 
-    super.initState();
-  }
+  //   super.initState();
+  // }
 
-  bool operator ==(Object other) {
-    // TODO: implement ==
-    return super == other;
-  }
+  // bool operator ==(Object other) {
+  //   // TODO: implement ==
+  //   return super == other;
+  // }
 
   void createNewTask(Task task) {
     setState(() {
-      db.Personal.add(task);
+      tasks.add(task);
     });
-    db.updateDataBase();
   }
 
   void checkBoxChanged(bool? value, int index) {
     setState(() {
-      db.Personal[index].isCompleted = !db.Personal[index].isCompleted;
+      tasks[index].isCompleted = !tasks[index].isCompleted;
     });
-    db.updateDataBase();
   }
 
   void deleteTask(Task task) {
     setState(() {
-      db.Personal.remove(task);
+      tasks.remove(task);
     });
-    db.updateDataBase();
   }
 
   //cancel new task
@@ -146,11 +144,11 @@ class _PersonalState extends State<Personal> {
             SizedBox(height: 16),
             Expanded(
               child: ListView.builder(
-                itemCount: db.Personal.length,
+                itemCount: tasks.length,
                 itemBuilder: (context, index) {
                   return ToDoTile(
-                    task: db.Personal[index],
-                    taskCompleted: db.Personal[index].isCompleted,
+                    task: tasks[index],
+                    taskCompleted: tasks[index].isCompleted,
                     onChanged: (value) => checkBoxChanged(value, index),
                     deleteFunction: deleteTask,
                   );
