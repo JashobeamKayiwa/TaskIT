@@ -1,33 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:task_it/constants/colors.dart';
 import 'package:task_it/screens/forgot.dart';
 import 'package:task_it/screens/register.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  var _userNumber;
-  final _numberController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  bool _isPasswordVisible = false;
 
   @override
-  void initState() {
-    super.initState();
-    _numberController.addListener(_updateNumber);
-  }
-
-  void _updateNumber() {
-    setState(() {
-      _userNumber = _numberController.text;
-    });
-  }
-
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -58,92 +48,151 @@ class _LoginPageState extends State<LoginPage> {
                     thickness: 2,
                   ),
                 ),
-                Text('LOGIN',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 20.0,
-                    )),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 10.0, horizontal: 50.0),
-                  child: TextFormField(
-                      controller: _numberController,
-                      decoration: InputDecoration(
-                          hintText: "Phone No.",
-                          fillColor: kGrey,
-                          suffixIcon: Icon(Icons.person_outline_sharp),
-                          border: OutlineInputBorder())),
+                Text(
+                  'LOGIN',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 20.0,
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 10.0, horizontal: 50.0),
-                  child: TextFormField(
-                      controller: _passwordController,
-                      decoration: InputDecoration(
-                          hintText: "Password",
-                          fillColor: kGrey,
-                          suffixIcon: Icon(Icons.remove_red_eye),
-                          border: OutlineInputBorder())),
-                ),
-                TextButton(
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (context) => Container(
-                          padding: EdgeInsets.all(15.0),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Text("Enter Phone Number",
-                                    style: TextStyle(fontSize: 20.0)),
-                                Expanded(
-                                  child: OtpTextField(
-                                    numberOfFields: 10,
-                                    fillColor: const Color.fromARGB(
-                                        255, 211, 209, 209),
-                                    filled: true,
-                                    onSubmit: (code) {
-                                      print("Code is $code");
-                                    },
-                                  ),
-                                ),
-                              ]),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                            hintText: "Email",
+                            fillColor: kGrey,
+                            suffixIcon: Icon(Icons.email_outlined),
+                            border: OutlineInputBorder(),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please enter your email";
+                            } else if (!value.contains('@')) {
+                              return "Please enter a valid email";
+                            }
+                            return null;
+                          },
                         ),
-                      );
-                    },
-                    child: Text(
-                      "Forgot Password?",
-                      style: TextStyle(color: Colors.blue[900], fontSize: 10.0),
-                    )),
-                ElevatedButton(
-                    onPressed: () {},
-                    child: Text('Sign In', style: TextStyle(color: kWhite)),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: kBlack,
-                      padding: EdgeInsets.only(
-                        right: 90.0,
-                        left: 90.0,
-                      ),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0)),
-                    )),
-                TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => RegisterPage()));
-                    },
-                    child: Text(
-                      "Don't have an account, Create Account",
-                      style: TextStyle(color: Colors.blue[900], fontSize: 10.0),
-                    )),
+                        SizedBox(height: 10.0),
+                        TextFormField(
+                          controller: _passwordController,
+                          obscureText: !_isPasswordVisible,
+                          decoration: InputDecoration(
+                            hintText: "Password",
+                            fillColor: kGrey,
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _isPasswordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _isPasswordVisible = !_isPasswordVisible;
+                                });
+                              },
+                            ),
+                            border: OutlineInputBorder(),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please enter your password";
+                            } else if (value.length < 6) {
+                              return "Password must be at least 6 characters";
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 10.0),
+                        TextButton(
+                          onPressed: () {
+                            // Navigate to Forgot Password screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ForgotPage()),
+                            );
+                          },
+                          child: Text(
+                            "Forgot Password?",
+                            style: TextStyle(
+                                color: Colors.blue[900], fontSize: 10.0),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              _signInUser(_emailController.text,
+                                  _passwordController.text, context);
+                            }
+                          },
+                          child:
+                              Text('Sign In', style: TextStyle(color: kWhite)),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: kBlack,
+                            padding: EdgeInsets.symmetric(horizontal: 90.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10.0),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RegisterPage()),
+                            );
+                          },
+                          child: Text(
+                            "Don't have an account? Create Account",
+                            style: TextStyle(
+                                color: Colors.blue[900], fontSize: 10.0),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Future<void> _signInUser(
+      String email, String password, BuildContext context) async {
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('You are logged in')));
+      // Navigate to home screen or wherever
+      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('No user found with this email')));
+      } else if (e.code == 'wrong-password') {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Password did not match')));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.message ?? 'An error occurred')));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
+    }
   }
 }

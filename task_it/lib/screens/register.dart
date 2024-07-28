@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_it/constants/colors.dart';
+import 'package:task_it/functions/authfunctions.dart';
 
 import '../widgets/forms.dart';
 
@@ -12,12 +13,10 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
-  final _fullNameController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _numberController = TextEditingController();
-
   final _formKey = GlobalKey<FormState>();
-
   bool _isPasswordVisible = false;
 
   @override
@@ -49,7 +48,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       children: [
                         _buildLabeledFormField(
                           "Full Name",
-                          _fullNameController,
+                          _nameController,
                           Icons.person_outline_sharp,
                           (value) {
                             if (value!.isEmpty) {
@@ -104,7 +103,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         SizedBox(height: 16.0),
                         _buildLabeledFormField(
                           "Phone Number",
-                          _numberController,
+                          _phoneController,
                           Icons.phone_outlined,
                           (value) {
                             if (value == null || value.isEmpty) {
@@ -120,9 +119,13 @@ class _RegisterPageState extends State<RegisterPage> {
                         RegButton(
                           onPress: () {
                             if (_formKey.currentState!.validate()) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text('Processing Data')));
+                              AuthService.registerUser(
+                                _emailController.text,
+                                _passwordController.text,
+                                _nameController.text,
+                                _phoneController.text,
+                                context,
+                              );
                             }
                           },
                         ),
