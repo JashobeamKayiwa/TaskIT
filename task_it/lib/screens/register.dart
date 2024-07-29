@@ -16,8 +16,9 @@ class _RegisterPageState extends State<RegisterPage> {
   final _lNameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _numberController = TextEditingController();
-
   final _formKey = GlobalKey<FormState>();
+  bool isAdmin = false;
+  bool isStaff = false;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +62,44 @@ class _RegisterPageState extends State<RegisterPage> {
                         SizedBox(height: 16.0),
                         _buildTextFormField(_numberController, "Phone Number",
                             Icons.phone_outlined),
-                        SizedBox(height: 20.0),
+                        SizedBox(height: 8),            
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ListTile(
+                                title: Text(
+                                  'Admin',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                leading: Checkbox(
+                                  value: isAdmin,
+                                  onChanged: _handleAdminChanged,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: ListTile(
+                                title: Text(
+                                  'Staff',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                leading: Checkbox(
+                                  value: isStaff,
+                                  onChanged: _handleStaffChanged,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      SizedBox(height: 20.0),
                         RegButton(
                           onPress: () {
                             if (_formKey.currentState!.validate()) {
@@ -82,7 +120,19 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
+void _handleAdminChanged(bool? value) {
+    setState(() {
+      isAdmin = value ?? false;
+      isStaff = !isAdmin;
+    });
+  }
 
+  void _handleStaffChanged(bool? value) {
+    setState(() {
+      isStaff = value ?? false;
+      isAdmin = !isStaff;
+    });
+  }
   Widget _buildTextFormField(
       TextEditingController controller, String hintText, IconData icon) {
     return TextFormField(
