@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:task_it/constants/colors.dart';
 import 'package:task_it/screens/manager/personal.dart';
 import 'package:task_it/screens/manager/tasker.dart';
@@ -8,8 +7,14 @@ import 'package:task_it/screens/manager/worker_tile.dart';
 import 'package:task_it/widgets/tiles.dart';
 
 class HomePage extends StatelessWidget {
+  //final Map<String, dynamic> userDetails;
+
+  HomePage();
+
   @override
   Widget build(BuildContext context) {
+    //String userName = userDetails['fullname'];
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
@@ -39,10 +44,8 @@ class HomePage extends StatelessWidget {
                         size: 60, color: kBlack),
                     titleText: 'Personal',
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Personal()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Personal()));
                     },
                   ),
                   SizedBox(height: 20),
@@ -56,8 +59,7 @@ class HomePage extends StatelessWidget {
                   ),
                   SizedBox(height: 20),
                   Tiles(
-                    leadingIcon:
-                        Icon(Icons.bar_chart, size: 60, color: kBlack),
+                    leadingIcon: Icon(Icons.bar_chart, size: 60, color: kBlack),
                     titleText: 'Finance',
                     onTap: () {
                       Navigator.push(
@@ -93,7 +95,7 @@ Widget _buildAppBar() {
         elevation: 0,
         title: Row(
           children: [
-            Text('Welcome, Michelle',
+            Text('Welcome, User1',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 26,
@@ -136,8 +138,7 @@ Widget _buildBottomNavigationBar() {
               BottomNavigationBarItem(
                   label: 'Home', icon: Icon(Icons.home_rounded, size: 40)),
               BottomNavigationBarItem(
-                  label: 'Finances',
-                  icon: Icon(Icons.bar_chart, size: 40)),
+                  label: 'Finances', icon: Icon(Icons.bar_chart, size: 40)),
               BottomNavigationBarItem(
                   label: 'Person', icon: Icon(Icons.person_rounded, size: 40)),
             ],

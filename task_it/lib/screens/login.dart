@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:task_it/constants/colors.dart';
 import 'package:task_it/screens/forgot.dart';
+import 'package:task_it/screens/manager/home.dart';
 import 'package:task_it/screens/register.dart';
 
 class LoginPage extends StatefulWidget {
@@ -41,8 +43,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0),
+                  padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0),
                   child: Divider(
                     color: kGrey,
                     thickness: 2,
@@ -173,12 +174,22 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _signInUser(
       String email, String password, BuildContext context) async {
     try {
-      await FirebaseAuth.instance
+      UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
+      User? user = userCredential.user;
+      if (user != null) {
+        Map<String, dynamic>? userDetails = await fetchUserDetails();
+        if (userDetails != null) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(userDetails: userDetails),
+            ),
+          );
+        }
+      }
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('You are logged in')));
-      // Navigate to home screen or wherever
-      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -194,5 +205,17 @@ class _LoginPageState extends State<LoginPage> {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.toString())));
     }
+  }
+
+  Future<Map<String, dynamic>?> fetchUserDetails() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+      return userDoc.data() as Map<String, dynamic>?;
+    }
+    return null;
   }
 }

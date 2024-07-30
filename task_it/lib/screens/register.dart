@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:task_it/constants/colors.dart';
 import 'package:task_it/functions/authfunctions.dart';
+import 'package:task_it/models/user_model.dart';
 
 import '../widgets/forms.dart';
 
@@ -12,10 +14,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final _emailController = TextEditingController();
-  final _nameController = TextEditingController();
-  final _phoneController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final controller = Get.put(SignUpController());
   final _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false;
 
@@ -48,7 +47,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       children: [
                         _buildLabeledFormField(
                           "Full Name",
-                          _nameController,
+                          controller.nameController,
                           Icons.person_outline_sharp,
                           (value) {
                             if (value!.isEmpty) {
@@ -62,7 +61,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         SizedBox(height: 16.0),
                         _buildLabeledFormField(
                           "Email",
-                          _emailController,
+                          controller.emailController,
                           Icons.email_outlined,
                           (value) {
                             if (value == null || value.isEmpty) {
@@ -76,7 +75,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         SizedBox(height: 16.0),
                         _buildLabeledFormField(
                           "Password",
-                          _passwordController,
+                          controller.passwordController,
                           Icons.lock_outline,
                           (value) {
                             if (value == null || value.isEmpty) {
@@ -103,7 +102,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         SizedBox(height: 16.0),
                         _buildLabeledFormField(
                           "Phone Number",
-                          _phoneController,
+                          controller.phoneController,
                           Icons.phone_outlined,
                           (value) {
                             if (value == null || value.isEmpty) {
@@ -116,16 +115,22 @@ class _RegisterPageState extends State<RegisterPage> {
                           },
                         ),
                         SizedBox(height: 20.0),
+                        _buildRoleDropdown(),
+                        SizedBox(height: 20.0),
                         RegButton(
                           onPress: () {
                             if (_formKey.currentState!.validate()) {
-                              AuthService.registerUser(
-                                _emailController.text,
-                                _passwordController.text,
-                                _nameController.text,
-                                _phoneController.text,
-                                context,
-                              );
+                              SignUpController.instance.registerUser(
+                                  controller.emailController.text.trim(),
+                                  controller.passwordController.text.trim());
+
+                              // Call the static registerUser function directly
+                              // final user = UserModel(
+                              //     email: emailController.text.trim(),
+                              //     fullName: nameController.text.trim(),
+                              //     password: passwordController.text.trim(),
+                              //     phoneNo: phoneController.text.trim(),
+                              //     role: selectedRole);
                             }
                           },
                         ),
@@ -138,6 +143,28 @@ class _RegisterPageState extends State<RegisterPage> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildRoleDropdown() {
+    return DropdownButtonFormField<String>(
+      decoration: InputDecoration(
+        labelText: 'Role',
+        fillColor: kGrey,
+        border: OutlineInputBorder(),
+      ),
+      value: controller.selectedRole,
+      items: <String>['Manager', 'Worker'].map((String role) {
+        return DropdownMenuItem<String>(
+          value: role,
+          child: Text(role),
+        );
+      }).toList(),
+      onChanged: (String? newRole) {
+        setState(() {
+          controller.selectedRole = newRole!;
+        });
+      },
     );
   }
 
