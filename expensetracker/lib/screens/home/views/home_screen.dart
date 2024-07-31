@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       body: index == 0
       ? const MainScreen()
-      :const StatScreen(),
+      :const WorkersProfileScreen(),
       //backgroundColor:Colors.black12 ,
       );
   }
