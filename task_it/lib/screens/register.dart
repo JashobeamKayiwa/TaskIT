@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_it/constants/colors.dart';
 import 'package:task_it/functions/authfunctions.dart';
-import 'package:task_it/models/user_model.dart';
 
 import '../widgets/forms.dart';
 

@@ -47,142 +47,147 @@ class _AddTaskState extends State<AddTask> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildTextFormField(
-                _titleController, "Title", Icons.info_outline_rounded),
-            DropdownButtonFormField<String>(
-              hint: Text("Category"),
-              value: _categorySelected,
-              focusColor: Colors.transparent,
-              items: _categoryList
-                  .map((e) => DropdownMenuItem<String>(
-                        child: Text(e),
-                        value: e,
-                      ))
-                  .toList(),
-              onChanged: (val) {
-                setState(() {
-                  _categorySelected = val;
-                });
-              },
-            ),
-            DropdownButtonFormField<String>(
-              value: _workerSelected,
-              hint: Text("Worker"),
-              focusColor: Colors.transparent,
-              items: _workerList
-                  .map((e) => DropdownMenuItem<String>(
-                        child: Text(e),
-                        value: e,
-                      ))
-                  .toList(),
-              onChanged: (val) {
-                setState(() {
-                  _workerSelected = val;
-                });
-              },
-            ),
-            CheckboxListTile(
-              activeColor: kBlack,
-              controlAffinity: ListTileControlAffinity.leading,
-              title: Text("Manual Input"),
-              checkColor: kWhite,
-              value: _manualInput,
-              onChanged: _categorySelected == 'Finance'
-                  ? (val) {
-                      setState(() {
-                        _manualInput = val;
-                      });
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildTextFormField(
+                  _titleController, "Title", Icons.info_outline_rounded),
+              DropdownButtonFormField<String>(
+                hint: Text("Category"),
+                value: _categorySelected,
+                focusColor: Colors.transparent,
+                items: _categoryList
+                    .map((e) => DropdownMenuItem<String>(
+                          child: Text(e),
+                          value: e,
+                        ))
+                    .toList(),
+                onChanged: (val) {
+                  setState(() {
+                    _categorySelected = val;
+                    if (_categorySelected != 'Finance') {
+                      _manualInput = false;
                     }
-                  : null,
-            ),
-            _buildTextFormField(
-                _amountController, "Amount", Icons.attach_money_outlined,
-                enabled: _categorySelected == 'Finance'),
-            Row(
-              children: [
-                Expanded(
-                  child: RadioListTile<FinanceType>(
-                    contentPadding: EdgeInsets.all(0.0),
-                    value: FinanceType.Income,
-                    activeColor: kBlack,
-                    groupValue: _financeTypeEnum,
-                    title: Text('Income'),
-                    onChanged: _categorySelected == 'Finance'
-                        ? (val) {
-                            setState(() {
-                              _financeTypeEnum = val;
-                            });
-                          }
-                        : null,
+                  });
+                },
+              ),
+              DropdownButtonFormField<String>(
+                value: _workerSelected,
+                hint: Text("Worker"),
+                focusColor: Colors.transparent,
+                items: _workerList
+                    .map((e) => DropdownMenuItem<String>(
+                          child: Text(e),
+                          value: e,
+                        ))
+                    .toList(),
+                onChanged: (val) {
+                  setState(() {
+                    _workerSelected = val;
+                  });
+                },
+              ),
+              CheckboxListTile(
+                activeColor: kBlack,
+                controlAffinity: ListTileControlAffinity.leading,
+                title: Text("Manual Input"),
+                checkColor: kWhite,
+                value: _manualInput,
+                onChanged: _categorySelected == 'Finance'
+                    ? (val) {
+                        setState(() {
+                          _manualInput = val;
+                        });
+                      }
+                    : null,
+              ),
+              _buildTextFormField(
+                  _amountController, "Amount", Icons.attach_money_outlined,
+                  enabled: _categorySelected == 'Finance' && !_manualInput!),
+              Row(
+                children: [
+                  Expanded(
+                    child: RadioListTile<FinanceType>(
+                      contentPadding: EdgeInsets.all(0.0),
+                      value: FinanceType.Income,
+                      activeColor: kBlack,
+                      groupValue: _financeTypeEnum,
+                      title: Text('Income'),
+                      onChanged: _categorySelected == 'Finance'
+                          ? (val) {
+                              setState(() {
+                                _financeTypeEnum = val;
+                              });
+                            }
+                          : null,
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: RadioListTile<FinanceType>(
-                    contentPadding: EdgeInsets.all(0.0),
-                    value: FinanceType.Expense,
-                    activeColor: kBlack,
-                    groupValue: _financeTypeEnum,
-                    title: Text('Expense'),
-                    onChanged: _categorySelected == 'Finance'
-                        ? (val) {
-                            setState(() {
-                              _financeTypeEnum = val;
-                            });
-                          }
-                        : null,
+                  Expanded(
+                    child: RadioListTile<FinanceType>(
+                      contentPadding: EdgeInsets.all(0.0),
+                      value: FinanceType.Expense,
+                      activeColor: kBlack,
+                      groupValue: _financeTypeEnum,
+                      title: Text('Expense'),
+                      onChanged: _categorySelected == 'Finance'
+                          ? (val) {
+                              setState(() {
+                                _financeTypeEnum = val;
+                              });
+                            }
+                          : null,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            _buildTextFormField(_timeController, "Due Time", Icons.timer,
-                readOnly: true, onTap: () async {
-              TimeOfDay? pickedTime = await showTimePicker(
-                context: context,
-                initialTime: TimeOfDay.now(),
-              );
-              if (pickedTime != null) {
-                setState(() {
-                  _timeController.text = pickedTime.format(context);
-                });
-              }
-            }),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text('Cancel', style: TextStyle(color: kBlack)),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: kWhite,
-                      padding: EdgeInsets.only(
-                        right: 20.0,
-                        left: 20.0,
-                      ),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0)),
-                    )),
-                ElevatedButton(
-                    onPressed: () {
-                      _submitForm();
-                    },
-                    child: Text('Add Task', style: TextStyle(color: kWhite)),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: kBlack,
-                      padding: EdgeInsets.only(
-                        right: 20.0,
-                        left: 20.0,
-                      ),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0)),
-                    )),
-              ],
-            )
-          ],
+                ],
+              ),
+              _buildTextFormField(_timeController, "Due Time", Icons.timer,
+                  readOnly: true, onTap: () async {
+                TimeOfDay? pickedTime = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.now(),
+                );
+                if (pickedTime != null) {
+                  setState(() {
+                    _timeController.text = pickedTime.format(context);
+                  });
+                }
+              }),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text('Cancel', style: TextStyle(color: kBlack)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: kWhite,
+                        padding: EdgeInsets.only(
+                          right: 20.0,
+                          left: 20.0,
+                        ),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0)),
+                      )),
+                  ElevatedButton(
+                      onPressed: () {
+                        _submitForm();
+                      },
+                      child: Text('Add Task', style: TextStyle(color: kWhite)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: kBlack,
+                        padding: EdgeInsets.only(
+                          right: 20.0,
+                          left: 20.0,
+                        ),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0)),
+                      )),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -225,6 +230,7 @@ class _AddTaskState extends State<AddTask> {
       'manualInput': _categorySelected == 'Finance' ? _manualInput : null,
       'dueTime': _timeController.text,
       'createdAt': Timestamp.now(),
+      'status': 'Pending', // Set initial status to 'Pending'
     };
 
     if (_categorySelected == 'Finance') {
