@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:task_it/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:task_it/screens/addtask.dart';
-import 'package:task_it/screens/forgot.dart';
 import 'package:task_it/screens/login.dart';
 
-void main() async {
+void main(){
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+   Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 

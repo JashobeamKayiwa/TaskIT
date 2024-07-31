@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_it/constants/colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 enum FinanceType { Income, Expense }
 
@@ -11,26 +12,34 @@ class AddTask extends StatefulWidget {
 }
 
 class _AddTaskState extends State<AddTask> {
-  final _fNameController = TextEditingController();
-  bool? _checkBox = false;
+  final _titleController = TextEditingController();
+  final _amountController = TextEditingController();
+  final _timeController = TextEditingController();
+  bool? _manualInput = false;
   FinanceType? _financeTypeEnum;
 
   final _categoryList = ['Work', 'Finance'];
   String? _categorySelected;
 
-  final _workerList = [
-    'Worker 1',
-    'Worker 2',
-    'Worker 3',
-    'Worker 4',
-    'Worker 5'
-  ];
+  List<String> _workerList = [];
   String? _workerSelected;
 
   @override
   void initState() {
     super.initState();
     _categorySelected = _categoryList[0]; // Set the initial selected value
+    _fetchWorkers(); // Fetch worker list from the database
+  }
+
+  Future<void> _fetchWorkers() async {
+    // Fetch the list of workers from the database
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('role', isEqualTo: 'Worker')
+        .get();
+    setState(() {
+      _workerList = snapshot.docs.map((doc) => doc['name'] as String).toList();
+    });
   }
 
   @override
@@ -42,7 +51,7 @@ class _AddTaskState extends State<AddTask> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildTextFormField(
-                _fNameController, "Title", Icons.info_outline_rounded),
+                _titleController, "Title", Icons.info_outline_rounded),
             DropdownButtonFormField<String>(
               hint: Text("Category"),
               value: _categorySelected,
@@ -80,15 +89,18 @@ class _AddTaskState extends State<AddTask> {
               controlAffinity: ListTileControlAffinity.leading,
               title: Text("Manual Input"),
               checkColor: kWhite,
-              value: _checkBox,
-              onChanged: (val) {
-                setState(() {
-                  _checkBox = val;
-                });
-              },
+              value: _manualInput,
+              onChanged: _categorySelected == 'Finance'
+                  ? (val) {
+                      setState(() {
+                        _manualInput = val;
+                      });
+                    }
+                  : null,
             ),
             _buildTextFormField(
-                _fNameController, "Amount", Icons.attach_money_outlined),
+                _amountController, "Amount", Icons.attach_money_outlined,
+                enabled: _categorySelected == 'Finance'),
             Row(
               children: [
                 Expanded(
@@ -98,11 +110,13 @@ class _AddTaskState extends State<AddTask> {
                     activeColor: kBlack,
                     groupValue: _financeTypeEnum,
                     title: Text('Income'),
-                    onChanged: (val) {
-                      setState(() {
-                        _financeTypeEnum = val;
-                      });
-                    },
+                    onChanged: _categorySelected == 'Finance'
+                        ? (val) {
+                            setState(() {
+                              _financeTypeEnum = val;
+                            });
+                          }
+                        : null,
                   ),
                 ),
                 Expanded(
@@ -112,20 +126,36 @@ class _AddTaskState extends State<AddTask> {
                     activeColor: kBlack,
                     groupValue: _financeTypeEnum,
                     title: Text('Expense'),
-                    onChanged: (val) {
-                      setState(() {
-                        _financeTypeEnum = val;
-                      });
-                    },
+                    onChanged: _categorySelected == 'Finance'
+                        ? (val) {
+                            setState(() {
+                              _financeTypeEnum = val;
+                            });
+                          }
+                        : null,
                   ),
                 ),
               ],
             ),
+            _buildTextFormField(_timeController, "Due Time", Icons.timer,
+                readOnly: true, onTap: () async {
+              TimeOfDay? pickedTime = await showTimePicker(
+                context: context,
+                initialTime: TimeOfDay.now(),
+              );
+              if (pickedTime != null) {
+                setState(() {
+                  _timeController.text = pickedTime.format(context);
+                });
+              }
+            }),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                     child: Text('Cancel', style: TextStyle(color: kBlack)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: kWhite,
@@ -137,7 +167,9 @@ class _AddTaskState extends State<AddTask> {
                           borderRadius: BorderRadius.circular(10.0)),
                     )),
                 ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _submitForm();
+                    },
                     child: Text('Add Task', style: TextStyle(color: kWhite)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: kBlack,
@@ -157,15 +189,61 @@ class _AddTaskState extends State<AddTask> {
   }
 
   Widget _buildTextFormField(
-      TextEditingController controller, String hintText, IconData icon) {
+      TextEditingController controller, String hintText, IconData icon,
+      {bool enabled = true, bool readOnly = false, VoidCallback? onTap}) {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
         hintText: hintText,
-        fillColor: kGrey,
+        fillColor: enabled ? kGrey : kGrey.withOpacity(0.5),
         suffixIcon: Icon(icon),
         border: OutlineInputBorder(),
       ),
+      enabled: enabled,
+      readOnly: readOnly,
+      onTap: onTap,
     );
+  }
+
+  void _submitForm() async {
+    if (_titleController.text.isEmpty ||
+        _categorySelected == null ||
+        _workerSelected == null ||
+        (_categorySelected == 'Finance' &&
+            !_manualInput! &&
+            (_amountController.text.isEmpty || _financeTypeEnum == null))) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please fill all the required fields')));
+      return;
+    }
+
+    // Prepare task data
+    Map<String, dynamic> taskData = {
+      'title': _titleController.text,
+      'category': _categorySelected,
+      'worker': _workerSelected,
+      'manualInput': _categorySelected == 'Finance' ? _manualInput : null,
+      'dueTime': _timeController.text,
+      'createdAt': Timestamp.now(),
+    };
+
+    if (_categorySelected == 'Finance') {
+      taskData.addAll({
+        'amount': _manualInput! ? null : _amountController.text,
+        'financeType':
+            _financeTypeEnum == FinanceType.Income ? 'Income' : 'Expense',
+      });
+    }
+
+    try {
+      // Submit to Firestore
+      await FirebaseFirestore.instance.collection('tasks').add(taskData);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Task added successfully')));
+      Navigator.pop(context);
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Failed to add task: $e')));
+    }
   }
 }
