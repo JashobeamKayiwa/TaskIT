@@ -117,7 +117,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           },
                         ),
                         SizedBox(height: 20.0),
-                        _buildRoleDropdown(),
+                        _buildTextFormField(),
                         SizedBox(height: 20.0),
                         RegButton(
                           onPress: () {
@@ -154,8 +154,17 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _buildRoleDropdown() {
-    return DropdownButtonFormField<String>(
+  Widget _buildTextFormField(
+      TextEditingController controller, String hintText, IconData icon) {
+    return TextFormField(
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return "Fill out this field";
+        } else {
+          null;
+        }
+      },
+      controller: controller,
       decoration: InputDecoration(
         labelText: 'Role',
         fillColor: kGrey,
