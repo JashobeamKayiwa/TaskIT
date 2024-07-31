@@ -117,7 +117,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           },
                         ),
                         SizedBox(height: 20.0),
-                        _buildTextFormField(),
+                        _buildTextForm(),
                         SizedBox(height: 20.0),
                         RegButton(
                           onPress: () {
