@@ -2,7 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:task_it/screens/manager/home.dart'; // Replace with your actual homepage import
+import 'package:task_it/screens/manager/home.dart';
+import 'package:task_it/screens/manager/home1.dart'; // Replace with your actual homepage import
 
 class AuthService {
   static Future<void> registerUser(
@@ -37,7 +38,7 @@ class AuthService {
         // Navigate to the homepage
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()), // Replace with your homepage widget
+          MaterialPageRoute(builder: (context) => Home()), // Replace with your homepage widget
         );
 
         // Inform user to check email and verify
@@ -65,7 +66,7 @@ class AuthService {
           // Automatically log in the user and navigate to the homepage
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const HomePage()), // Replace with your homepage widget
+            MaterialPageRoute(builder: (context) => const Home()), // Replace with your homepage widget
           );
         }
       }

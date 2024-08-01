@@ -140,7 +140,7 @@ class _TaskerState extends State<Tasker> {
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
+      // bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
@@ -175,42 +175,42 @@ class _TaskerState extends State<Tasker> {
     );
   }
 
-  Widget _buildBottomNavigationBar() {
-    return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 5,
-              blurRadius: 10,
-            )
-          ]),
-      child: ClipRRect(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        ),
-        child: BottomNavigationBar(
-          backgroundColor: Colors.white,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          selectedItemColor: kBlack,
-          unselectedItemColor: Colors.grey.withOpacity(0.5),
-          items: [
-            BottomNavigationBarItem(
-                label: 'Home', icon: Icon(Icons.home_rounded, size: 40)),
-            BottomNavigationBarItem(
-                label: 'Finances',
-                icon: Icon(Icons.attach_money_outlined, size: 40)),
-            BottomNavigationBarItem(
-                label: 'Person', icon: Icon(Icons.person_rounded, size: 40)),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget _buildBottomNavigationBar() {
+  //   return Container(
+  //     decoration: BoxDecoration(
+  //         borderRadius: BorderRadius.only(
+  //           topLeft: Radius.circular(30),
+  //           topRight: Radius.circular(30),
+  //         ),
+  //         boxShadow: [
+  //           BoxShadow(
+  //             color: Colors.grey.withOpacity(0.2),
+  //             spreadRadius: 5,
+  //             blurRadius: 10,
+  //           )
+  //         ]),
+  //     child: ClipRRect(
+  //       borderRadius: BorderRadius.only(
+  //         topLeft: Radius.circular(30),
+  //         topRight: Radius.circular(30),
+  //       ),
+  //       child: BottomNavigationBar(
+  //         backgroundColor: Colors.white,
+  //         showSelectedLabels: false,
+  //         showUnselectedLabels: false,
+  //         selectedItemColor: kBlack,
+  //         unselectedItemColor: Colors.grey.withOpacity(0.5),
+  //         items: [
+  //           BottomNavigationBarItem(
+  //               label: 'Home', icon: Icon(Icons.home_rounded, size: 40)),
+  //           BottomNavigationBarItem(
+  //               label: 'Finances',
+  //               icon: Icon(Icons.attach_money_outlined, size: 40)),
+  //           BottomNavigationBarItem(
+  //               label: 'Person', icon: Icon(Icons.person_rounded, size: 40)),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  //}
 }

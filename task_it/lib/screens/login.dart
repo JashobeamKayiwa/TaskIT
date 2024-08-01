@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:task_it/constants/colors.dart';
 import 'package:task_it/screens/forgot.dart';
 import 'package:task_it/screens/manager/home.dart';
+import 'package:task_it/screens/manager/home1.dart';
 import 'package:task_it/screens/register.dart';
 
 class LoginPage extends StatefulWidget {
@@ -183,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => HomePage(),
+              builder: (context) => Home(),
             ),
           );
         }
