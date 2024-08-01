@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:task_it/screens/manager/home.dart';
 import 'package:flutter/services.dart';
 
 void main() {
@@ -14,7 +13,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'TaskIT',
-      home: HomePage(),
-    );
+       );
   }
 }
