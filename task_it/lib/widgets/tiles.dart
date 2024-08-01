@@ -34,4 +34,3 @@ class Tiles extends StatelessWidget {
         )));
   }
 }
-}
