@@ -69,7 +69,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             if (value == null || value.isEmpty) {
                               return "Please enter email";
                             } else if (!value.contains('@')) {
-                              return "messi@example.com";
+                              return "Please enter a valid email";
                             }
                             return null;
                           },
@@ -116,13 +116,12 @@ class _RegisterPageState extends State<RegisterPage> {
                             return null;
                           },
                         ),
-                        SizedBox(height: 20.0),
-                        _buildTextForm(),
+                        SizedBox(height: 16.0),
+                        _buildRoleDropdown(),
                         SizedBox(height: 20.0),
                         RegButton(
                           onPress: () {
                             if (_formKey.currentState!.validate()) {
-
                               AuthService.registerUser(
                                 _emailController.text,
                                 _passwordController.text,
@@ -131,14 +130,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                 selectedRole,
                                 context,
                               );
-
-                              // Call the static registerUser function directly
-                              // final user = UserModel(
-                              //     email: _emailController.text.trim(),
-                              //     fullName: _nameController.text.trim(),
-                              //     password: _passwordController.text.trim(),
-                              //     phoneNo: _phoneController.text.trim(),
-                              //     role: _selectedRole);
                             }
                           },
                         ),
@@ -151,37 +142,6 @@ class _RegisterPageState extends State<RegisterPage> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildTextFormField(
-      TextEditingController controller, String hintText, IconData icon) {
-    return TextFormField(
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return "Fill out this field";
-        } else {
-          null;
-        }
-      },
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: 'Role',
-        fillColor: kGrey,
-        border: OutlineInputBorder(),
-      ),
-      value: selectedRole,
-      items: <String>['Manager', 'Worker'].map((String role) {
-        return DropdownMenuItem<String>(
-          value: role,
-          child: Text(role),
-        );
-      }).toList(),
-      onChanged: (String? newRole) {
-        setState(() {
-          selectedRole = newRole!;
-        });
-      },
     );
   }
 
@@ -216,6 +176,34 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  Widget _buildRoleDropdown() {
+    return DropdownButtonFormField<String>(
+      value: selectedRole,
+      decoration: InputDecoration(
+        labelText: 'Role',
+        fillColor: kGrey,
+        border: OutlineInputBorder(),
+      ),
+      items: ['Manager', 'Worker'].map((role) {
+        return DropdownMenuItem(
+          value: role,
+          child: Text(role),
+        );
+      }).toList(),
+      onChanged: (String? newRole) {
+        setState(() {
+          selectedRole = newRole!;
+        });
+      },
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return "Please select a role";
+        }
+        return null;
+      },
+    );
+  }
+
   Widget _buildAppBar() {
     return Material(
       elevation: 0,
@@ -240,5 +228,3 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 }
-
-           
