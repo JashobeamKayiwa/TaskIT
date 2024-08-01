@@ -14,4 +14,8 @@ const Color kBlueDark = Color(0xFFC0D3F8);
 
 const Color kGrey = Color(0xFFD6D6D6);
 const Color kBlack = Colors.black;
+
 const Color kWhite = Colors.white;
+
+const Color kWhite = Colors.white;
+

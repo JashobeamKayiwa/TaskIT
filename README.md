@@ -21,8 +21,6 @@ o	Inadequate Financial Record-Keeping: The farm lacks a comprehensive system to 
 
 o	Difficulty in Cost Analysis: Without accurate data, it’s challenging to analyse costs associated with breeding, feeding, and healthcare.
 
-o	Incomplete Breeding Logs: The current system lacks detailed records of matings, litters, and sales.
-
 Proposed Solution:
 
 To address these challenges, we propose developing a mobile application called TaskIT. TaskIT will streamline farm operations, enhance productivity, and ensure accurate record-keeping.
@@ -45,15 +43,11 @@ o	Financial Records: Log expenses (feed, veterinary services, equipment) and rev
 
 o	Profit Calculation: Calculate net profit by deducting costs from revenue.
 
-o	Breeding Logs: Record mating dates, litter details (kits born, kits weaned, kits sold), and mortality rates.
-
 Expected Benefits:
 
 •	Efficiency: Streamlined task management reduces manual effort and minimizes errors.
 
 •	Financial Insights: Accurate financial tracking enables better decision-making.
-
-•	Data-Driven Breeding: Detailed breeding logs improve breeding outcomes.
 
 •	User-Friendly Interface: Intuitive design for easy adoption by farmers.
 
@@ -75,8 +69,8 @@ o	As an accountant, I want to log farm expenses (feed, vet services, equipment) 
 
 o	As a financial analyst, I want to calculate net profit by deducting costs from revenue.
 
-o	As a breeder, I want to record mating dates, litter details (kits born, kits weaned, kits sold), and mortality rates.
-
 Link to user stories table: https://docs.google.com/spreadsheets/d/1zGJNXxUNM12QSHWTRg5rjs00cQKOOrkpdyDN5DF5uvE/edit?usp=sharing
+
+Link to UI : https://www.figma.com/design/74zIUzyVTQhOgRqj00x5BI/TaskIT?node-id=0-1&t=tT0RnYEOw8Gk9XNx-1
 
 
