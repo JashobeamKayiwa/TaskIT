@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:task_it/constants/colors.dart';
 import 'package:task_it/screens/manager/selftask.dart';
+import 'package:task_it/screens/manager/updater.dart';
 
 class Personal extends StatelessWidget {
   @override
@@ -79,6 +80,14 @@ class Personal extends StatelessWidget {
                       bool isCompleted = task['status'] == 'Completed';
                       return Card(
                         child: ListTile(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => UpdateTask(task: task),
+                              ),
+                            );
+                          },
                           leading: Checkbox(
                             activeColor: kBlack,
                             value: isCompleted,

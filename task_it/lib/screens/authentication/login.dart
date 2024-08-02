@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:task_it/constants/colors.dart';
-import 'package:task_it/screens/forgot.dart';
+import 'package:task_it/screens/authentication/forgot.dart';
 import 'package:task_it/screens/manager/home.dart';
-import 'package:task_it/screens/register.dart';
+import 'package:task_it/screens/authentication/register.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

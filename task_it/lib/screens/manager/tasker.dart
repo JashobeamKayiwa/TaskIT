@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:task_it/constants/colors.dart';
-import 'package:task_it/screens/addtask.dart';
+import 'package:task_it/screens/manager/addtask.dart';
+import 'package:task_it/screens/manager/preview.dart';
 
 class Tasker extends StatefulWidget {
   @override
@@ -22,11 +23,12 @@ class _TaskerState extends State<Tasker> {
       body: Container(
         padding: EdgeInsets.all(20.0),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-            color: kWhite),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+          color: kWhite,
+        ),
         child: Column(
           children: [
             Row(
@@ -132,6 +134,14 @@ class _TaskerState extends State<Tasker> {
                               _deleteTask(task.id);
                             },
                           ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EditTask(task: task),
+                              ),
+                            );
+                          },
                         ),
                       );
                     },
@@ -180,17 +190,18 @@ class _TaskerState extends State<Tasker> {
   Widget _buildBottomNavigationBar() {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 5,
+            blurRadius: 10,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 5,
-              blurRadius: 10,
-            )
-          ]),
+        ],
+      ),
       child: ClipRRect(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(30),
