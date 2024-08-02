@@ -86,6 +86,9 @@ class _TaskerState extends State<Tasker> {
 
                   final tasks = snapshot.data!.docs;
                   final filteredTasks = tasks.where((task) {
+                    if (task['isPersonal'] == true) {
+                      return false;
+                    }
                     if (_taskFilter == 'All Tasks') {
                       return true;
                     }
@@ -104,7 +107,6 @@ class _TaskerState extends State<Tasker> {
                       final task = filteredTasks[index];
                       final title = task['title'] ?? 'No Title';
                       final worker = task['worker'] ?? 'No Worker';
-                      // final dueTime = task['dueTime'] ?? 'No Time';
                       final status = task['status'] ?? 'Pending';
                       final statusColor =
                           status == 'Completed' ? Colors.green : Colors.red;

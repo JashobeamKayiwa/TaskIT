@@ -208,6 +208,7 @@ class _MyTaskState extends State<MyTask> {
       'dueTime': _timeController.text,
       'createdAt': Timestamp.now(),
       'status': 'Pending', // Set initial status to 'Pending'
+      'isPersonal': true, // Set isPersonal to true
     };
 
     if (_categorySelected == 'Finance') {

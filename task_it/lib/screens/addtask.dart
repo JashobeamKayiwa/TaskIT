@@ -73,8 +73,8 @@ class _AddTaskState extends State<AddTask> {
                 },
               ),
               DropdownButtonFormField<String>(
+                hint: Text("Assign Worker"),
                 value: _workerSelected,
-                hint: Text("Worker"),
                 focusColor: Colors.transparent,
                 items: _workerList
                     .map((e) => DropdownMenuItem<String>(
@@ -231,6 +231,7 @@ class _AddTaskState extends State<AddTask> {
       'dueTime': _timeController.text,
       'createdAt': Timestamp.now(),
       'status': 'Pending', // Set initial status to 'Pending'
+      'isPersonal': false, // Set isPersonal to false
     };
 
     if (_categorySelected == 'Finance') {
