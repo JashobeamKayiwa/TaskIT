@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:task_it/constants/colors.dart';
 import 'package:task_it/screens/manager/home.dart';
+import 'package:task_it/screens/manager/statistics.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -23,7 +24,7 @@ class _HomeState extends State<Home> {
 
   List pages = [
     HomePage(),
-    //Statistics(),
+    Statistics(),
     //Profile(),
   ];
 
