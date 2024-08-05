@@ -35,3 +35,24 @@ class ForgotPage extends StatelessWidget {
                       print("Code is $code");
                     },
                   ),
+                   SizedBox(height: 10.0),
+                  SizedBox(
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: Text("Next", style: TextStyle(color: kWhite)),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: kBlack,
+                          padding: EdgeInsets.only(left: 100.0, right: 100.0),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0))),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
