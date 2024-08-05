@@ -22,3 +22,16 @@ class ForgotPage extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 80.0),
                   ),
+                  Text(
+                    "Please enter verification code",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                  OtpTextField(
+                    numberOfFields: 7,
+                    fillColor: const Color.fromARGB(255, 211, 209, 209),
+                    filled: true,
+                    onSubmit: (code) {
+                      print("Code is $code");
+                    },
+                  ),
