@@ -21,7 +21,7 @@ class TopCard extends StatelessWidget {
         children: [
           Container(
             height: 150,
-            width: 200,
+            width: 180,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               border: Border.all(
@@ -67,7 +67,7 @@ class TopCard extends StatelessWidget {
                         Icon(
                           Icons.arrow_upward,
                           color: Colors.green,
-                          size: 50,
+                          size: 30,
                         ),
                       ],
                     ),
@@ -78,7 +78,7 @@ class TopCard extends StatelessWidget {
                       'Shs. ' + income,
                       style: TextStyle(
                         color: Colors.green,
-                        fontSize: 32,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -88,11 +88,11 @@ class TopCard extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 16,
+            width: 8,
           ),
           Container(
             height: 150,
-            width: 200,
+            width: 180,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               border: Border.all(
@@ -138,7 +138,7 @@ class TopCard extends StatelessWidget {
                         Icon(
                           Icons.arrow_downward,
                           color: Colors.red,
-                          size: 50,
+                          size: 30,
                         ),
                       ],
                     ),
@@ -149,7 +149,7 @@ class TopCard extends StatelessWidget {
                       'Shs. ' + expense,
                       style: TextStyle(
                         color: Colors.red,
-                        fontSize: 32,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
