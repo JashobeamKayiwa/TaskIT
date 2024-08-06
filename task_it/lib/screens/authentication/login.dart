@@ -134,3 +134,39 @@ class _LoginPageState extends State<LoginPage> {
                                   _passwordController.text, context);
                             }
                           },
+                          child:
+                              Text('Sign In', style: TextStyle(color: kWhite)),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: kBlack,
+                            padding: EdgeInsets.symmetric(horizontal: 90.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10.0),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RegisterPage()),
+                            );
+                          },
+                          child: Text(
+                            "Don't have an account? Create Account",
+                            style: TextStyle(
+                                color: Colors.blue[900], fontSize: 10.0),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
