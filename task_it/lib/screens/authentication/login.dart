@@ -111,3 +111,13 @@ class _LoginPageState extends State<LoginPage> {
                             return null;
                           },
                         ),
+                        SizedBox(height: 10.0),
+                        TextButton(
+                          onPressed: () {
+                            // Navigate to Forgot Password screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ForgotPage()),
+                            );
+                          },
