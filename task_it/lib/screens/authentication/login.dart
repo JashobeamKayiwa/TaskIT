@@ -127,3 +127,10 @@ class _LoginPageState extends State<LoginPage> {
                                 color: Colors.blue[900], fontSize: 10.0),
                           ),
                         ),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              _signInUser(_emailController.text,
+                                  _passwordController.text, context);
+                            }
+                          },
