@@ -81,3 +81,24 @@ class _LoginPageState extends State<LoginPage> {
                             return null;
                           },
                            ),
+                           SizedBox(height: 10.0),
+                        TextFormField(
+                          controller: _passwordController,
+                          obscureText: !_isPasswordVisible,
+                          decoration: InputDecoration(
+                            hintText: "Password",
+                            fillColor: kGrey,
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _isPasswordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _isPasswordVisible = !_isPasswordVisible;
+                                });
+                              },
+                            ),
+                            border: OutlineInputBorder(),
+                          ),
