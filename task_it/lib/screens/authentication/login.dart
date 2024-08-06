@@ -78,3 +78,5 @@ class _LoginPageState extends State<LoginPage> {
                             } else if (!value.contains('@')) {
                               return "Please enter a valid email";
                             }
+                            return null;
+                          },
