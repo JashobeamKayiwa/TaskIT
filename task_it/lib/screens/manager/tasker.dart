@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:task_it/constants/colors.dart';
 import 'package:task_it/screens/manager/addtask.dart';
 import 'package:task_it/screens/manager/preview.dart';
+import 'package:task_it/screens/manager/progress.dart';
 
 class Tasker extends StatefulWidget {
   @override
@@ -180,7 +181,15 @@ class _TaskerState extends State<Tasker> {
             ],
           ),
           actions: [
-            Icon(Icons.circle_outlined, color: kWhite, size: 40),
+            GestureDetector(
+              child:Icon(Icons.circle),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProgressTracker()),
+                );
+              },
+            )
           ],
         ),
       ),
