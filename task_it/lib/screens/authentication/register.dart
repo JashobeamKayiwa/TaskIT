@@ -102,3 +102,31 @@ class _RegisterPageState extends State<RegisterPage> {
                             return null;
                           },
                         ),
+                        SizedBox(height: 16.0),
+                        _buildRoleDropdown(),
+                        SizedBox(height: 20.0),
+                        RegButton(
+                          onPress: () {
+                            if (_formKey.currentState!.validate()) {
+                              AuthService.registerUser(
+                                _emailController.text,
+                                _passwordController.text,
+                                _nameController.text,
+                                _phoneController.text,
+                                selectedRole,
+                                context,
+                              );
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
