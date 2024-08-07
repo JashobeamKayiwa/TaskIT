@@ -60,3 +60,16 @@ class _RegisterPageState extends State<RegisterPage> {
                             return null;
                           },
                         ),
+                         SizedBox(height: 16.0),
+                        _buildLabeledFormField(
+                          "Password",
+                          _passwordController,
+                          Icons.lock_outline,
+                          (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please enter password";
+                            } else if (value.length <= 6) {
+                              return "Password must be more than 6 characters";
+                            }
+                            return null;
+                          },
