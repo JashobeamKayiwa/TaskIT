@@ -35,3 +35,28 @@ class _RegisterPageState extends State<RegisterPage> {
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
           ),
+          color: kWhite,
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                children: [
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _buildLabeledFormField(
+                          "Full Name",
+                          _nameController,
+                          Icons.person_outline_sharp,
+                          (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter full name";
+                            } else if (value.trim().split(' ').length < 2) {
+                              return "Please enter at least two names";
+                            }
+                            return null;
+                          },
+                        ),
