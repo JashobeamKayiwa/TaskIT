@@ -28,3 +28,10 @@ class _RegisterPageState extends State<RegisterPage> {
         preferredSize: Size.fromHeight(60.0),
         child: _buildAppBar(),
       ),
+      body: Container(
+        padding: EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
