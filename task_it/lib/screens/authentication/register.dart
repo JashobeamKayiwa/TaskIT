@@ -73,3 +73,17 @@ class _RegisterPageState extends State<RegisterPage> {
                             }
                             return null;
                           },
+                          obscureText: !_isPasswordVisible, // Show asterisks
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _isPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _isPasswordVisible = !_isPasswordVisible;
+                              });
+                            },
+                          ),
+                        ),
