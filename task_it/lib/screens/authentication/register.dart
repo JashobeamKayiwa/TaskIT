@@ -20,4 +20,11 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _isPasswordVisible = false;
   String selectedRole = 'Manager'; // Default role
 
-  
+   @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: kBlack,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60.0),
+        child: _buildAppBar(),
+      ),
