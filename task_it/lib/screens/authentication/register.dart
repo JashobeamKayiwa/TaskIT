@@ -87,3 +87,18 @@ class _RegisterPageState extends State<RegisterPage> {
                             },
                           ),
                         ),
+                        SizedBox(height: 16.0),
+                        _buildLabeledFormField(
+                          "Phone Number",
+                          _phoneController,
+                          Icons.phone_outlined,
+                          (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please enter phone number";
+                            } else if (value.length != 10 ||
+                                !RegExp(r'^[0-9]+$').hasMatch(value)) {
+                              return "Please enter a valid 10-digit phone number";
+                            }
+                            return null;
+                          },
+                        ),
