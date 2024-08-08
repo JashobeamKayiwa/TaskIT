@@ -145,3 +145,18 @@ Widget _buildLabeledFormField(
           label,
           style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
         ),
+        SizedBox(height: 8.0),
+        TextFormField(
+          validator: validator,
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: label,
+            fillColor: kGrey,
+            suffixIcon: suffixIcon ?? Icon(icon),
+            border: OutlineInputBorder(),
+          ),
+          obscureText: obscureText, // Show asterisks if true
+        ),
+      ],
+    );
+  }
