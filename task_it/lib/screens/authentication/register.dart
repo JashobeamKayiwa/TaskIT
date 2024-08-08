@@ -160,3 +160,32 @@ Widget _buildLabeledFormField(
       ],
     );
   }
+
+Widget _buildRoleDropdown() {
+    return DropdownButtonFormField<String>(
+      value: selectedRole,
+      decoration: InputDecoration(
+        labelText: 'Role',
+        fillColor: kGrey,
+        border: OutlineInputBorder(),
+      ),
+      items: ['Manager', 'Worker'].map((role) {
+        return DropdownMenuItem(
+          value: role,
+          child: Text(role),
+        );
+      }).toList(),
+      onChanged: (String? newRole) {
+        setState(() {
+          selectedRole = newRole!;
+        });
+      },
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return "Please select a role";
+        }
+        return null;
+      },
+    );
+  }
+
