@@ -99,3 +99,39 @@ class _AddTaskState extends State<AddTask> {
                           _manualInput = val;
                         });
                       }
+                       : null,
+              ),
+              _buildTextFormField(
+                  _amountController, "Amount", Icons.attach_money_outlined,
+                  enabled: _categorySelected == 'Finance' && !_manualInput!),
+              Row(
+                children: [
+                  Expanded(
+                    child: RadioListTile<FinanceType>(
+                      contentPadding: EdgeInsets.all(0.0),
+                      value: FinanceType.Income,
+                      activeColor: kBlack,
+                      groupValue: _financeTypeEnum,
+                      title: Text('Income'),
+                      onChanged: _categorySelected == 'Finance'
+                          ? (val) {
+                              setState(() {
+                                _financeTypeEnum = val;
+                              });
+                            }
+                          : null,
+                    ),
+                  ),
+                  Expanded(
+                    child: RadioListTile<FinanceType>(
+                      contentPadding: EdgeInsets.all(0.0),
+                      value: FinanceType.Expense,
+                      activeColor: kBlack,
+                      groupValue: _financeTypeEnum,
+                      title: Text('Expense'),
+                      onChanged: _categorySelected == 'Finance'
+                          ? (val) {
+                              setState(() {
+                                _financeTypeEnum = val;
+                              });
+                            }
