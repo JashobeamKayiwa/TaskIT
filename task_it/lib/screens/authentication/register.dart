@@ -130,3 +130,18 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
+Widget _buildLabeledFormField(
+    String label,
+    TextEditingController controller,
+    IconData icon,
+    FormFieldValidator<String> validator, {
+    bool obscureText = false,
+    Widget? suffixIcon,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+        ),
