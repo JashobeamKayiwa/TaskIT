@@ -1,23 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:task_it/screens/bottom_sheets/google_sheets.dart';
 
-class MyTransaction extends StatelessWidget {
+class MyTransaction extends StatefulWidget {
   final String transactionName;
   final String money;
   final String expenseOrIncome;
+  final Function(bool, double, String, int) onCheckboxChanged;
+  final int rowIndex;
+  final bool initialIsChecked; // Add this
 
   const MyTransaction({
     super.key,
     required this.transactionName,
     required this.money,
     required this.expenseOrIncome,
+    required this.onCheckboxChanged,
+    required this.rowIndex,
+    required this.initialIsChecked, // Add this
   });
 
   @override
+  _MyTransactionState createState() => _MyTransactionState();
+}
+
+class _MyTransactionState extends State<MyTransaction> {
+  late bool isChecked; // Use late modifier
+
+  @override
+  void initState() {
+    super.initState();
+    isChecked = widget.initialIsChecked; // Initialize state
+  }
+
+  void _onCheckboxChanged(bool? value) {
+    setState(() {
+      isChecked = value ?? false;
+    });
+
+    final amount = double.parse(widget.money);
+    widget.onCheckboxChanged(isChecked, amount, widget.expenseOrIncome, widget.rowIndex);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final String balance = (GoogleSheetsApi.calculateIncome() -
-                      GoogleSheetsApi.calculateExpense())
-                  .toString();
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: ClipRRect(
@@ -43,28 +67,28 @@ class MyTransaction extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: 16,
-                  ),
-                  Text(transactionName),
+                  SizedBox(width: 16),
+                  Text(widget.transactionName),
                 ],
               ),
               Column(
                 children: [
                   Text(
-                    expenseOrIncome == 'expense' ? '-' + 'Shs.' + money : '+' + 'Shs.' + money,
+                    widget.expenseOrIncome == 'expense'
+                        ? '-' + 'Shs.' + widget.money
+                        : '+' + 'Shs.' + widget.money,
                     style: TextStyle(
-                      color: (expenseOrIncome == 'expense'
+                      color: (widget.expenseOrIncome == 'expense'
                           ? Colors.red
                           : Colors.green),
                     ),
                   ),
-                  Text(
-                'Shs. ${balance}',
-                style: TextStyle(color: Colors.grey,),
-              ),
+                  Checkbox(
+                    value: isChecked,
+                    onChanged: _onCheckboxChanged,
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),

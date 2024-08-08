@@ -26,64 +26,122 @@ class GoogleSheetsApi {
   static int numberOfTransactions = 0;
   static List<List<dynamic>> currentTransactions = [];
   static bool loading = true;
+  static double totalIncome = 0.0;
+  static double totalExpense = 0.0;
+  static double balance = 0.0;
 
-  Future init() async {
+  static Future<void> init() async {
     final ss = await gsheets.spreadsheet(spreadsheetId);
     worksheet = ss.worksheetByTitle('Worksheet1');
-    countRows();
+    await _fetchData();
   }
 
-  static Future countRows() async {
-    while ((await worksheet!.values
-            .value(column: 1, row: numberOfTransactions + 1)) !=
-        '') {
-      numberOfTransactions++;
-    }
-    loadTransactions();
-  }
+  static Future<void> _fetchData() async {
+    List<List<dynamic>> allRows = await worksheet!.values.allRows();
 
-  static Future loadTransactions() async {
-    if (worksheet == null) return;
+    // Skip the first row (header)
+    currentTransactions = allRows.skip(1).map((row) {
+      final name = row[0] as String;
+      final amount = row[1] as String;
+      final type = row[2] as String;
+      final date = row[3] as String;
+      final status = row[4] as String;
 
-    for (int i = 1; i < numberOfTransactions; i++) {
-      final String transactionName =
-          await worksheet!.values.value(column: 1, row: i + 1);
-      final String transactionAmount =
-          await worksheet!.values.value(column: 2, row: i + 1);
-      final String transactionType =
-          await worksheet!.values.value(column: 3, row: i + 1);
-
-      if (currentTransactions.length < numberOfTransactions) {
-        currentTransactions.add([
-          transactionName,
-          transactionAmount,
-          transactionType,
-        ]);
-      }
-    }
+      return [
+        name,
+        amount,
+        type,
+        date,
+        status.toLowerCase() == 'completed' ? true : false,
+      ];
+    }).toList();
+    _recalculateTotals();
     loading = false;
   }
 
-  static Future insert(String name, String amount, bool isIncome) async {
+  static void _recalculateTotals() {
+    totalIncome = 0.0;
+    totalExpense = 0.0;
+
+    for (var transaction in currentTransactions) {
+      if (transaction[4] == true) {  // Only count if transaction is checked
+        if (transaction[2] == 'income') {
+          totalIncome += double.parse(transaction[1]);
+        } else if (transaction[2] == 'expense') {
+          totalExpense += double.parse(transaction[1]);
+        }
+      }
+    }
+
+    balance = totalIncome - totalExpense;
+  }
+
+  static Future<void> insert(String name, String amount, bool isIncome) async {
     if (worksheet == null) return;
+
+    // Get the current date
+    String currentDate = DateTime.now().toIso8601String();
+
     numberOfTransactions++;
     currentTransactions.add([
       name,
       amount,
       isIncome == true ? 'income' : 'expense',
+      currentDate,
+      false, // Default to not completed
     ]);
+
     await worksheet!.values.appendRow([
       name,
       amount,
       isIncome == true ? 'income' : 'expense',
+      currentDate,
+      'Incomplete' // Default value for the new "Completed" column
     ]);
+    await _fetchData(); // Refresh the current transactions
+  }
+
+  static Future<void> markAsCompleted(int rowIndex) async {
+    if (worksheet == null) return;
+
+    // Ensure the row index is valid and within the current range
+    if (rowIndex < 0 || rowIndex >= currentTransactions.length) return;
+
+    // Update the "Completed" column for the specified row
+    await worksheet!.values.insertValue(
+      'Completed',
+      row: rowIndex + 2, // +2 to account for header row and zero-based index
+      column:
+          5, // Column index for "Completed" (5 is the 6th column, zero-based)
+    );
+    currentTransactions[rowIndex][4] = true;
+
+    await _fetchData(); // Refresh the current transactions
+  }
+
+  static Future<void> markAsIncomplete(int rowIndex) async {
+    if (worksheet == null) return;
+
+    // Ensure the row index is valid and within the current range
+    if (rowIndex < 0 || rowIndex >= currentTransactions.length) return;
+
+    // Update the "Completed" column for the specified row
+    await worksheet!.values.insertValue(
+      'Incomplete',
+      row: rowIndex + 2, // +2 to account for header row and zero-based index
+      column:
+          5, // Column index for "Completed" (5 is the 6th column, zero-based)
+    );
+    currentTransactions[rowIndex][4] = false;
+
+    await _fetchData(); // Refresh the current transactions
   }
 
   static double calculateIncome() {
     double totalIncome = 0;
-    for (int i = 0; i < currentTransactions.length; i++) {
-      if (currentTransactions[i][2] == 'income') {
-        totalIncome += double.parse(currentTransactions[i][1]);
+    for (var transaction in currentTransactions) {
+      if (transaction[2] == 'income' && transaction[4]) {
+        totalIncome += double.parse(transaction[1]);
       }
     }
     return totalIncome;
@@ -91,11 +149,39 @@ class GoogleSheetsApi {
 
   static double calculateExpense() {
     double totalExpense = 0;
-    for (int i = 0; i < currentTransactions.length; i++) {
-      if (currentTransactions[i][2] == 'expense') {
-        totalExpense += double.parse(currentTransactions[i][1]);
+    for (var transaction in currentTransactions) {
+      if (transaction[2] == 'expense' && transaction[4]) {
+        totalExpense += double.parse(transaction[1]);
       }
     }
     return totalExpense;
+  }
+
+  static Future loadTransactions() async {
+    if (worksheet == null) return;
+
+    for (int i = 1; i <= numberOfTransactions; i++) {
+      final String transactionName =
+          await worksheet!.values.value(column: 1, row: i + 1);
+      final String transactionAmount =
+          await worksheet!.values.value(column: 2, row: i + 1);
+      final String transactionType =
+          await worksheet!.values.value(column: 3, row: i + 1);
+      final String transactionDate =
+          await worksheet!.values.value(column: 4, row: i + 1);
+      final String transactionStatus =
+          await worksheet!.values.value(column: 5, row: i + 1);
+
+      if (currentTransactions.length < numberOfTransactions) {
+        currentTransactions.add([
+          transactionName,
+          transactionAmount,
+          transactionType,
+          transactionDate,
+          transactionStatus == 'Completed' ? true : false,
+        ]);
+      }
+    }
+    loading = false;
   }
 }

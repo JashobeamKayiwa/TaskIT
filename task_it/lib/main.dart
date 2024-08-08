@@ -7,7 +7,7 @@ import 'package:task_it/screens/login.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  GoogleSheetsApi().init();
+  GoogleSheetsApi.init();
   Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
