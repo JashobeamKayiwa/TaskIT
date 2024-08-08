@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:task_it/constants/colors.dart';
+import 'package:task_it/profile/profile.dart';
 import 'package:task_it/screens/manager/personal.dart';
 import 'package:task_it/screens/manager/tasker.dart';
 import 'package:task_it/screens/manager/worker_tile.dart';
@@ -16,7 +17,7 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   String userName = '';
-
+  
   @override
   void initState() {
     super.initState();
@@ -165,9 +166,16 @@ class HomePageState extends State<HomePage> {
                     label: 'Home', icon: Icon(Icons.home_rounded, size: 40)),
                 BottomNavigationBarItem(
                     label: 'Finances', icon: Icon(Icons.bar_chart, size: 40)),
-                BottomNavigationBarItem(
+                BottomNavigationBarItem(                         
+                    icon: Icon(Icons.person_rounded, size: 40),
                     label: 'Person',
-                    icon: Icon(Icons.person_rounded, size: 40)),
+                    // onPressed: () { 
+                    //         Navigator.of(context).push(
+                    //           MaterialPageRoute(
+                    //               builder: (context) => UserProfile(userId: userId),
+                    //               ));
+                    //       },
+                    ),
               ],
             )));
   }
