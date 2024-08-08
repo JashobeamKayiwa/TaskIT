@@ -41,3 +41,61 @@ class _AddTaskState extends State<AddTask> {
       _workerList = snapshot.docs.map((doc) => doc['name'] as String).toList();
     });
   }
+   @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildTextFormField(
+                  _titleController, "Title", Icons.info_outline_rounded),
+              DropdownButtonFormField<String>(
+                hint: Text("Category"),
+                value: _categorySelected,
+                focusColor: Colors.transparent,
+                items: _categoryList
+                    .map((e) => DropdownMenuItem<String>(
+                          child: Text(e),
+                          value: e,
+                        ))
+                    .toList(),
+                onChanged: (val) {
+                  setState(() {
+                    _categorySelected = val;
+                    if (_categorySelected != 'Finance') {
+                      _manualInput = false;
+                    }
+                  });
+                },
+              ),
+              DropdownButtonFormField<String>(
+                hint: Text("Assign Worker"),
+                value: _workerSelected,
+                focusColor: Colors.transparent,
+                items: _workerList
+                    .map((e) => DropdownMenuItem<String>(
+                          child: Text(e),
+                          value: e,
+                        ))
+                    .toList(),
+                onChanged: (val) {
+                  setState(() {
+                    _workerSelected = val;
+                  });
+                },
+              ),
+              CheckboxListTile(
+                activeColor: kBlack,
+                controlAffinity: ListTileControlAffinity.leading,
+                title: Text("Manual Input"),
+                checkColor: kWhite,
+                value: _manualInput,
+                onChanged: _categorySelected == 'Finance'
+                    ? (val) {
+                        setState(() {
+                          _manualInput = val;
+                        });
+                      }
