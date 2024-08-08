@@ -189,3 +189,27 @@ Widget _buildRoleDropdown() {
     );
   }
 
+ Widget _buildAppBar() {
+    return Material(
+      elevation: 0,
+      child: ClipRRect(
+        child: AppBar(
+          backgroundColor: kBlack,
+          elevation: 0,
+          title: Row(
+            children: [
+              Text(
+                'CREATE ACCOUNT',
+                style: TextStyle(
+                  color: kWhite,
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
