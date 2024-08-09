@@ -4,9 +4,9 @@ import 'package:task_it/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:task_it/screens/authentication/login.dart';
 
-void main(){
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-   Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -23,5 +23,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-

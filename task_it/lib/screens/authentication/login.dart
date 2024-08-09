@@ -43,7 +43,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0),
+                  padding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0),
                   child: Divider(
                     color: kGrey,
                     thickness: 2,
@@ -183,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => HomePage(),
+              builder: (context) => const HomePage(),
             ),
           );
         }
