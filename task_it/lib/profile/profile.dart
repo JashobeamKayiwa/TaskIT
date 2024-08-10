@@ -56,20 +56,21 @@ class UserProfile extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        IconButton(
-                          onPressed: () {},
-                          icon:
-                              Icon(isDark ? Icons.light_mode : Icons.dark_mode),
-                        ),
                       ],
                     ),
                   ),
                 ),
               ),
             ),
-            body: SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.all(tDefaultSize),
+            body: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                  color: Colors.white),
+              padding: EdgeInsets.all(20.0),
+              child: SingleChildScrollView(
                 child: Column(
                   children: [
                     Stack(
