@@ -59,3 +59,39 @@ class HomePageState extends State<HomePage> {
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
               ),
+               Expanded(
+                  child: ListView(
+                children: [
+                  Tiles(
+                    leadingIcon: const Icon(Icons.account_circle_sharp,
+                        size: 60, color: kBlack),
+                    titleText: 'Personal',
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Personal()));
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  Tiles(
+                    leadingIcon:
+                        const Icon(Icons.work, size: 60, color: kBlack),
+                    titleText: 'Work',
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Tasker()));
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  Tiles(
+                    leadingIcon:
+                        const Icon(Icons.bar_chart, size: 60, color: kBlack),
+                    titleText: 'Finance',
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => WorkerTile()));
+                    },
+                  ),
+                ],
+              ))
