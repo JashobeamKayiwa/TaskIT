@@ -191,3 +191,32 @@ class _AddTaskState extends State<AddTask> {
       ),
     );
   }
+
+   Widget _buildTextFormField(
+      TextEditingController controller, String hintText, IconData icon,
+      {bool enabled = true, bool readOnly = false, VoidCallback? onTap}) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        hintText: hintText,
+        fillColor: enabled ? kGrey : kGrey.withOpacity(0.5),
+        suffixIcon: Icon(icon),
+        border: OutlineInputBorder(),
+      ),
+      enabled: enabled,
+      readOnly: readOnly,
+      onTap: onTap,
+    );
+  }
+
+  void _submitForm() async {
+    if (_titleController.text.isEmpty ||
+        _categorySelected == null ||
+        _workerSelected == null ||
+        (_categorySelected == 'Finance' &&
+            !_manualInput! &&
+            (_amountController.text.isEmpty || _financeTypeEnum == null))) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please fill all the required fields')));
+      return;
+    }
