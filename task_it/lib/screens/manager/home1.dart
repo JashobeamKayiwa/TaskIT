@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:task_it/constants/colors.dart';
 import 'package:task_it/screens/manager/home.dart';
-import 'package:task_it/screens/manager/profile.dart';
+import 'package:task_it/profile/profile.dart';
 import 'package:task_it/screens/manager/statistics.dart';
 
 class Home extends StatefulWidget {
