@@ -15,3 +15,24 @@ const Color kBlueDark = Color(0xFFC0D3F8);
 const Color kGrey = Color(0xFFD6D6D6);
 const Color kBlack = Colors.black;
 const Color kWhite = Colors.white;
+
+
+const tDefaultSize = 30.0;
+const tFormHeight = 30.0;
+const tPrimaryColor = Colors.white;
+const tDarkColor = Colors.black;
+const tAccentColor = Colors.grey;
+//const String bodyText1 = 'Following';
+const String tEditProfile = "Edit Profile" ;
+const darkTextTheme = Colors.white;
+const lightTextTheme = Colors.black;
+const lightInputDecorationTheme = Colors.black;
+const darkInputDecorationTheme = Colors.white;
+
+//const String headLine4 = ""
+//const String tProfilHeading = "";
+// const String tProfilHeading
+// const String tProfileSubHeading
+const String tProfileImage = "assets/images/account.png";
+//const String tLineAwesomeIcons = 
+
