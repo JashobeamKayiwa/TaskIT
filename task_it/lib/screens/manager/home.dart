@@ -95,3 +95,35 @@ class HomePageState extends State<HomePage> {
                   ),
                 ],
               ))
+               ],
+          )),
+      bottomNavigationBar: _buildBottomNavigationBar(),
+    );
+  }
+
+  Widget _buildAppBar() {
+    return Material(
+      elevation: 5,
+      borderRadius: const BorderRadius.only(
+        bottomLeft: Radius.circular(30.0),
+        bottomRight: Radius.circular(30.0),
+      ),
+      shadowColor: Colors.grey.withOpacity(0.5),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(20.0),
+          bottomRight: Radius.circular(20.0),
+        ),
+        child: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: Row(
+            children: [
+              Text('Welcome, $userName',
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                  )),
+            ],
+          ),
