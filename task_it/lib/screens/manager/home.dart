@@ -44,3 +44,18 @@ class HomePageState extends State<HomePage> {
         preferredSize: const Size.fromHeight(60.0),
         child: _buildAppBar(),
       ),
+       body: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 15,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 50, bottom: 20),
+                child: const Text(
+                  'Dashboard',
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                ),
+              ),
