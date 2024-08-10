@@ -135,3 +135,59 @@ class _AddTaskState extends State<AddTask> {
                                 _financeTypeEnum = val;
                               });
                             }
+                                : null,
+                    ),
+                  ),
+                ],
+              ),
+              _buildTextFormField(_timeController, "Due Time", Icons.timer,
+                  readOnly: true, onTap: () async {
+                TimeOfDay? pickedTime = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.now(),
+                );
+                if (pickedTime != null) {
+                  setState(() {
+                    _timeController.text = pickedTime.format(context);
+                  });
+                }
+              }),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text('Cancel', style: TextStyle(color: kBlack)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: kWhite,
+                        padding: EdgeInsets.only(
+                          right: 20.0,
+                          left: 20.0,
+                        ),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0)),
+                      )),
+                  ElevatedButton(
+                      onPressed: () {
+                        _submitForm();
+                      },
+                      child: Text('Add Task', style: TextStyle(color: kWhite)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: kBlack,
+                        padding: EdgeInsets.only(
+                          right: 20.0,
+                          left: 20.0,
+                        ),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0)),
+                      )),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
