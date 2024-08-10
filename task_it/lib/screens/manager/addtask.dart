@@ -220,3 +220,35 @@ class _AddTaskState extends State<AddTask> {
           SnackBar(content: Text('Please fill all the required fields')));
       return;
     }
+     // Prepare task data
+    Map<String, dynamic> taskData = {
+      'title': _titleController.text,
+      'category': _categorySelected,
+      'worker': _workerSelected,
+      'manualInput': _categorySelected == 'Finance' ? _manualInput : null,
+      'dueTime': _timeController.text,
+      'createdAt': Timestamp.now(),
+      'status': 'Pending', // Set initial status to 'Pending'
+      'isPersonal': false, // Set isPersonal to false
+    };
+
+    if (_categorySelected == 'Finance') {
+      taskData.addAll({
+        'amount': _manualInput! ? null : _amountController.text,
+        'financeType':
+            _financeTypeEnum == FinanceType.Income ? 'Income' : 'Expense',
+      });
+    }
+
+    try {
+      // Submit to Firestore
+      await FirebaseFirestore.instance.collection('tasks').add(taskData);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Task added successfully')));
+      Navigator.pop(context);
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Failed to add task: $e')));
+    }
+  }
+}
