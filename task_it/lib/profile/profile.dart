@@ -109,29 +109,42 @@ class UserProfile extends StatelessWidget {
                     ProfileMenuWidget(
                         title: 'Name: ${userData['name']}',
                         icon: Icons.account_box,
-                        onPress: () {}),
+                        onPress: () {}, child:
+                  Icon(Icons.account_box, size: 18.0, color: Colors.grey)),
                     // ProfileMenuWidget(title: "Billing Details", icon: LineAwesomeIcons.wallet, onPress: () {}),
                     ProfileMenuWidget(
                         title: 'Email: ${userData['email']}',
                         icon: Icons.mail,
-                        onPress: () {}),
+                        onPress: () {}, child:
+                  Icon(Icons.mail, size: 18.0, color: Colors.grey)),
                     // const Divider(color: Colors.grey),
                     // const SizedBox(height: 10),
                     ProfileMenuWidget(
                         title: 'Phone Number: ${userData['phoneNumber']}',
                         icon: Icons.phone,
-                        onPress: () {}),
+                        onPress: () {}, child:
+                  Icon(Icons.phone, size: 18.0, color: Colors.grey)),
                     ProfileMenuWidget(
                         title: "Logout",
                         icon: Icons.no_accounts,
                         textColor: Colors.red,
-                        onPress: () {}),
+                        onPress: () {},
+                        child:
+                  Icon(Icons.no_accounts, size: 18.0, color: Colors.grey)),
                         const SizedBox(height: 10),
                         SizedBox(
                       width: 200,
                       child: ElevatedButton(
-                        onPressed: () =>
-                            Get.to(() => UpdateProfileScreen(userId: 'user.uid',)),
+                        onPressed: () {
+                            // Navigate to Forgot Password screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => UpdateProfileScreen(userId: 'user.uid',)),
+                            );
+                          },
+                        // onPressed: () =>
+                        //     Get.to(() => UpdateProfileScreen(userId: 'user.uid',)),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: tPrimaryColor,
                           side: BorderSide.none,
