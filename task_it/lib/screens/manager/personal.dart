@@ -54,3 +54,85 @@ class Personal extends StatelessWidget {
                 ),
               ],
             ),
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('tasks')
+                    .where('worker',
+                        isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+
+                  var tasks = snapshot.data!.docs;
+                  tasks.sort((a, b) {
+                    bool aCompleted = a['status'] == 'Completed';
+                    bool bCompleted = b['status'] == 'Completed';
+                    return aCompleted && !bCompleted ? 1 : -1;
+                  });
+
+                  return ListView.builder(
+                    itemCount: tasks.length,
+                    itemBuilder: (context, index) {
+                      var task = tasks[index];
+                      bool isCompleted = task['status'] == 'Completed';
+                      return Card(
+                        child: ListTile(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => UpdateTask(task: task),
+                              ),
+                            );
+                          },
+                          leading: Checkbox(
+                            activeColor: kBlack,
+                            value: isCompleted,
+                            onChanged: (bool? value) {
+                              FirebaseFirestore.instance
+                                  .collection('tasks')
+                                  .doc(task.id)
+                                  .update({
+                                'status': value! ? 'Completed' : 'Pending',
+                              });
+                            },
+                          ),
+                          isThreeLine: true,
+                          title: Text(
+                            task['title'],
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              decoration: isCompleted
+                                  ? TextDecoration.lineThrough
+                                  : TextDecoration.none,
+                            ),
+                          ),
+                          subtitle: Text(
+                              'Time: ${task['dueTime']} \n ${task['category']}'),
+                          trailing: IconButton(
+                            icon: Icon(Icons.delete_outlined, color: kRedDark),
+                            onPressed: () {
+                              FirebaseFirestore.instance
+                                  .collection('tasks')
+                                  .doc(task.id)
+                                  .delete();
+                            },
+                          ),
+                          tileColor:
+                              isCompleted ? kGrey.withOpacity(0.5) : kWhite,
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: _buildBottomNavigationBar(),
+    );
+  }
