@@ -1,53 +1,190 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:task_it/constants/colors.dart';
 
-class UserProfile extends StatelessWidget {
-  final String userId;
-
-  UserProfile({required this.userId});
-
-  Future<Map<String, dynamic>?> getUserDetails(String userId) async {
-    DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('users').doc(userId).get();
-    if (snapshot.exists) {
-      return snapshot.data() as Map<String, dynamic>;
-    }
-    return null;
-  }
-
+class WorkerTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('User Profile'),
+      backgroundColor: kWhite,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60.0),
+        child: _buildAppBar(),
       ),
-      body: FutureBuilder<Map<String, dynamic>?>(
-        future: getUserDetails(userId),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data == null) {
-            return Center(child: Text('User not found'));
-          } else {
-            var userData = snapshot.data!;
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      body: Container(
+          padding: EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Name: ${userData['name']}', style: TextStyle(fontSize: 20)),
-                  SizedBox(height: 8),
-                  Text('Phone Number: ${userData['phoneNumber']}', style: TextStyle(fontSize: 20)),
-                  SizedBox(height: 8),
-                  Text('Email: ${userData['email']}', style: TextStyle(fontSize: 20)),
+                  Text(
+                    'Daily Task Completion',
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                      color: kBlack,
+                    ),
+                  )
                 ],
               ),
-            );
-          }
-        },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(Icons.circle_outlined, size: 90),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        'Tasks Remaining: 0',
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.bold,
+                          color: kBlack,
+                        ),
+                      ),
+                      Text(
+                        'Tasks Completed: 12',
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.bold,
+                          color: kBlack,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  Icon(Icons.phone),
+                  SizedBox(width: 4),
+                  Text('+256 777101010'),
+                ],
+              ),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Tasks',
+                    style: TextStyle(
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.bold,
+                      color: kBlack,
+                    ),
+                  ),
+                  Text(
+                    'Add Task+',
+                    style: TextStyle(
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.bold,
+                      color: kBlack,
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: ListView(
+                  children: [
+                    Card(
+                      child: ListTile(
+                        title: Text('Won the Copa America',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        subtitle: Text('Year: 2021, 2024'),
+                        trailing: Icon(Icons.check_circle_outlined),
+                      ),
+                    ),
+                    Card(
+                      child: ListTile(
+                        title: Text('Won the Copa America',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        subtitle: Text('Year: 2021, 2024'),
+                        trailing: Icon(Icons.check_circle_outlined),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          )),
+      bottomNavigationBar: _buildBottomNavigationBar(),
+    );
+  }
+
+  Widget _buildAppBar() {
+    return Material(
+      elevation: 5,
+      borderRadius: BorderRadius.only(
+        bottomLeft: Radius.circular(30.0),
+        bottomRight: Radius.circular(30.0),
+      ),
+      shadowColor: Colors.grey.withOpacity(0.5),
+      child: ClipRRect(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(20.0),
+          bottomRight: Radius.circular(20.0),
+        ),
+        child: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: Row(
+            children: [
+              Text(
+                'LIONEL MESSI',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            Icon(Icons.more_vert, color: Colors.black, size: 40),
+          ],
+        ),
       ),
     );
   }
+}
+
+Widget _buildBottomNavigationBar() {
+  return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 5,
+              blurRadius: 10,
+            )
+          ]),
+      child: ClipRRect(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+          child: BottomNavigationBar(
+            backgroundColor: Colors.white,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            selectedItemColor: kBlack,
+            unselectedItemColor: Colors.grey.withOpacity(0.5),
+            items: [
+              BottomNavigationBarItem(
+                  label: 'Home', icon: Icon(Icons.home_rounded, size: 40)),
+              BottomNavigationBarItem(
+                  label: 'Finances',
+                  icon: Icon(Icons.attach_money_outlined, size: 40)),
+              BottomNavigationBarItem(
+                  label: 'Person', icon: Icon(Icons.person_rounded, size: 40)),
+            ],
+          )));
 }
