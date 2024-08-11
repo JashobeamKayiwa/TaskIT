@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:task_it/constants/colors.dart';
 import 'package:task_it/profile/update_profile.dart';
 import 'package:task_it/profile/widgets/profile_menu.dart';
@@ -140,7 +138,7 @@ class UserProfile extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => UpdateProfileScreen(userId: 'user.uid',)),
+                                  builder: (context) => UpdateProfile()),
                             );
                           },
                         // onPressed: () =>

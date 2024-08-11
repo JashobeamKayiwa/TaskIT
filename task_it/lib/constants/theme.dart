@@ -3,8 +3,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:task_it/constants/Texttheme.dart';
-import 'package:task_it/constants/colors.dart';
 
 //import 'colors.dart';
 

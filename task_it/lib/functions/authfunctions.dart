@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:task_it/screens/manager/home.dart';
 import 'package:task_it/screens/manager/home1.dart'; // Replace with your actual homepage import
 
 class AuthService {
