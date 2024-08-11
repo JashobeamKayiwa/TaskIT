@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:task_it/constants/colors.dart';
 import 'package:task_it/profile/update_profile.dart';
+import 'package:task_it/profile/widgets/profile_menu.dart';
 
 class UserProfile extends StatelessWidget {
   final String userId;
@@ -22,7 +23,7 @@ class UserProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    //var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
 
     return FutureBuilder<Map<String, dynamic>?>(
       future:
@@ -93,8 +94,8 @@ class UserProfile extends StatelessWidget {
                               borderRadius: BorderRadius.circular(100),
                               color: tPrimaryColor,
                             ),
-                            child: const Icon(Icons.edit,
-                                size: 20, color: Colors.black),
+                            // child: const Icon(Icons.edit,
+                            //     size: 20, color: Colors.black),
                           ),
                         ),
                       ],
@@ -102,24 +103,9 @@ class UserProfile extends StatelessWidget {
                     const SizedBox(height: 10),
                     Text('${userData['name']}'),
                     Text('${userData['email']}'),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      width: 200,
-                      child: ElevatedButton(
-                        onPressed: () =>
-                            Get.to(() => const UpdateProfileScreen()),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: tPrimaryColor,
-                          side: BorderSide.none,
-                          shape: const StadiumBorder(),
-                        ),
-                        child: const Text(tEditProfile,
-                            style: TextStyle(color: tDarkColor)),
-                      ),
-                    ),
+                    const SizedBox(height: 20),                    
                     const SizedBox(height: 30),
-                    const Divider(),
-                    const SizedBox(height: 10),
+                    //const Divider(),                    
                     ProfileMenuWidget(
                         title: 'Name: ${userData['name']}',
                         icon: Icons.account_box,
@@ -140,6 +126,21 @@ class UserProfile extends StatelessWidget {
                         icon: Icons.no_accounts,
                         textColor: Colors.red,
                         onPress: () {}),
+                        const SizedBox(height: 10),
+                        SizedBox(
+                      width: 200,
+                      child: ElevatedButton(
+                        onPressed: () =>
+                            Get.to(() => UpdateProfileScreen(userId: 'user.uid',)),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: tPrimaryColor,
+                          side: BorderSide.none,
+                          shape: const StadiumBorder(),
+                        ),
+                        child: const Text(tEditProfile,
+                            style: TextStyle(color: tDarkColor)),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -151,59 +152,6 @@ class UserProfile extends StatelessWidget {
   }
 }
 
-class ProfileMenuWidget extends StatelessWidget {
-  const ProfileMenuWidget({
-    Key? userId,
-    required this.title,
-    required this.icon,
-    required this.onPress,
-    this.endIcon = true,
-    this.textColor,
-  }) : super(key: userId);
-
-  final String title;
-  final IconData icon;
-  final VoidCallback onPress;
-  final bool endIcon;
-  final Color? textColor;
-
-  @override
-  Widget build(BuildContext context) {
-    var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
-    var iconColor = isDark ? tPrimaryColor : tAccentColor;
-    return ListTile(
-      onTap: onPress,
-      leading: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          color: iconColor.withOpacity(0.1),
-        ),
-        child: Icon(icon, color: iconColor),
-      ),
-      title: Text(
-        title,
-        style: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.normal,
-        ),
-      ),
-      //style: Theme.of(context).textTheme.bodyText?.apply(color: textColor)),
-      trailing: endIcon
-          ? Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                color: Colors.grey.withOpacity(0.1),
-              ),
-              child:
-                  Icon(Icons.arrow_forward_ios, size: 18.0, color: Colors.grey))
-          : null,
-    );
-  }
-}
 
 
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 const Color kYellowLight = Color(0xFFFFF7EC);
 const Color kYellow = Color(0xFFFAF0DA);
@@ -28,6 +29,8 @@ const darkTextTheme = Colors.white;
 const lightTextTheme = Colors.black;
 const lightInputDecorationTheme = Colors.black;
 const darkInputDecorationTheme = Colors.white;
+
+const String bodyText1 = "profile";
 
 //const String headLine4 = ""
 //const String tProfilHeading = "";
