@@ -53,7 +53,7 @@ class Calculations {
       // Update existing document
       DocumentReference docRef = balanceDoc.docs.first.reference;
 
-      await docRef.update({
+      docRef.update({
         'personalIncomeBalance': FieldValue.increment(personalIncomeBalance),
         'personalExpenseBalance': FieldValue.increment(personalExpenseBalance),
         'workIncomeBalance': FieldValue.increment(workIncomeBalance),

@@ -8,200 +8,249 @@ class TrackerPage extends StatefulWidget {
 }
 
 class _TrackerPageState extends State<TrackerPage> {
-  bool isPersonal = true;
-  bool calculationsCompleted = false;
-  int personalIncomeBalance = 0;
-  int personalExpenseBalance = 0;
-  int workIncomeBalance = 0;
-  int workExpenseBalance = 0;
+  bool showPersonal = true;
+
+  // Future to hold the initialization process
+  late Future<void> initializationFuture;
+
+  // Selected date range option
+  String selectedDateRange = 'Today';
 
   @override
   void initState() {
     super.initState();
-    _performCalculationsAndRetrieveBalances();
-  }
-
-  Future<void> _performCalculationsAndRetrieveBalances() async {
-    // Perform the calculations first
-    await Calculations().processCompletedFinanceTasks();
-
-    // Then retrieve the balances
-    await _retrieveBalances();
-
-    setState(() {
-      calculationsCompleted = true;
-    });
-  }
-
-  Future<void> _retrieveBalances() async {
-    DateTime today = DateTime.now();
-    DateTime entryDate = DateTime(today.year, today.month, today.day);
-
-    final balanceDoc = await FirebaseFirestore.instance
-        .collection('balances')
-        .where('entryDate', isEqualTo: Timestamp.fromDate(entryDate))
-        .limit(1)
-        .get();
-
-    if (balanceDoc.docs.isNotEmpty) {
-      final data = balanceDoc.docs.first.data();
-
-      setState(() {
-        personalIncomeBalance = data['personalIncomeBalance'] ?? 0;
-        personalExpenseBalance = data['personalExpenseBalance'] ?? 0;
-        workIncomeBalance = data['workIncomeBalance'] ?? 0;
-        workExpenseBalance = data['workExpenseBalance'] ?? 0;
-      });
-    }
+    // Initialize the future
+    initializationFuture = Calculations().processCompletedFinanceTasks();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!calculationsCompleted) {
-      return Scaffold(
-        appBar: AppBar(title: Text('Finance Tracker')),
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    int personalTotalEarnings = personalIncomeBalance - personalExpenseBalance;
-    int workTotalEarnings = workIncomeBalance - workExpenseBalance;
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('Finance Tracker'),
+        title: Text('Tracker Page'),
       ),
-      body: Column(
-        children: [
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Personal'),
-                  Switch(
-                    value: isPersonal,
-                    onChanged: (value) {
-                      setState(() {
-                        isPersonal = value;
-                      });
-                    },
-                    activeColor: Colors.green,
-                    inactiveThumbColor: Colors.red,
-                    inactiveTrackColor: Colors.red.withOpacity(0.3),
-                  ),
-                  Text('Work'),
-                ],
+      body: FutureBuilder<void>(
+        future: initializationFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // Show a loading indicator while waiting for the future to complete
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            // Handle any errors that might occur during processing
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
+          // Proceed with rendering the UI after the future is complete
+          return Column(
+            children: [
+              SwitchListTile(
+                title: Text('Show Personal / Work Details'),
+                value: showPersonal,
+                onChanged: (bool value) {
+                  setState(() {
+                    showPersonal = value;
+                  });
+                },
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildBalanceCard('Income', personalIncomeBalance,
-                    workIncomeBalance, Colors.green, Icons.arrow_upward),
-                _buildBalanceCard('Expense', personalExpenseBalance,
-                    workExpenseBalance, Colors.red, Icons.arrow_downward),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: _buildTotalEarningsCard(
-              'Total Earnings',
-              personalTotalEarnings,
-              workTotalEarnings,
-              isPersonal,
-            ),
-          ),
-          Expanded(
-            child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('tasks')
-                  .where('category', isEqualTo: 'Finance')
-                  .where('status', isEqualTo: 'Completed')
-                  .where('isPersonal', isEqualTo: isPersonal)
-                  .snapshots(),
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData) return CircularProgressIndicator();
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: DropdownButton<String>(
+                  iconEnabledColor: Colors.transparent,
+                  value: selectedDateRange,
+                  items: <String>[
+                    'Today',
+                    'Tomorrow',
+                    'Yesterday',
+                    'This Week',
+                    'This Month'
+                  ].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedDateRange = newValue!;
+                    });
+                  },
+                ),
+              ),
+              Expanded(
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('balances')
+                      .where(
+                        'entryDate',
+                        isGreaterThanOrEqualTo:
+                            _getStartDate(selectedDateRange),
+                        isLessThanOrEqualTo: _getEndDate(selectedDateRange),
+                      )
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) return CircularProgressIndicator();
 
-                return ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    final doc = snapshot.data!.docs[index];
-                    final data = doc.data() as Map<String, dynamic>;
+                    var balancesDocs = snapshot.data!.docs;
 
-                    final title = data['title'] ?? 'No Title';
-                    final amount = data['amount'] ?? 0;
+                    if (balancesDocs.isEmpty) {
+                      return Center(child: Text('No balances found.'));
+                    }
 
-                    return Card(
-                      child: ListTile(
-                        title: Text(
-                          title,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                    var balances =
+                        balancesDocs.first.data() as Map<String, dynamic>;
+
+                    int personalIncomeBalance =
+                        balances['personalIncomeBalance'] ?? 0;
+                    int personalExpenseBalance =
+                        balances['personalExpenseBalance'] ?? 0;
+                    int workIncomeBalance = balances['workIncomeBalance'] ?? 0;
+                    int workExpenseBalance =
+                        balances['workExpenseBalance'] ?? 0;
+
+                    int totalPersonalEarnings =
+                        personalIncomeBalance - personalExpenseBalance;
+                    int totalWorkEarnings =
+                        workIncomeBalance - workExpenseBalance;
+
+                    return ListView(
+                      children: [
+                        if (showPersonal)
+                          ...buildBalanceCards(
+                            personalIncomeBalance,
+                            personalExpenseBalance,
+                            totalPersonalEarnings,
+                            'Personal',
+                          ),
+                        if (!showPersonal)
+                          ...buildBalanceCards(
+                            workIncomeBalance,
+                            workExpenseBalance,
+                            totalWorkEarnings,
+                            'Work',
+                          ),
+                        StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('tasks')
+                              .where('isPersonal', isEqualTo: showPersonal)
+                              .where('category', isEqualTo: 'Finance')
+                              .where('status',
+                                  isEqualTo:
+                                      'Completed') // Filter for completed tasks
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData)
+                              return CircularProgressIndicator();
+
+                            var tasks = snapshot.data!.docs;
+
+                            return Column(
+                              children: tasks.map((task) {
+                                var taskData =
+                                    task.data() as Map<String, dynamic>;
+                                return ListTile(
+                                  title: Text(taskData['title'] ?? 'No Title'),
+                                  trailing:
+                                      Text('\$${taskData['amount'] ?? 0}'),
+                                );
+                              }).toList(),
+                            );
+                          },
                         ),
-                        trailing: Text('\$${amount.toString()}',
-                            style: TextStyle(
-                                color: Colors.grey[700], fontSize: 16)),
-                      ),
+                      ],
                     );
                   },
-                );
-              },
-            ),
-          ),
-        ],
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildBalanceCard(String title, int personalBalance, int workBalance,
-      Color color, IconData icon) {
-    int balanceValue = isPersonal ? personalBalance : workBalance;
+  // Calculate the start date based on the selected date range
+  Timestamp _getStartDate(String dateRange) {
+    DateTime now = DateTime.now();
+    DateTime start;
 
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Icon(icon, color: color, size: 32),
-            SizedBox(height: 8),
-            Text(title,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            SizedBox(height: 8),
-            Text('\$${balanceValue.toString()}',
-                style: TextStyle(fontSize: 22, color: color)),
-          ],
-        ),
-      ),
-    );
+    switch (dateRange) {
+      case 'Today':
+        start = DateTime(now.year, now.month, now.day);
+        break;
+      case 'Tomorrow':
+        start = DateTime(now.year, now.month, now.day + 1);
+        break;
+      case 'Yesterday':
+        start = DateTime(now.year, now.month, now.day - 1);
+        break;
+      case 'This Week':
+        int weekDay = now.weekday;
+        start = now.subtract(Duration(days: weekDay - 1)); // Start of the week
+        break;
+      case 'This Month':
+        start = DateTime(now.year, now.month, 1);
+        break;
+      default:
+        start = DateTime(now.year, now.month, now.day);
+    }
+    return Timestamp.fromDate(start);
   }
 
-  Widget _buildTotalEarningsCard(
-      String title, int personalEarnings, int workEarnings, bool isPersonal) {
-    int totalEarnings = isPersonal ? personalEarnings : workEarnings;
-    final earningsColor = totalEarnings >= 0 ? Colors.green : Colors.red;
+  // Calculate the end date based on the selected date range
+  Timestamp _getEndDate(String dateRange) {
+    DateTime now = DateTime.now();
+    DateTime end;
 
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Icon(Icons.account_balance_wallet, color: earningsColor, size: 32),
-            SizedBox(height: 8),
-            Text(title,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            SizedBox(height: 8),
-            Text('\$${totalEarnings.toString()}',
-                style: TextStyle(fontSize: 22, color: earningsColor)),
-          ],
+    switch (dateRange) {
+      case 'Today':
+        end = DateTime(now.year, now.month, now.day, 23, 59, 59, 999);
+        break;
+      case 'Tomorrow':
+        end = DateTime(now.year, now.month, now.day + 1, 23, 59, 59, 999);
+        break;
+      case 'Yesterday':
+        end = DateTime(now.year, now.month, now.day - 1, 23, 59, 59, 999);
+        break;
+      case 'This Week':
+        int weekDay = now.weekday;
+        end = now.add(Duration(days: 7 - weekDay));
+        end = DateTime(
+            end.year, end.month, end.day, 23, 59, 59, 999); // End of the week
+        break;
+      case 'This Month':
+        end = DateTime(now.year, now.month + 1, 1).subtract(Duration(days: 1));
+        end = DateTime(end.year, end.month, end.day, 23, 59, 59, 999);
+        break;
+      default:
+        end = DateTime(now.year, now.month, now.day, 23, 59, 59, 999);
+    }
+    return Timestamp.fromDate(end);
+  }
+
+  List<Widget> buildBalanceCards(
+      int income, int expense, int total, String label) {
+    return [
+      Card(
+        child: ListTile(
+          leading: Icon(Icons.arrow_upward, color: Colors.green),
+          title: Text('$label Income Balance'),
+          trailing: Text('\$$income'),
         ),
       ),
-    );
+      Card(
+        child: ListTile(
+          leading: Icon(Icons.arrow_downward, color: Colors.red),
+          title: Text('$label Expense Balance'),
+          trailing: Text('\$$expense'),
+        ),
+      ),
+      Card(
+        child: ListTile(
+          leading: Icon(Icons.account_balance_wallet),
+          title: Text('Total $label Earnings'),
+          trailing: Text('\$$total'),
+        ),
+      ),
+    ];
   }
 }

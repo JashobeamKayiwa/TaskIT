@@ -4,6 +4,17 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:task_it/screens/manager/home.dart'; // Replace with your actual homepage import
 
+class CustomUser {
+  final String uid;
+  final String email;
+  final String? name;
+  CustomUser({required this.uid, required this.email, this.name});
+
+  String getEmail() {
+    return this.email;
+  }
+}
+
 class AuthService {
   static Future<void> registerUser(
     String email,
@@ -92,6 +103,20 @@ class AuthService {
             .showSnackBar(SnackBar(content: Text(e.toString())));
       }
     }
+  }
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  CustomUser? userFromFirebaseUser(User? user) {
+    if (user == null) return null;
+    return CustomUser(
+      uid: user.uid,
+      email: user.email!,
+      name: user.displayName,
+    );
+  }
+
+  Stream<CustomUser?> get user {
+    return _auth.authStateChanges().map(userFromFirebaseUser);
   }
 
   static Future<bool> _checkEmailVerified(User user) async {
