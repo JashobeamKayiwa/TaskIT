@@ -41,8 +41,8 @@ class _HomeState extends State<Home> {
       ];
     }
     return [
-      const HomePage(),
-      const Statistics(),
+      HomePage(),
+      Statistics(),
       UserProfile(
         userId: user!.uid, // Safe to access `uid` since `user` is non-null.
       ),
