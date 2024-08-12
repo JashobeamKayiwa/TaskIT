@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:task_it/screens/manager/home.dart'; // Replace with your actual homepage import
+import 'package:task_it/screens/manager/home.dart'; 
 
 class AuthService {
   static Future<void> registerUser(
@@ -31,7 +31,7 @@ class AuthService {
         await user.sendEmailVerification();
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Registration Successful. Please verify your email.')),
+          const SnackBar(content: Text('Registration Successful. Please verify your email.')),
         );
 
         // Navigate to the homepage
@@ -44,14 +44,14 @@ class AuthService {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text('Email Verification'),
+            title: const Text('Email Verification'),
             content: Text('A verification email has been sent to your email address. Please verify your email before proceeding.'),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           ),
@@ -83,9 +83,9 @@ class AuthService {
   }
 
   static Future<bool> _checkEmailVerified(User user) async {
-    await Future.delayed(Duration(seconds: 3)); // Initial delay to allow time for verification
+    await Future.delayed(const Duration(seconds: 3)); // Initial delay to allow time for verification
     while (true) {
-      await Future.delayed(Duration(seconds: 5)); // Delay between checks
+      await Future.delayed(const Duration(seconds: 5)); // Delay between checks
       await user.reload(); // Refresh the user
       if (user.emailVerified) {
         return true;
