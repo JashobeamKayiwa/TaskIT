@@ -4,6 +4,7 @@ import 'package:task_it/constants/colors.dart';
 import 'package:task_it/screens/manager/addtask.dart';
 import 'package:task_it/screens/manager/preview.dart';
 import 'package:task_it/screens/manager/progress.dart';
+import 'package:task_it/widgets/indicator.dart';
 
 class Tasker extends StatefulWidget {
   @override
@@ -166,12 +167,14 @@ class _TaskerState extends State<Tasker> {
       elevation: 0,
       child: ClipRRect(
         child: AppBar(
+          automaticallyImplyLeading: true,
+          iconTheme: IconThemeData(color: kWhite),
           backgroundColor: kBlack,
           elevation: 0,
           title: Row(
             children: [
               Text(
-                'WORK',
+                'Work',
                 style: TextStyle(
                   color: kWhite,
                   fontSize: 26,
@@ -181,15 +184,47 @@ class _TaskerState extends State<Tasker> {
             ],
           ),
           actions: [
-            GestureDetector(
-              child: Icon(Icons.circle),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ProgressTracker()),
+            StreamBuilder<QuerySnapshot>(
+              stream:
+                  FirebaseFirestore.instance.collection('tasks').snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProgressTracker()),
+                      );
+                    },
+                  );
+                }
+
+                final tasks = snapshot.data!.docs;
+                final int totalTasks = tasks.length;
+                final int completedTasks =
+                    tasks.where((task) => task['status'] == 'Completed').length;
+
+                return GestureDetector(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    child: TaskCompletionIndicator2(
+                      allTasks: totalTasks,
+                      completedTasks: completedTasks,
+                      radius: 5.0, // Adjust the size here
+                      lineWidth: 0.5, // Adjust the thickness here
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProgressTracker()),
+                    );
+                  },
                 );
               },
-            )
+            ),
           ],
         ),
       ),

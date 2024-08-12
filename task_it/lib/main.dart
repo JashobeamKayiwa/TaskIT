@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
       value: AuthService().user,
       initialData: null,
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Task It',
         theme: ThemeData(
           primarySwatch: Colors.blue,

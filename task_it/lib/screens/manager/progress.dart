@@ -85,6 +85,7 @@ class _ProgressTrackerState extends State<ProgressTracker> {
                   )
                 ],
               ),
+              SizedBox(height: 15.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -97,6 +98,7 @@ class _ProgressTrackerState extends State<ProgressTracker> {
                       ),
                     ],
                   ),
+                  SizedBox(height: 15.0),
                   Column(
                     children: [
                       Text(
@@ -119,7 +121,7 @@ class _ProgressTrackerState extends State<ProgressTracker> {
                   )
                 ],
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 35.0),
               Expanded(
                 child: ListView(
                   children: workerTasks.entries.map((entry) {
@@ -184,7 +186,7 @@ class _ProgressTrackerState extends State<ProgressTracker> {
           title: Row(
             children: [
               Text(
-                'WORK PROGRESS',
+                'Work Progress',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 26,
