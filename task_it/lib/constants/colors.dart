@@ -22,19 +22,13 @@ const tFormHeight = 30.0;
 const tPrimaryColor = Colors.white;
 const tDarkColor = Colors.black;
 const tAccentColor = Colors.grey;
-//const String bodyText1 = 'Following';
 const String tEditProfile = "Edit Profile" ;
 const darkTextTheme = Colors.white;
 const lightTextTheme = Colors.black;
 const lightInputDecorationTheme = Colors.black;
 const darkInputDecorationTheme = Colors.white;
-
 const String bodyText1 = "profile";
-
-//const String headLine4 = ""
-//const String tProfilHeading = "";
-// const String tProfilHeading
-// const String tProfileSubHeading
 const String tProfileImage = "assets/images/account.png";
-//const String tLineAwesomeIcons = 
+const String tsaveProfile = "Save Profile";
+
 

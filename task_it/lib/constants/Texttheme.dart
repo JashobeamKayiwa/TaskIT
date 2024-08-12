@@ -1,13 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:task_it/constants/colors.dart';
-
-// class TAppTheme {
-//   static ThemeData lightTheme = ThemeData(
-//     brightness: Brightness.light,
-//     textTheme: Colors.black,
-//   )
-// }
-
 import 'package:flutter/material.dart';
 import 'package:task_it/constants/colors.dart';
 
