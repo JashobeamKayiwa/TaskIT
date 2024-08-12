@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:task_it/constants/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,8 +20,13 @@ class UpdateProfilePageState extends State<UpdateProfile> {
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  // ignore: unused_field
+  late PickedFile? _pickedFile; 
+  final picker = ImagePicker();
+  //PickedFile? pickedFile = (picker.pickImage(source: ImageSource.camera)) as PickedFile?;
   bool _isPasswordVisible = false;
   String selectedRole = '';
+  File? _selectedImage;
   late final String userId;  
 
   //UpdateProfileScreen({required this.userId});
@@ -44,6 +52,15 @@ class UpdateProfilePageState extends State<UpdateProfile> {
     } 
   }
    
+  Future<void> _pickImage() async {
+    final picker = ImagePicker(); // Create a new instance here
+    final pickedImage = await picker.pickImage(source: ImageSource.camera);
+    if (pickedImage != null) {
+      setState(() {
+        _pickedFile = pickedImage as PickedFile?;
+      });
+    }
+  }
     @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,30 +75,62 @@ class UpdateProfilePageState extends State<UpdateProfile> {
         child: Container(
           padding: EdgeInsets.all(tDefaultSize),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-            Stack(
-              children: [
-                SizedBox(
+              SizedBox(
                 width: 120,
                 height: 120,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(100), child: Image(image: AssetImage(tProfileImage))),
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,                
-                child: Container(
-                  width: 35, 
-                  height: 35,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100), 
-                    color: tPrimaryColor),
-                child: const Icon(
-                Icons.camera, size: 20, color: Colors.black)
-                ),), 
-              ],
+                ),            
+              GestureDetector(
+              onTap: _pickImage, // Trigger image picker
+              child: CircleAvatar(
+                radius: 60,
+                backgroundImage: _selectedImage != null
+                    ? FileImage(_selectedImage!) // Display selected image
+                    :AssetImage(tProfileImage), // Default avatar
+              ),
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Save changes (upload image, update profile, etc.)
+                // Implement your logic here
+              },
+              child: Text('Save Changes'),
+            ),
+          ],
+        ),
+        
+                // SizedBox(
+                // width: 120,
+                // height: 120,
+                // child: ClipRRect(
+                //   borderRadius: BorderRadius.circular(100), child: Image(image: AssetImage(tProfileImage))),
+                // ),
+                // Positioned(
+                //   bottom: 0,
+                //   right: 0,                
+                // child: Column(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     GestureDetector(
+                //       onTap: _pickImage,
+                //     Child: Container(
+                //       width: 35, 
+                //       height: 35,
+                //       decoration: BoxDecoration(
+                //         borderRadius: BorderRadius.circular(100), 
+                //         color: tPrimaryColor),
+                //     child: const Icon(
+                //     Icons.camera, size: 20, color: Colors.black)
+            //         ),
+            //     )],
+            //     ),), 
+            //   ],
+            // ),
+            SizedBox(height: 50),
             Form(
               key: _formKey,
               child: 
@@ -196,12 +245,10 @@ class UpdateProfilePageState extends State<UpdateProfile> {
                 ],)
               ],
             ))
-            ]
-          ), 
-               
-      ),
-    )
-  );
+            
+      ),),);
+    
+  
   }
   }
   

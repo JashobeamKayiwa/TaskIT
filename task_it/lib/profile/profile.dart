@@ -79,7 +79,8 @@ class UserProfile extends StatelessWidget {
                           height: 120,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(100),
-                            child: Image(image: AssetImage(tProfileImage)),
+                            child: //NetworkImage(snapshot.data!.docs[index]["imageurl"]) as ImageProvider?,
+                            Image(image: AssetImage(tProfileImage)),
                           ),
                         ),
                         Positioned(
@@ -91,9 +92,7 @@ class UserProfile extends StatelessWidget {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(100),
                               color: tPrimaryColor,
-                            ),
-                            // child: const Icon(Icons.edit,
-                            //     size: 20, color: Colors.black),
+                            ),                            
                           ),
                         ),
                       ],
@@ -102,21 +101,17 @@ class UserProfile extends StatelessWidget {
                     Text('${userData['name']}'),
                     Text('${userData['email']}'),
                     const SizedBox(height: 20),                    
-                    const SizedBox(height: 30),
-                    //const Divider(),                    
+                    const SizedBox(height: 30),                                     
                     ProfileMenuWidget(
                         title: 'Name: ${userData['name']}',
                         icon: Icons.account_box,
                         onPress: () {}, child:
-                  Icon(Icons.account_box, size: 18.0, color: Colors.grey)),
-                    // ProfileMenuWidget(title: "Billing Details", icon: LineAwesomeIcons.wallet, onPress: () {}),
+                  Icon(Icons.account_box, size: 18.0, color: Colors.grey)),                    
                     ProfileMenuWidget(
                         title: 'Email: ${userData['email']}',
                         icon: Icons.mail,
                         onPress: () {}, child:
-                  Icon(Icons.mail, size: 18.0, color: Colors.grey)),
-                    // const Divider(color: Colors.grey),
-                    // const SizedBox(height: 10),
+                  Icon(Icons.mail, size: 18.0, color: Colors.grey)),                    
                     ProfileMenuWidget(
                         title: 'Phone Number: ${userData['phoneNumber']}',
                         icon: Icons.phone,
@@ -133,8 +128,7 @@ class UserProfile extends StatelessWidget {
                         SizedBox(
                       width: 200,
                       child: ElevatedButton(
-                        onPressed: () {
-                            // Navigate to Forgot Password screen
+                        onPressed: () {                            
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -166,53 +160,3 @@ class UserProfile extends StatelessWidget {
 
 
 
-
-// class UserProfile extends StatelessWidget {
-//   final String userId;
-
-//   UserProfile({required this.userId});
-
-//   Future<Map<String, dynamic>?> getUserDetails(String userId) async {
-//     DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('users').doc(userId).get();
-//     if (snapshot.exists) {
-//       return snapshot.data() as Map<String, dynamic>;
-//     }
-//     return null;
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('User Profile'),
-//       ),
-//       body: FutureBuilder<Map<String, dynamic>?>(
-//         future: getUserDetails(userId),
-//         builder: (context, snapshot) {
-//           if (snapshot.connectionState == ConnectionState.waiting) {
-//             return Center(child: CircularProgressIndicator());
-//           } else if (snapshot.hasError) {
-//             return Center(child: Text('Error: ${snapshot.error}'));
-//           } else if (!snapshot.hasData || snapshot.data == null) {
-//             return Center(child: Text('User not found'));
-//           } else {
-//             var userData = snapshot.data!;
-//             return Padding(
-//               padding: const EdgeInsets.all(16.0),
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Text('Name: ${userData['name']}', style: TextStyle(fontSize: 20)),
-//                   SizedBox(height: 8),
-//                   Text('Phone Number: ${userData['phoneNumber']}', style: TextStyle(fontSize: 20)),
-//                   SizedBox(height: 8),
-//                   Text('Email: ${userData['email']}', style: TextStyle(fontSize: 20)),
-//                 ],
-//               ),
-//             );
-//           }
-//         },
-//       ),
-//     );
-//   }
-// }
