@@ -31,6 +31,14 @@ class _AddTaskState extends State<AddTask> {
     _fetchWorkers(); // Fetch worker list from the database
   }
 
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _amountController.dispose();
+    _timeController.dispose();
+    super.dispose();
+  }
+
   Future<void> _fetchWorkers() async {
     // Fetch the list of workers from the database
     QuerySnapshot snapshot = await FirebaseFirestore.instance
@@ -198,6 +206,7 @@ class _AddTaskState extends State<AddTask> {
       {bool enabled = true, bool readOnly = false, VoidCallback? onTap}) {
     return TextFormField(
       controller: controller,
+      keyboardType: hintText == "Amount" ? TextInputType.number : null,
       decoration: InputDecoration(
         hintText: hintText,
         fillColor: enabled ? kGrey : kGrey.withOpacity(0.5),
@@ -222,6 +231,23 @@ class _AddTaskState extends State<AddTask> {
       return;
     }
 
+    // Parse and validate the amount field as an integer
+    int? amount;
+    if (_categorySelected == 'Finance' && !_manualInput!) {
+      if (_amountController.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Please fill all the required fields')));
+        return;
+      }
+
+      amount = int.tryParse(_amountController.text);
+      if (amount == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Please input a valid integer')));
+        return;
+      }
+    }
+
     // Prepare task data
     Map<String, dynamic> taskData = {
       'title': _titleController.text,
@@ -232,11 +258,12 @@ class _AddTaskState extends State<AddTask> {
       'createdAt': Timestamp.now(),
       'status': 'Pending', // Set initial status to 'Pending'
       'isPersonal': false, // Set isPersonal to false
+      'isProcessed': false, // Set isProcessed to false
     };
 
     if (_categorySelected == 'Finance') {
       taskData.addAll({
-        'amount': _manualInput! ? null : _amountController.text,
+        'amount': amount,
         'financeType':
             _financeTypeEnum == FinanceType.Income ? 'Income' : 'Expense',
       });

@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 enum FinanceType { Income, Expense }
 
 class UpdateTask extends StatefulWidget {
-  final DocumentSnapshot task; // Accept the task data
+  final DocumentSnapshot task;
 
   const UpdateTask({super.key, required this.task});
 
@@ -37,6 +37,14 @@ class _UpdateTaskState extends State<UpdateTask> {
     _financeTypeEnum = taskData['financeType'] == 'Income'
         ? FinanceType.Income
         : FinanceType.Expense;
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _amountController.dispose();
+    _timeController.dispose();
+    super.dispose();
   }
 
   @override
@@ -129,6 +137,24 @@ class _UpdateTaskState extends State<UpdateTask> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () async {
+                        // Parse and validate the amount field
+                        double? amount;
+                        if (_categorySelected == 'Finance' && !_manualInput!) {
+                          if (_amountController.text.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(
+                                    'Please fill all the required fields')));
+                            return;
+                          }
+
+                          amount = double.tryParse(_amountController.text);
+                          if (amount == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text('Please input a valid number')));
+                            return;
+                          }
+                        }
+
                         FirebaseFirestore.instance
                             .collection('tasks')
                             .doc(widget.task.id)

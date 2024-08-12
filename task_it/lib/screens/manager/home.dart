@@ -2,10 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:task_it/constants/colors.dart';
-import 'package:task_it/screens/finance/statistics.dart';
+import 'package:task_it/screens/finance/tracker.dart';
 import 'package:task_it/screens/manager/personal.dart';
 import 'package:task_it/screens/manager/tasker.dart';
-// import 'package:task_it/screens/manager/worker_tile.dart';
 import 'package:task_it/widgets/tiles.dart'; // Add GetX if needed for state management
 
 class HomePage extends StatefulWidget {
@@ -91,7 +90,7 @@ class HomePageState extends State<HomePage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const Statistics()));
+                              builder: (context) => TrackerPage()));
                     },
                   ),
                 ],

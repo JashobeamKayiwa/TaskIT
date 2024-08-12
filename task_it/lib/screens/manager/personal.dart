@@ -92,12 +92,18 @@ class Personal extends StatelessWidget {
                             activeColor: kBlack,
                             value: isCompleted,
                             onChanged: (bool? value) {
-                              FirebaseFirestore.instance
-                                  .collection('tasks')
-                                  .doc(task.id)
-                                  .update({
-                                'status': value! ? 'Completed' : 'Pending',
-                              });
+                              if (task['manualInput'] == true &&
+                                  value == true) {
+                                _showManualInputDialog(context, task);
+                              } else {
+                                FirebaseFirestore.instance
+                                    .collection('tasks')
+                                    .doc(task.id)
+                                    .update({
+                                  'status': value! ? 'Completed' : 'Pending',
+                                  'isProcessed': value ? true : false,
+                                });
+                              }
                             },
                           ),
                           isThreeLine: true,
@@ -111,7 +117,8 @@ class Personal extends StatelessWidget {
                             ),
                           ),
                           subtitle: Text(
-                              'Time: ${task['dueTime']} \n ${task['category']}'),
+                            'Time: ${task['dueTime']} \n ${task['category']}',
+                          ),
                           trailing: IconButton(
                             icon: Icon(Icons.delete_outlined, color: kRedDark),
                             onPressed: () {
@@ -134,6 +141,69 @@ class Personal extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: _buildBottomNavigationBar(),
+    );
+  }
+
+  void _showManualInputDialog(BuildContext context, DocumentSnapshot task) {
+    TextEditingController amountController = TextEditingController();
+
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Enter Amount',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextField(
+                controller: amountController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: 'Amount',
+                  errorText: amountController.text.isNotEmpty &&
+                          int.tryParse(amountController.text) == null
+                      ? 'Please enter a valid integer'
+                      : null,
+                ),
+                onChanged: (value) {
+                  // Force rebuild to update the error text
+                  (context as Element).markNeedsBuild();
+                },
+              ),
+              SizedBox(height: 20.0),
+              ElevatedButton(
+                onPressed: () {
+                  int? manualAmount = int.tryParse(amountController.text);
+                  if (manualAmount == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Please input a valid integer')),
+                    );
+                    return;
+                  }
+
+                  FirebaseFirestore.instance
+                      .collection('tasks')
+                      .doc(task.id)
+                      .update({
+                    'manualInputAmount': manualAmount,
+                    'status': 'Completed',
+                    'isProcessed': true,
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text('Submit'),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

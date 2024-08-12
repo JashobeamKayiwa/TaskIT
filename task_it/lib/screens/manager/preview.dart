@@ -17,7 +17,7 @@ class _EditTaskState extends State<EditTask> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   final _timeController = TextEditingController();
-  bool _manualInput = false; // Initialize as false
+  bool _manualInput = false;
   FinanceType? _financeTypeEnum;
 
   final _categoryList = ['Work', 'Finance'];
@@ -29,16 +29,23 @@ class _EditTaskState extends State<EditTask> {
   @override
   void initState() {
     super.initState();
-    _categorySelected = _categoryList[0]; // Set the initial selected value
-    _fetchWorkers(); // Fetch worker list from the database
+    _categorySelected = _categoryList[0];
+    _fetchWorkers();
 
     if (widget.task != null) {
       _initializeFormFields(widget.task!);
     }
   }
 
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _amountController.dispose();
+    _timeController.dispose();
+    super.dispose();
+  }
+
   Future<void> _fetchWorkers() async {
-    // Fetch the list of workers from the database
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection('users')
         .where('role', isEqualTo: 'Worker')
@@ -52,7 +59,7 @@ class _EditTaskState extends State<EditTask> {
     _titleController.text = task['title'];
     _categorySelected = task['category'];
     _workerSelected = task['worker'];
-    _manualInput = task['manualInput'] ?? false; // Handle potential null value
+    _manualInput = task['manualInput'] ?? false;
     _timeController.text = task['dueTime'];
 
     if (_categorySelected == 'Finance') {
@@ -230,6 +237,17 @@ class _EditTaskState extends State<EditTask> {
       enabled: enabled,
       readOnly: readOnly,
       onTap: onTap,
+      keyboardType: controller == _amountController
+          ? TextInputType.numberWithOptions(decimal: true)
+          : TextInputType.text,
+      validator: controller == _amountController && !enabled
+          ? (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter a valid amount';
+              }
+              return null;
+            }
+          : null,
     );
   }
 
@@ -245,7 +263,6 @@ class _EditTaskState extends State<EditTask> {
       return;
     }
 
-    // Prepare task data
     Map<String, dynamic> taskData = {
       'title': _titleController.text,
       'category': _categorySelected,
@@ -253,8 +270,8 @@ class _EditTaskState extends State<EditTask> {
       'manualInput': _categorySelected == 'Finance' ? _manualInput : null,
       'dueTime': _timeController.text,
       'createdAt': Timestamp.now(),
-      'status': 'Pending', // Set initial status to 'Pending'
-      'isPersonal': false, // Set isPersonal to false
+      'status': 'Pending',
+      'isPersonal': false,
     };
 
     if (_categorySelected == 'Finance') {
@@ -267,12 +284,10 @@ class _EditTaskState extends State<EditTask> {
 
     try {
       if (widget.task == null) {
-        // Add new task
         await FirebaseFirestore.instance.collection('tasks').add(taskData);
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Task added successfully')));
       } else {
-        // Update existing task
         await FirebaseFirestore.instance
             .collection('tasks')
             .doc(widget.task!.id)

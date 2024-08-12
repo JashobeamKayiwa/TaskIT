@@ -6,7 +6,8 @@ class TaskCompletionIndicator extends StatelessWidget {
   final int allTasks;
   final int completedTasks;
 
-  TaskCompletionIndicator({required this.allTasks, required this.completedTasks});
+  TaskCompletionIndicator(
+      {required this.allTasks, required this.completedTasks});
 
   @override
   Widget build(BuildContext context) {

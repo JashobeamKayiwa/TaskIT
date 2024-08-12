@@ -29,6 +29,14 @@ class _MyTaskState extends State<MyTask> {
   }
 
   @override
+  void dispose() {
+    _titleController.dispose();
+    _amountController.dispose();
+    _timeController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
@@ -168,6 +176,7 @@ class _MyTaskState extends State<MyTask> {
       {bool enabled = true, bool readOnly = false, VoidCallback? onTap}) {
     return TextFormField(
       controller: controller,
+      keyboardType: hintText == "Amount" ? TextInputType.number : null,
       decoration: InputDecoration(
         hintText: hintText,
         fillColor: enabled ? kGrey : kGrey.withOpacity(0.5),
@@ -184,9 +193,26 @@ class _MyTaskState extends State<MyTask> {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('No user is logged in')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('No user is logged in')));
       return;
+    }
+
+    // Parse and validate the amount field as an integer
+    int? amount;
+    if (_categorySelected == 'Finance' && !_manualInput!) {
+      if (_amountController.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Please fill all the required fields')));
+        return;
+      }
+
+      amount = int.tryParse(_amountController.text);
+      if (amount == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Please input a valid integer')));
+        return;
+      }
     }
 
     if (_titleController.text.isEmpty ||
@@ -213,7 +239,7 @@ class _MyTaskState extends State<MyTask> {
 
     if (_categorySelected == 'Finance') {
       taskData.addAll({
-        'amount': _manualInput! ? null : _amountController.text,
+        'amount': _manualInput! ? null : amount,
         'financeType':
             _financeTypeEnum == FinanceType.Income ? 'Income' : 'Expense',
       });

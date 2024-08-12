@@ -182,7 +182,7 @@ class _TaskerState extends State<Tasker> {
           ),
           actions: [
             GestureDetector(
-              child:Icon(Icons.circle),
+              child: Icon(Icons.circle),
               onTap: () {
                 Navigator.push(
                   context,
