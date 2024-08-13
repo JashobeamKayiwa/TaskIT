@@ -7,7 +7,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:task_it/constants/colors.dart';
 import 'package:task_it/profile/update_profile.dart';
 import 'package:task_it/profile/widgets/profile_menu.dart';
-import 'package:task_it/screens/login.dart';
+import 'package:task_it/screens/authentication/login.dart';
 
 class UserProfile extends StatelessWidget {
   final String userId;

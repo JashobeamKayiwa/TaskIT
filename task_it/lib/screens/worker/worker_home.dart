@@ -3,9 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:task_it/constants/colors.dart';
-import 'package:task_it/screens/manager/selftask.dart';
 
-class Personal extends StatelessWidget {
+class WorkerHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,54 +37,53 @@ class Personal extends StatelessWidget {
                         color: kBlack,
                       ),
                     ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => MyTask()),
-                        );
-                      },
-                      child: Text(
-                        'Add Task+',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                          color: kBlack,
-                        ),
-                      ),
-                    ),
-                  ],
+                   ],
                 ),
                 Expanded(
-                  child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('tasks')
-                        .where('worker',
-                            isEqualTo: FirebaseAuth.instance.currentUser?.uid)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
+                  child: FutureBuilder<DocumentSnapshot>(
+                    future: FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(FirebaseAuth.instance.currentUser?.uid)
+                        .get(),
+                    builder: (context, userSnapshot) {
+                      if (userSnapshot.connectionState == ConnectionState.waiting) {
                         return Center(child: CircularProgressIndicator());
                       }
 
-                      var tasks = snapshot.data!.docs;
-                      tasks.sort((a, b) {
-                        bool aCompleted = a['status'] == 'Completed';
-                        bool bCompleted = b['status'] == 'Completed';
-                        return aCompleted && !bCompleted ? 1 : -1;
-                      });
+                      if (!userSnapshot.hasData || userSnapshot.data == null) {
+                        return Center(child: Text('No user data found'));
+                      }
 
-                      return ListView.builder(
-                        itemCount: tasks.length,
-                        itemBuilder: (context, index) {
-                          var task = tasks[index];
-                          bool isCompleted = task['status'] == 'Completed';
-                          return Card(
-                            child: ListTile(
-                              leading: Checkbox(
-                                activeColor: kBlack,
-                                value: isCompleted,
-                                onChanged: (bool? value) {
+                      String? workerName = userSnapshot.data!['name'];
+
+                      return StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('tasks')
+                            .where('worker', isEqualTo: workerName)
+                            .snapshots(),
+                        builder: (context, taskSnapshot) {
+                          if (!taskSnapshot.hasData) {
+                            return Center(child: CircularProgressIndicator());
+                          }
+
+                          var tasks = taskSnapshot.data!.docs;
+                          tasks.sort((a, b) {
+                            bool aCompleted = a['status'] == 'Completed';
+                            bool bCompleted = b['status'] == 'Completed';
+                            return aCompleted && !bCompleted ? 1 : -1;
+                          });
+
+                          return ListView.builder(
+                            itemCount: tasks.length,
+                            itemBuilder: (context, index) {
+                              var task = tasks[index];
+                              bool isCompleted = task['status'] == 'Completed';
+                              return Card(
+                                child: ListTile(
+                                  leading: Checkbox(
+                                    activeColor: kBlack,
+                                    value: isCompleted,
+                                    onChanged: (bool? value) {
                                   if (task['manualInput'] == true &&
                                       value == true) {
                                     _showManualInputDialog(context, task);
@@ -96,37 +94,29 @@ class Personal extends StatelessWidget {
                                         .update({
                                       'status':
                                           value! ? 'Completed' : 'Pending',
-                                      'isProcessed': false,
                                     });
                                   }
                                 },
-                              ),
-                              isThreeLine: true,
-                              title: Text(
-                                task['title'],
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  decoration: isCompleted
-                                      ? TextDecoration.lineThrough
-                                      : TextDecoration.none,
+                                  ),
+                                  isThreeLine: true,
+                                  title: Text(
+                                    task['title'],
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      decoration: isCompleted
+                                          ? TextDecoration.lineThrough
+                                          : TextDecoration.none,
+                                    ),
+                                  ),
+                                  subtitle: Text(
+                                    'Time: ${task['dueTime']} \n ${task['category']}',
+                                  ),
+                                  tileColor: isCompleted
+                                      ? kGrey.withOpacity(0.5)
+                                      : kWhite,
                                 ),
-                              ),
-                              subtitle: Text(
-                                'Time: ${task['dueTime']} \n ${task['category']}',
-                              ),
-                              trailing: IconButton(
-                                icon: Icon(Icons.delete_outlined,
-                                    color: kRedDark),
-                                onPressed: () {
-                                  FirebaseFirestore.instance
-                                      .collection('tasks')
-                                      .doc(task.id)
-                                      .delete();
-                                },
-                              ),
-                              tileColor:
-                                  isCompleted ? kGrey.withOpacity(0.5) : kWhite,
-                            ),
+                              );
+                            },
                           );
                         },
                       );
@@ -137,6 +127,32 @@ class Personal extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildAppBar(BuildContext context) {
+    return Material(
+      elevation: 0,
+      child: ClipRRect(
+        child: AppBar(
+          automaticallyImplyLeading: true,
+          backgroundColor: kBlack,
+          elevation: 0,
+          iconTheme: IconThemeData(color: kWhite),
+          title: Center(
+            child: Text(
+              textAlign: TextAlign.center,
+              'Assignments',
+              style: TextStyle(
+                color: kWhite,
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          
+        ),
       ),
     );
   }
@@ -194,7 +210,6 @@ class Personal extends StatelessWidget {
                       .update({
                     'manualInputAmount': manualAmount,
                     'status': 'Completed',
-                    'isProcessed': false,
                   });
                   Navigator.pop(context);
                 },
@@ -206,39 +221,4 @@ class Personal extends StatelessWidget {
       },
     );
   }
-
-  Widget _buildAppBar(BuildContext context) {
-    return Material(
-      elevation: 0,
-      child: ClipRRect(
-        child: AppBar(
-          automaticallyImplyLeading: true,
-          backgroundColor: kBlack,
-          elevation: 0,
-          iconTheme: IconThemeData(color: kWhite),
-          title: Text(
-            'Personal',
-            style: TextStyle(
-              color: kWhite,
-              fontSize: 26,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.add, color: kWhite, size: 40),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyTask()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  
 }

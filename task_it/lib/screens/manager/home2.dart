@@ -1,18 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:task_it/constants/colors.dart';
-import 'package:task_it/screens/manager/home.dart';
 import 'package:task_it/profile/profile.dart';
-import 'package:task_it/screens/manager/statistics.dart';
+import 'package:task_it/screens/worker/worker_home.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class Home2 extends StatefulWidget {
+  const Home2({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Home2> createState() => _Home2State();
 }
 
-class _HomeState extends State<Home> {
+class _Home2State extends State<Home2> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   User? user;
   int selectedindex = 0;
@@ -32,16 +31,14 @@ class _HomeState extends State<Home> {
   List<Widget> get pages {
     if (user == null) {
       return [
-         HomePage(),
-         Statistics(),
+         WorkerHome(),
          UserProfile(
           userId: '', // Provide an empty string or handle it accordingly.
         ),
       ];
     }
     return [
-      HomePage(),
-      Statistics(),
+      WorkerHome(),
       UserProfile(
         userId: user!.uid, // Safe to access `uid` since `user` is non-null.
       ),
@@ -86,12 +83,6 @@ class _HomeState extends State<Home> {
                 icon: Icon(Icons.home_rounded, size: 40),
               ),
               
-              
-              BottomNavigationBarItem(
-                label: 'Finances',
-                icon: Icon(Icons.bar_chart, size: 40),
-              ),
-
               BottomNavigationBarItem(
                 label: 'Person',
                 icon: Icon(Icons.person_rounded, size: 40),

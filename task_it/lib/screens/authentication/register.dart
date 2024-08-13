@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:task_it/constants/colors.dart';
 import 'package:task_it/functions/authfunctions.dart';
 
-import '../widgets/forms.dart';
+import '../../widgets/forms.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});

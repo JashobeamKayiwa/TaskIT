@@ -204,109 +204,113 @@ class _StatisticsState extends State<Statistics> {
       startLoading();
     }
 
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100.0),
-        child: Material(
-      elevation: 0,
-      child: ClipRRect(
-        child: Container(
-          color: Colors.black,
-          child: Row(
-            children: [
-              SizedBox(
-                width: 16,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    'Total Balance',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 26,
-                    ),
-                  ),
-                  Text(
-                    'Shs.' + balance.toString(),
-                    style: TextStyle(color: Colors.white, fontSize: 40),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    ),
-      ),
-      floatingActionButton: PlusButton(
-        function: newTransaction,
-      ),
-      body: Container(
-        padding: const EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-          color: Colors.white,
-        ),
-        child: Column(
-          children: [
-            TopCard(
-              balance: balance.toString(),
-              income: totalIncome.toString(),
-              expense: totalExpense.toString(),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(100.0),
+          child: Material(
+        elevation: 0,
+        child: ClipRRect(
+          child: Container(
+            color: Colors.black,
+            child: Row(
               children: [
-                Text(
-                  'Transactions',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                SizedBox(
+                  width: 16,
                 ),
-                Row(
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      'View all',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      'Total Balance',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 26,
+                      ),
                     ),
-                    SizedBox(
-                      width: 8,
+                    Text(
+                      'Shs.' + balance.toString(),
+                      style: TextStyle(color: Colors.white, fontSize: 40),
                     ),
-                    Icon(
-                      Icons.arrow_downward,
-                      size: 15,
-                    )
                   ],
                 ),
               ],
             ),
-            SizedBox(
-              height: 16,
+          ),
+        ),
+      ),
+        ),
+        floatingActionButton: PlusButton(
+          function: newTransaction,
+        ),
+        body: Container(
+          padding: const EdgeInsets.all(10.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
             ),
-            Expanded(
-              child: GoogleSheetsApi.loading == true
-                  ? Center(child: LoadingCircle())
-                  : ListView.builder(
-                      itemCount: GoogleSheetsApi.currentTransactions.length,
-                      reverse: true,
-                      itemBuilder: (context, index) {
-                        final transaction =
-                            GoogleSheetsApi.currentTransactions[index];
-                        return MyTransaction(
-                          transactionName: transaction[0],
-                          money: transaction[1],
-                          expenseOrIncome: transaction[2],
-                          onCheckboxChanged: updateBalance,
-                          rowIndex: index,
-                          initialIsChecked: transaction[4],
-                        );
-                      },
-                    ),
-            ),
-          ],
+            color: Colors.white,
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                child: TopCard(
+                  balance: balance.toString(),
+                  income: totalIncome.toString(),
+                  expense: totalExpense.toString(),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Transactions',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'View all',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Icon(
+                        Icons.arrow_downward,
+                        size: 15,
+                      )
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Expanded(
+                child: GoogleSheetsApi.loading == true
+                    ? Center(child: LoadingCircle())
+                    : ListView.builder(
+                        itemCount: GoogleSheetsApi.currentTransactions.length,
+                        reverse: true,
+                        itemBuilder: (context, index) {
+                          final transaction =
+                              GoogleSheetsApi.currentTransactions[index];
+                          return MyTransaction(
+                            transactionName: transaction[0],
+                            money: transaction[1],
+                            expenseOrIncome: transaction[2],
+                            onCheckboxChanged: updateBalance,
+                            rowIndex: index,
+                            initialIsChecked: transaction[4],
+                          );
+                        },
+                      ),
+              ),
+            ],
+          ),
         ),
       ),
     );

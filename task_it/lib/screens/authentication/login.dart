@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:task_it/constants/colors.dart';
-import 'package:task_it/screens/forgot.dart';
-// import 'package:task_it/screens/manager/home.dart';
-import 'package:task_it/screens/manager/home1.dart';
-import 'package:task_it/screens/register.dart';
+import 'package:task_it/screens/authentication/forgot.dart';
+import 'package:task_it/screens/manager/home1.dart'; // For other users
+import 'package:task_it/screens/authentication/register.dart';
+import 'package:task_it/screens/manager/home2.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -131,12 +131,14 @@ class _LoginPageState extends State<LoginPage> {
                         ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              _signInUser(_emailController.text,
-                                  _passwordController.text, context);
+                              _signInUser(
+                                  _emailController.text,
+                                  _passwordController.text,
+                                  context);
                             }
                           },
-                          child:
-                              Text('Sign In', style: TextStyle(color: kWhite)),
+                          child: Text('Sign In',
+                              style: TextStyle(color: kWhite)),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: kBlack,
                             padding: EdgeInsets.symmetric(horizontal: 90.0),
@@ -181,12 +183,18 @@ class _LoginPageState extends State<LoginPage> {
       if (user != null) {
         Map<String, dynamic>? userDetails = await fetchUserDetails();
         if (userDetails != null) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Home(),
-            ),
-          );
+          String? role = userDetails['role'];
+          if (role == 'Manager') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => Home()),
+            );
+          } else {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => Home2()),
+            );
+          }
         }
       }
       ScaffoldMessenger.of(context)

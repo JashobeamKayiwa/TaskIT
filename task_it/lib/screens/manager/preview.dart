@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:task_it/constants/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:task_it/constants/colors.dart';
 
 enum FinanceType { Income, Expense }
 
-class AddTask extends StatefulWidget {
-  const AddTask({super.key});
+class EditTask extends StatefulWidget {
+  final DocumentSnapshot? task;
+
+  const EditTask({super.key, this.task});
 
   @override
-  State<AddTask> createState() => _AddTaskState();
+  State<EditTask> createState() => _EditTaskState();
 }
 
-class _AddTaskState extends State<AddTask> {
+class _EditTaskState extends State<EditTask> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   final _timeController = TextEditingController();
-  bool? _manualInput = false;
+  bool _manualInput = false;
   FinanceType? _financeTypeEnum;
 
   final _categoryList = ['Work', 'Finance'];
@@ -27,12 +29,23 @@ class _AddTaskState extends State<AddTask> {
   @override
   void initState() {
     super.initState();
-    _categorySelected = _categoryList[0]; // Set the initial selected value
-    _fetchWorkers(); // Fetch worker list from the database
+    _categorySelected = _categoryList[0];
+    _fetchWorkers();
+
+    if (widget.task != null) {
+      _initializeFormFields(widget.task!);
+    }
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _amountController.dispose();
+    _timeController.dispose();
+    super.dispose();
   }
 
   Future<void> _fetchWorkers() async {
-    // Fetch the list of workers from the database
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection('users')
         .where('role', isEqualTo: 'Worker')
@@ -40,6 +53,21 @@ class _AddTaskState extends State<AddTask> {
     setState(() {
       _workerList = snapshot.docs.map((doc) => doc['name'] as String).toList();
     });
+  }
+
+  void _initializeFormFields(DocumentSnapshot task) {
+    _titleController.text = task['title'];
+    _categorySelected = task['category'];
+    _workerSelected = task['worker'];
+    _manualInput = task['manualInput'] ?? false;
+    _timeController.text = task['dueTime'];
+
+    if (_categorySelected == 'Finance') {
+      _amountController.text = task['amount'] ?? '';
+      _financeTypeEnum = task['financeType'] == 'Income'
+          ? FinanceType.Income
+          : FinanceType.Expense;
+    }
   }
 
   @override
@@ -73,8 +101,8 @@ class _AddTaskState extends State<AddTask> {
                 },
               ),
               DropdownButtonFormField<String>(
+                hint: Text("Assign Worker"),
                 value: _workerSelected,
-                hint: Text("Worker"),
                 focusColor: Colors.transparent,
                 items: _workerList
                     .map((e) => DropdownMenuItem<String>(
@@ -97,14 +125,14 @@ class _AddTaskState extends State<AddTask> {
                 onChanged: _categorySelected == 'Finance'
                     ? (val) {
                         setState(() {
-                          _manualInput = val;
+                          _manualInput = val!;
                         });
                       }
                     : null,
               ),
               _buildTextFormField(
                   _amountController, "Amount", Icons.attach_money_outlined,
-                  enabled: _categorySelected == 'Finance' && !_manualInput!),
+                  enabled: _categorySelected == 'Finance' && !_manualInput),
               Row(
                 children: [
                   Expanded(
@@ -174,7 +202,9 @@ class _AddTaskState extends State<AddTask> {
                       onPressed: () {
                         _submitForm();
                       },
-                      child: Text('Add Task', style: TextStyle(color: kWhite)),
+                      child: Text(
+                          widget.task == null ? 'Add Task' : 'Update Task',
+                          style: TextStyle(color: kWhite)),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: kBlack,
                         padding: EdgeInsets.only(
@@ -207,6 +237,17 @@ class _AddTaskState extends State<AddTask> {
       enabled: enabled,
       readOnly: readOnly,
       onTap: onTap,
+      keyboardType: controller == _amountController
+          ? TextInputType.numberWithOptions(decimal: true)
+          : TextInputType.text,
+      validator: controller == _amountController && !enabled
+          ? (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter a valid amount';
+              }
+              return null;
+            }
+          : null,
     );
   }
 
@@ -215,14 +256,13 @@ class _AddTaskState extends State<AddTask> {
         _categorySelected == null ||
         _workerSelected == null ||
         (_categorySelected == 'Finance' &&
-            !_manualInput! &&
+            !_manualInput &&
             (_amountController.text.isEmpty || _financeTypeEnum == null))) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Please fill all the required fields')));
       return;
     }
 
-    // Prepare task data
     Map<String, dynamic> taskData = {
       'title': _titleController.text,
       'category': _categorySelected,
@@ -230,26 +270,35 @@ class _AddTaskState extends State<AddTask> {
       'manualInput': _categorySelected == 'Finance' ? _manualInput : null,
       'dueTime': _timeController.text,
       'createdAt': Timestamp.now(),
-      'status': 'Pending', // Set initial status to 'Pending'
+      'status': 'Pending',
+      'isPersonal': false,
     };
 
     if (_categorySelected == 'Finance') {
       taskData.addAll({
-        'amount': _manualInput! ? null : _amountController.text,
+        'amount': _manualInput ? null : _amountController.text,
         'financeType':
             _financeTypeEnum == FinanceType.Income ? 'Income' : 'Expense',
       });
     }
 
     try {
-      // Submit to Firestore
-      await FirebaseFirestore.instance.collection('tasks').add(taskData);
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Task added successfully')));
+      if (widget.task == null) {
+        await FirebaseFirestore.instance.collection('tasks').add(taskData);
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Task added successfully')));
+      } else {
+        await FirebaseFirestore.instance
+            .collection('tasks')
+            .doc(widget.task!.id)
+            .update(taskData);
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Task updated successfully')));
+      }
       Navigator.pop(context);
     } catch (e) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Failed to add task: $e')));
+          .showSnackBar(SnackBar(content: Text('Failed to submit task: $e')));
     }
   }
 }

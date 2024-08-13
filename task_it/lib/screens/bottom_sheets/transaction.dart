@@ -84,6 +84,7 @@ class _MyTransactionState extends State<MyTransaction> {
                     ),
                   ),
                   Checkbox(
+                    activeColor: Colors.black,
                     value: isChecked,
                     onChanged: _onCheckboxChanged,
                   ),

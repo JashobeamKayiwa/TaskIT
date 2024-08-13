@@ -21,7 +21,7 @@ class TopCard extends StatelessWidget {
         children: [
           Container(
             height: 150,
-            width: 180,
+            width: 170,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               border: Border.all(
@@ -92,7 +92,7 @@ class TopCard extends StatelessWidget {
           ),
           Container(
             height: 150,
-            width: 180,
+            width: 170,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               border: Border.all(

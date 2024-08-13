@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:task_it/constants/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart'; // Add this import for FilteringTextInputFormatter
 
 enum FinanceType { Income, Expense }
 
-class MyTask extends StatefulWidget {
-  const MyTask({super.key});
+class AddTask extends StatefulWidget {
+  const AddTask({super.key});
 
   @override
-  State<MyTask> createState() => _MyTaskState();
+  State<AddTask> createState() => _AddTaskState();
 }
 
-class _MyTaskState extends State<MyTask> {
+class _AddTaskState extends State<AddTask> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   final _timeController = TextEditingController();
@@ -23,10 +22,14 @@ class _MyTaskState extends State<MyTask> {
   final _categoryList = ['Work', 'Finance'];
   String? _categorySelected;
 
+  List<String> _workerList = [];
+  String? _workerSelected;
+
   @override
   void initState() {
     super.initState();
     _categorySelected = _categoryList[0]; // Set the initial selected value
+    _fetchWorkers(); // Fetch worker list from the database
   }
 
   @override
@@ -37,6 +40,17 @@ class _MyTaskState extends State<MyTask> {
     super.dispose();
   }
 
+  Future<void> _fetchWorkers() async {
+    // Fetch the list of workers from the database
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('role', isEqualTo: 'Worker')
+        .get();
+    setState(() {
+      _workerList = snapshot.docs.map((doc) => doc['name'] as String).toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,13 +59,12 @@ class _MyTaskState extends State<MyTask> {
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
           child: SingleChildScrollView(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment:
-                  MainAxisAlignment.center, // Center content vertically
               children: [
                 _buildTextFormField(
                     _titleController, "Title", Icons.info_outline_rounded),
-                SizedBox(height: 20), // Add spacing between fields
+                SizedBox(height: 20),
                 DropdownButtonFormField<String>(
                   hint: Text("Category"),
                   value: _categorySelected,
@@ -71,7 +84,24 @@ class _MyTaskState extends State<MyTask> {
                     });
                   },
                 ),
-                SizedBox(height: 20), // Add spacing between fields
+                SizedBox(height: 20),
+                DropdownButtonFormField<String>(
+                  hint: Text("Assign Worker"),
+                  value: _workerSelected,
+                  focusColor: Colors.transparent,
+                  items: _workerList
+                      .map((e) => DropdownMenuItem<String>(
+                            child: Text(e),
+                            value: e,
+                          ))
+                      .toList(),
+                  onChanged: (val) {
+                    setState(() {
+                      _workerSelected = val;
+                    });
+                  },
+                ),
+                SizedBox(height: 20),
                 CheckboxListTile(
                   activeColor: kBlack,
                   controlAffinity: ListTileControlAffinity.leading,
@@ -86,12 +116,12 @@ class _MyTaskState extends State<MyTask> {
                         }
                       : null,
                 ),
-                SizedBox(height: 20), // Add spacing between fields
+                SizedBox(height: 20),
                 _buildTextFormField(
                     _amountController, "Amount", Icons.attach_money_outlined,
                     enabled: _categorySelected == 'Finance' && !_manualInput!,
                     isAmount: true),
-                SizedBox(height: 20), // Add spacing between fields
+                SizedBox(height: 20),
                 Row(
                   children: [
                     Expanded(
@@ -128,7 +158,7 @@ class _MyTaskState extends State<MyTask> {
                     ),
                   ],
                 ),
-                SizedBox(height: 20), // Add spacing between fields
+                SizedBox(height: 20),
                 _buildTextFormField(_timeController, "Due Time", Icons.timer,
                     readOnly: true, onTap: () async {
                   TimeOfDay? pickedTime = await showTimePicker(
@@ -141,7 +171,7 @@ class _MyTaskState extends State<MyTask> {
                     });
                   }
                 }),
-                SizedBox(height: 30), // Add spacing between fields and buttons
+                SizedBox(height: 30),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -152,9 +182,8 @@ class _MyTaskState extends State<MyTask> {
                         child: Text('Cancel', style: TextStyle(color: kBlack)),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: kWhite,
-                          padding: EdgeInsets.only(
-                            right: 20.0,
-                            left: 20.0,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 20.0,
                           ),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0)),
@@ -167,9 +196,8 @@ class _MyTaskState extends State<MyTask> {
                             Text('Add Task', style: TextStyle(color: kWhite)),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: kBlack,
-                          padding: EdgeInsets.only(
-                            right: 20.0,
-                            left: 20.0,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 20.0,
                           ),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0)),
@@ -192,7 +220,7 @@ class _MyTaskState extends State<MyTask> {
       bool isAmount = false}) {
     return TextFormField(
       controller: controller,
-      keyboardType: isAmount ? TextInputType.number : null,
+      keyboardType: hintText == "Amount" ? TextInputType.number : null,
       inputFormatters: isAmount ? [FilteringTextInputFormatter.digitsOnly] : [],
       decoration: InputDecoration(
         hintText: hintText,
@@ -207,15 +235,17 @@ class _MyTaskState extends State<MyTask> {
   }
 
   void _submitForm() async {
-    final user = FirebaseAuth.instance.currentUser;
-
-    if (user == null) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('No user is logged in')));
+    if (_titleController.text.isEmpty ||
+        _categorySelected == null ||
+        _workerSelected == null ||
+        (_categorySelected == 'Finance' &&
+            !_manualInput! &&
+            (_amountController.text.isEmpty || _financeTypeEnum == null))) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please fill all the required fields')));
       return;
     }
 
-    // Parse and validate the amount field as an integer
     int? amount;
     if (_categorySelected == 'Finance' && !_manualInput!) {
       if (_amountController.text.isEmpty) {
@@ -232,38 +262,28 @@ class _MyTaskState extends State<MyTask> {
       }
     }
 
-    if (_titleController.text.isEmpty ||
-        _categorySelected == null ||
-        (_categorySelected == 'Finance' &&
-            !_manualInput! &&
-            (_amountController.text.isEmpty || _financeTypeEnum == null))) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Please fill all the required fields')));
-      return;
-    }
-
     // Prepare task data
     Map<String, dynamic> taskData = {
       'title': _titleController.text,
       'category': _categorySelected,
-      'worker': user.uid, // Assign to the logged-in user
+      'worker': _workerSelected,
       'manualInput': _categorySelected == 'Finance' ? _manualInput : null,
       'dueTime': _timeController.text,
       'createdAt': Timestamp.now(),
-      'status': 'Pending', // Set initial status to 'Pending'
-      'isPersonal': true, // Set isPersonal to true
+      'status': 'Pending',
+      'isPersonal': false,
+      'isProcessed': false,
     };
 
     if (_categorySelected == 'Finance') {
       taskData.addAll({
-        'amount': _manualInput! ? null : amount,
+        'amount': amount,
         'financeType':
             _financeTypeEnum == FinanceType.Income ? 'Income' : 'Expense',
       });
     }
 
     try {
-      // Submit to Firestore
       await FirebaseFirestore.instance.collection('tasks').add(taskData);
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Task added successfully')));
