@@ -1,9 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:task_it/constants/colors.dart';
 import 'package:task_it/profile/update_profile.dart';
 import 'package:task_it/profile/widgets/profile_menu.dart';
+import 'package:task_it/screens/login.dart';
 
 class UserProfile extends StatelessWidget {
   final String userId;
@@ -121,32 +125,37 @@ class UserProfile extends StatelessWidget {
                         title: "Logout",
                         icon: Icons.no_accounts,
                         textColor: Colors.red,
-                        onPress: () {},
+                        onPress: () async {
+                              try {
+                                await FirebaseAuth.instance.signOut(); // Sign out the user
+                                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginPage()));
+                              } catch (e) {
+                                print("Error signing out: $e");
+                              }
+                            },
                         child:
                   Icon(Icons.no_accounts, size: 18.0, color: Colors.grey)),
                         const SizedBox(height: 10),
                         SizedBox(
                       width: 200,
                       child: ElevatedButton(
-                        onPressed: () {                            
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => UpdateProfile()),
-                            );
-                          },
-                        // onPressed: () =>
-                        //     Get.to(() => UpdateProfileScreen(userId: 'user.uid',)),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: tPrimaryColor,
-                          side: BorderSide.none,
-                          shape: const StadiumBorder(),
-                        ),
-                        child: const Text(tEditProfile,
-                            style: TextStyle(color: tDarkColor)),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => UpdateProfile()));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: tPrimaryColor,
+                    side: BorderSide.none,
+                    shape: StadiumBorder(),
+                  ),
+                  child: Text(
+                    tEditProfile,
+                    style: TextStyle(color: tDarkColor),
+                  ),
+                )
+
                       ),
-                    ),
-                  ],
+              
+                  ]
                 ),
               ),
             ),
