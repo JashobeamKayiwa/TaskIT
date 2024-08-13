@@ -16,9 +16,6 @@ packages:
       sha256: b1595874fbc8f7a50da90f5d8f327bb0bfd6a95dc906c390efe991540c3b54aa
       url: "https://pub.dev"
     source: hosted
-<<<<<<< HEAD
-    version: "1.3.39"
-=======
     version: "1.3.40"
   archive:
     dependency: transitive
@@ -28,7 +25,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.6.1"
->>>>>>> origin/expense
   args:
     dependency: transitive
     description:
@@ -117,7 +113,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.18.0"
-<<<<<<< HEAD
   color:
     dependency: "direct main"
     description:
@@ -126,12 +121,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> origin/Luffy
-=======
   cross_file:
     dependency: transitive
     description:
@@ -140,7 +129,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.4+2"
->>>>>>> origin/expense
   crypto:
     dependency: transitive
     description:
@@ -149,13 +137,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> origin/adminwork
-=======
->>>>>>> origin/Luffy
-=======
->>>>>>> origin/expense
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -172,9 +153,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
   file_selector_linux:
     dependency: transitive
     description:
@@ -207,7 +185,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.3+2"
->>>>>>> origin/expense
   firebase_auth:
     dependency: "direct main"
     description:
@@ -256,8 +233,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.17.4"
-<<<<<<< HEAD
-=======
   firebase_storage:
     dependency: "direct main"
     description:
@@ -282,7 +257,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.9.12"
->>>>>>> origin/expense
   firebase_ui_firestore:
     dependency: "direct main"
     description:
@@ -307,16 +281,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
-=======
-  ffi:
-    dependency: transitive
-    description:
-      name: ffi
-      sha256: "493f37e7df1804778ff3a53bd691d8692ddf69702cf4c1c1096a2e41b4779e21"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.2"
->>>>>>> origin/adminwork
   flutter:
     dependency: "direct main"
     description: flutter
@@ -329,12 +293,7 @@ packages:
       sha256: "526faf84284b86a4cb36d20a5e45147747b7563d921373d4ee0559c54fcdbcea"
       url: "https://pub.dev"
     source: hosted
-<<<<<<< HEAD
-    version: "3.0.2"
-<<<<<<< HEAD
-=======
     version: "0.13.1"
->>>>>>> origin/expense
   flutter_localizations:
     dependency: transitive
     description: flutter
@@ -348,18 +307,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.3+2"
-<<<<<<< HEAD
-=======
-  flutter_slidable:
-    dependency: "direct main"
-    description:
-      name: flutter_slidable
-      sha256: "2c5611c0b44e20d180e4342318e1bbc28b0a44ad2c442f5df16962606fd3e8e3"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.1"
->>>>>>> origin/adminwork
-=======
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -368,14 +315,11 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.21"
->>>>>>> origin/expense
   flutter_test:
     dependency: "direct dev"
     description: flutter
     source: sdk
     version: "0.0.0"
-<<<<<<< HEAD
-<<<<<<< HEAD
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -457,10 +401,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: c0e72ecd170b00a5590bb71238d57dc8ad22ee14c60c6b0d1a4e05cafbc5db4b
+      sha256: "8c5abf0dcc24fe6e8e0b4a5c0b51a5cf30cefdf6407a3213dae61edc75a70f56"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.12+11"
+    version: "0.8.12+12"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -517,36 +461,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.19.0"
-<<<<<<< HEAD
-=======
-  font_awesome_flutter:
-    dependency: "direct main"
-    description:
-      name: font_awesome_flutter
-      sha256: "275ff26905134bcb59417cf60ad979136f1f8257f2f449914b2c3e05bbb4cd6f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "10.7.0"
->>>>>>> madrine
-=======
-  hive:
-    dependency: "direct main"
-    description:
-      name: hive
-      sha256: "8dcf6db979d7933da8217edcec84e9df1bdb4e4edc7fc77dbd5aa74356d6d941"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.3"
-  hive_flutter:
-    dependency: "direct main"
-    description:
-      name: hive_flutter
-      sha256: dca1da446b1d808a51689fb5d0c6c9510c0a2ba01e22805d492c73b68e33eecc
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
->>>>>>> origin/adminwork
-=======
   json_annotation:
     dependency: transitive
     description:
@@ -555,7 +469,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.9.0"
->>>>>>> origin/expense
   leak_tracker:
     dependency: transitive
     description:
@@ -628,70 +541,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.0"
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-  path_provider:
-    dependency: transitive
-    description:
-      name: path_provider
-      sha256: c9e7d3a4cd1410877472158bee69963a4579f78b68c65a2b7d40d1a7a88bb161
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.3"
-  path_provider_android:
-    dependency: transitive
-    description:
-      name: path_provider_android
-      sha256: "30c5aa827a6ae95ce2853cdc5fe3971daaac00f6f081c419c013f7f57bff2f5e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.7"
-  path_provider_foundation:
-    dependency: transitive
-    description:
-      name: path_provider_foundation
-      sha256: f234384a3fdd67f989b4d54a5d73ca2a6c422fa55ae694381ae0f4375cd1ea16
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.4.0"
-  path_provider_linux:
-    dependency: transitive
-    description:
-      name: path_provider_linux
-      sha256: f7a1fe3a634fe7734c8d3f2766ad746ae2a2884abe22e241a8b301bf5cac3279
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.1"
-  path_provider_platform_interface:
-    dependency: transitive
-    description:
-      name: path_provider_platform_interface
-      sha256: "88f5779f72ba699763fa3a3b06aa4bf6de76c8e5de842cf6f29e2e06476c2334"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.2"
-  path_provider_windows:
-    dependency: transitive
-    description:
-      name: path_provider_windows
-      sha256: bd6f00dbd873bfb70d0761682da2b3a2c2fccc2b9e84c495821639601d81afe7
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.0"
-  platform:
-    dependency: transitive
-    description:
-      name: platform
-      sha256: "9b71283fc13df574056616011fb138fd3b793ea47cc509c189a6c3fa5f8a1a65"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.5"
->>>>>>> origin/adminwork
-=======
-=======
->>>>>>> origin/expense
   percent_indicator:
     dependency: "direct main"
     description:
@@ -700,9 +549,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.2.3"
-<<<<<<< HEAD
->>>>>>> origin/Luffy
-=======
   petitparser:
     dependency: transitive
     description:
@@ -711,7 +557,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.2"
->>>>>>> origin/expense
   plugin_platform_interface:
     dependency: transitive
     description:
@@ -720,7 +565,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
-<<<<<<< HEAD
   provider:
     dependency: "direct main"
     description:
@@ -729,8 +573,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.2"
-=======
->>>>>>> origin/adminwork
   sky_engine:
     dependency: transitive
     description: flutter
@@ -808,7 +650,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "14.2.1"
-<<<<<<< HEAD
   web:
     dependency: transitive
     description:
@@ -817,18 +658,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.1"
-<<<<<<< HEAD
-=======
-  xdg_directories:
-    dependency: transitive
-    description:
-      name: xdg_directories
-      sha256: faea9dee56b520b55a566385b84f2e8de55e7496104adada9962e0bd11bcff1d
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.4"
->>>>>>> origin/adminwork
-=======
   xml:
     dependency: transitive
     description:
@@ -845,7 +674,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
->>>>>>> origin/expense
 sdks:
   dart: ">=3.4.3 <4.0.0"
   flutter: ">=3.22.0"
