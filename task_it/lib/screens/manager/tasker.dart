@@ -211,8 +211,8 @@ class _TaskerState extends State<Tasker> {
                     child: TaskCompletionIndicator2(
                       allTasks: totalTasks,
                       completedTasks: completedTasks,
-                      radius: 5.0, // Adjust the size here
-                      lineWidth: 0.5, // Adjust the thickness here
+                      radius: 10, // Adjust the size here
+                      lineWidth: 5, // Adjust the thickness here
                     ),
                   ),
                   onTap: () {

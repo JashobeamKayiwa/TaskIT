@@ -96,7 +96,7 @@ class Personal extends StatelessWidget {
                                         .update({
                                       'status':
                                           value! ? 'Completed' : 'Pending',
-                                      'isProcessed': value ? true : false,
+                                      'isProcessed': false,
                                     });
                                   }
                                 },
@@ -195,7 +195,7 @@ class Personal extends StatelessWidget {
                       .update({
                     'manualInputAmount': manualAmount,
                     'status': 'Completed',
-                    'isProcessed': true,
+                    'isProcessed': false,
                   });
                   Navigator.pop(context);
                 },

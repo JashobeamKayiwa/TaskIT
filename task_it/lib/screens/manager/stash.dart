@@ -17,3 +17,21 @@
 //       });
 //     }
 //   }
+// Row(
+//                 mainAxisAlignment: MainAxisAlignment.center,
+//                 children: [
+//                   Text('Personal'),
+//                   Switch(
+//                     value: showPersonal,
+//                     onChanged: (bool value) {
+//                       setState(() {
+//                         showPersonal = value;
+//                       });
+//                     },
+//                   ),
+//                   Text('Work'),
+//                 ],
+//               ),
+// style: TextStyle(
+//               color: total < 0 ? Colors.red : Colors.green,
+//             ),

@@ -25,11 +25,18 @@ class _TrackerPageState extends State<TrackerPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Tracker Page'),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(screenHeight * 0.1),
+        child: _buildAppBar(screenWidth),
       ),
-      body: FutureBuilder<void>(
+      body:
+      
+       FutureBuilder<void>(
         future: initializationFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -43,19 +50,26 @@ class _TrackerPageState extends State<TrackerPage> {
           // Proceed with rendering the UI after the future is complete
           return Column(
             children: [
-              SwitchListTile(
-                title: Text('Show Personal / Work Details'),
-                value: showPersonal,
-                onChanged: (bool value) {
-                  setState(() {
-                    showPersonal = value;
-                  });
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Personal',style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),),
+                  Switch(
+                    activeColor: Colors.blue,
+                    value: showPersonal,
+                    onChanged: (bool value) {
+                      setState(() {
+                        showPersonal = value;
+                      });
+                    },
+                  ),
+                  Text('Work',style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),),
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: DropdownButton<String>(
-                  iconEnabledColor: Colors.transparent,
+                  iconEnabledColor: Colors.black,
                   value: selectedDateRange,
                   items: <String>[
                     'Today',
@@ -66,7 +80,7 @@ class _TrackerPageState extends State<TrackerPage> {
                   ].map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
-                      child: Text(value),
+                      child: Text(value, style:TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0)),
                     );
                   }).toList(),
                   onChanged: (String? newValue) {
@@ -128,18 +142,27 @@ class _TrackerPageState extends State<TrackerPage> {
                             totalWorkEarnings,
                             'Work',
                           ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Tasks",
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                         StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
                               .collection('tasks')
                               .where('isPersonal', isEqualTo: showPersonal)
                               .where('category', isEqualTo: 'Finance')
-                              .where('status',
-                                  isEqualTo:
-                                      'Completed') // Filter for completed tasks
+                              .where('status', isEqualTo: 'Completed')
                               .snapshots(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData)
-                              return CircularProgressIndicator();
+                              return Center(child: Text('No tasks found.'));
 
                             var tasks = snapshot.data!.docs;
 
@@ -147,10 +170,13 @@ class _TrackerPageState extends State<TrackerPage> {
                               children: tasks.map((task) {
                                 var taskData =
                                     task.data() as Map<String, dynamic>;
-                                return ListTile(
-                                  title: Text(taskData['title'] ?? 'No Title'),
-                                  trailing:
-                                      Text('\$${taskData['amount'] ?? 0}'),
+                                return Card(
+                                  child: ListTile(
+                                    // isThreeLine: true,
+                                    title: Text(taskData['title'] ?? 'No Title', style: TextStyle(fontSize: 20.0),),
+                                    trailing:
+                                        Text('UGX${taskData['amount'] ?? 0}',style: TextStyle(color : taskData['financeType']=='Income'  ? Colors.green : Colors.red,fontSize: 20.0)),
+                                  ),
                                 );
                               }).toList(),
                             );
@@ -233,24 +259,63 @@ class _TrackerPageState extends State<TrackerPage> {
       Card(
         child: ListTile(
           leading: Icon(Icons.arrow_upward, color: Colors.green),
-          title: Text('$label Income Balance'),
-          trailing: Text('\$$income'),
+          title: Text('$label Income Balance',style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),),
+          trailing: Text('UGX$income',style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold, color:Colors.green),),
         ),
       ),
       Card(
         child: ListTile(
           leading: Icon(Icons.arrow_downward, color: Colors.red),
-          title: Text('$label Expense Balance'),
-          trailing: Text('\$$expense'),
+          title: Text('$label Expense Balance',style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),),
+          trailing: Text('UGX$expense',style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold, color:Colors.red)),
         ),
       ),
       Card(
         child: ListTile(
           leading: Icon(Icons.account_balance_wallet),
-          title: Text('Total $label Earnings'),
-          trailing: Text('\$$total'),
+          title: Text('Total $label Earnings',style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),),
+          trailing: Text(
+            'UGX$total',
+            style: TextStyle(
+              color: total < 0 ? Colors.red : Colors.green,
+              fontSize: 15.0
+            ),
+          ),
         ),
       ),
     ];
   }
+  Widget _buildAppBar(double screenWidth) {
+    return Material(
+      elevation: 5,
+      borderRadius: const BorderRadius.only(
+        bottomLeft: Radius.circular(30.0),
+        bottomRight: Radius.circular(30.0),
+      ),
+      shadowColor: Colors.grey.withOpacity(0.5),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(20.0),
+          bottomRight: Radius.circular(20.0),
+        ),
+        child: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: Row(
+            children: [
+              Text(
+                'Finance Tracker',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: screenWidth * 0.065,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
 }

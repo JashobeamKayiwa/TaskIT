@@ -17,7 +17,7 @@ class TaskCompletionIndicator extends StatelessWidget {
     String percentText = (percent * 100).toStringAsFixed(0) + "%";
 
     double screenWidth = MediaQuery.of(context).size.width;
-    double radius = screenWidth * 0.085;
+    double radius = screenWidth * 0.1;
     double lineWidth = screenWidth * 0.025;
 
     return Container(
@@ -27,7 +27,7 @@ class TaskCompletionIndicator extends StatelessWidget {
         percent: percent,
         center: Text(
           percentText,
-          style: TextStyle(fontSize: screenWidth * 0.03),
+          style: TextStyle(fontSize: screenWidth * 0.07, fontWeight: FontWeight.bold),
         ),
         progressColor: kBlack,
         backgroundColor: kGrey.withOpacity(0.3),
@@ -60,7 +60,7 @@ class TaskCompletionIndicator2 extends StatelessWidget {
         value: progress,
         strokeWidth: lineWidth,
         backgroundColor: Colors.grey[300],
-        valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+        valueColor: AlwaysStoppedAnimation<Color>(const Color.fromARGB(255, 131, 115, 115)),
       ),
     );
   }

@@ -78,7 +78,7 @@ class _ProgressTrackerState extends State<ProgressTracker> {
                   Text(
                     'Daily Task Completion',
                     style: TextStyle(
-                      fontSize: 24.0,
+                      fontSize: 30.0,
                       fontWeight: FontWeight.bold,
                       color: kBlack,
                     ),
@@ -104,7 +104,7 @@ class _ProgressTrackerState extends State<ProgressTracker> {
                       Text(
                         'Tasks Remaining: ${remainingTasks}',
                         style: TextStyle(
-                          fontSize: 12.0,
+                          fontSize: 24.0,
                           fontWeight: FontWeight.bold,
                           color: kBlack,
                         ),
@@ -112,7 +112,7 @@ class _ProgressTrackerState extends State<ProgressTracker> {
                       Text(
                         'Tasks Completed: ${completedTasks}',
                         style: TextStyle(
-                          fontSize: 12.0,
+                          fontSize: 24.0,
                           fontWeight: FontWeight.bold,
                           color: kBlack,
                         ),
@@ -151,7 +151,7 @@ class _ProgressTrackerState extends State<ProgressTracker> {
                             Text('Tasks Left: $workerRemaining'),
                           ],
                         ),
-                        trailing: TaskCompletionIndicator(
+                        trailing: TaskCompletionIndicator2(
                           allTasks: workerTotal,
                           completedTasks: workerCompleted,
                         ),

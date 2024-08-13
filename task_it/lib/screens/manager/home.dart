@@ -80,7 +80,7 @@ class HomePageState extends State<HomePage> {
                       color: kBlack,
                     ),
                     titleText: 'Personal',
-                    textSize: textSize, // Pass calculated text size
+                    textSize: textSize, 
                     onTap: () {
                       Navigator.push(
                         context,
@@ -98,7 +98,7 @@ class HomePageState extends State<HomePage> {
                       color: kBlack,
                     ),
                     titleText: 'Work',
-                    textSize: textSize, // Pass calculated text size
+                    textSize: textSize, 
                     onTap: () {
                       Navigator.push(
                         context,
@@ -164,9 +164,6 @@ class HomePageState extends State<HomePage> {
               ),
             ],
           ),
-          actions: const [
-            Icon(Icons.add_alert_rounded, color: Colors.black, size: 40),
-          ],
         ),
       ),
     );
