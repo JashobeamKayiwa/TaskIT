@@ -71,6 +71,8 @@ o	As a financial analyst, I want to calculate net profit by deducting costs from
 
 Link to user stories table: https://docs.google.com/spreadsheets/d/1zGJNXxUNM12QSHWTRg5rjs00cQKOOrkpdyDN5DF5uvE/edit?usp=sharing
 
-Link to UI : https://www.figma.com/design/74zIUzyVTQhOgRqj00x5BI/TaskIT?node-id=0-1&t=tT0RnYEOw8Gk9XNx-1
+Link to UI: https://www.figma.com/design/74zIUzyVTQhOgRqj00x5BI/TaskIT?node-id=0-1&t=tT0RnYEOw8Gk9XNx-1
+
+Link to Googlesheet: https://docs.google.com/spreadsheets/d/1vC6p1_1Bko9xSQK4VruZklV1ryBkbZBdxe9AzynlZkI/edit?usp=sharing
 
 
